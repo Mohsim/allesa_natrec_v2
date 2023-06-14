@@ -1,0 +1,405 @@
+import '../../controllers/InternalTransferOrder/GenerateAndUpdatePalletIdController.dart';
+import '../../controllers/InternalTransferOrder/ValidateShipmentPalettizingSerialNo.dart';
+
+import 'package:dropdown_search/dropdown_search.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../../../widgets/ElevatedButtonWidget.dart';
+import '../../../../widgets/TextFormField.dart';
+import '../../../../widgets/TextWidget.dart';
+import '../HomeScreen.dart';
+
+class PalletGenerateScreen extends StatefulWidget {
+  List<String> receivedZoneList;
+  String ALS_PACKINGSLIPREF;
+  int ALS_TRANSFERORDERTYPE;
+  String TRANSFERID;
+  String INVENTLOCATIONIDFROM;
+  String INVENTLOCATIONIDTO;
+  int QTYTRANSFER;
+  String ITEMID;
+  String ITEMNAME;
+  String CONFIGID;
+  String WMSLOCATIONID;
+  String SHIPMENTID;
+
+  PalletGenerateScreen({
+    super.key,
+    required this.receivedZoneList,
+    required this.ALS_PACKINGSLIPREF,
+    required this.ALS_TRANSFERORDERTYPE,
+    required this.TRANSFERID,
+    required this.INVENTLOCATIONIDFROM,
+    required this.INVENTLOCATIONIDTO,
+    required this.QTYTRANSFER,
+    required this.ITEMID,
+    required this.ITEMNAME,
+    required this.CONFIGID,
+    required this.WMSLOCATIONID,
+    required this.SHIPMENTID,
+  });
+
+  @override
+  State<PalletGenerateScreen> createState() => _PalletGenerateScreenState();
+}
+
+class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
+  TextEditingController _serialNoController = TextEditingController();
+  final TextEditingController _palletTypeController = TextEditingController();
+
+  String dropdownValue = 'Select Pallet Type';
+  List<String> dropdownList = ['Select Pallet Type', "1000*1200", "800*1200"];
+
+  String result = "0";
+  List<String> serialNoList = [];
+  List<bool> isMarked = [];
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _serialNoController.dispose();
+    _palletTypeController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.only(bottom: 20),
+                decoration: const BoxDecoration(
+                  color: Colors.orange,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  ),
+                ),
+                child: Container(
+                  margin: const EdgeInsets.only(top: 50),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: const <Widget>[
+                              SizedBox(width: 10),
+                              Icon(
+                                Icons.search,
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 10),
+                              TextWidget(
+                                text: "Shipment Palletizing",
+                                color: Colors.white,
+                                fontSize: 25,
+                              ),
+                            ],
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(right: 10),
+                              width: MediaQuery.of(context).size.width * 0.1,
+                              alignment: Alignment.centerRight,
+                              child: Image.asset(
+                                "assets/delete.png",
+                                width: 30,
+                                height: 30,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Text(
+                              widget.ITEMNAME,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Column(
+                              children: [
+                                const Text(
+                                  "QTY",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  widget.QTYTRANSFER.toString(),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                const Text(
+                                  "Put-Away",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  widget.WMSLOCATIONID,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "Item Code:",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(width: 20),
+                            Text(
+                              widget.ITEMID,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Container(
+                margin: const EdgeInsets.only(left: 20),
+                child: const TextWidget(
+                  text: "Select the Type of Pallet",
+                  fontSize: 15,
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(left: 20),
+                width: MediaQuery.of(context).size.width * 0.9,
+                child: DropdownSearch<String>(
+                  popupProps: PopupProps.menu(
+                    showSelectedItems: true,
+                    disabledItemFn: (String s) => s.startsWith('I'),
+                  ),
+                  items: dropdownList,
+                  dropdownDecoratorProps: const DropDownDecoratorProps(
+                    baseStyle: TextStyle(fontSize: 15),
+                    dropdownSearchDecoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 0),
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: "Select Pallet Type",
+                      hintStyle: TextStyle(fontSize: 15),
+                    ),
+                  ),
+                  enabled: true,
+                  onChanged: (value) {
+                    setState(() {
+                      _palletTypeController.text = value!;
+                      dropdownValue = value;
+                    });
+                  },
+                  selectedItem: dropdownValue,
+                ),
+              ),
+              const SizedBox(height: 30),
+              Container(
+                margin: const EdgeInsets.only(left: 20),
+                child: TextFormFieldWidget(
+                  hintText: "Enter/Scan Serial No",
+                  controller: _serialNoController,
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  onEditingComplete: () {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    ValidateShipmentPalettizingSerialNoController
+                            .palletizeSerialNo(_serialNoController.text)
+                        .then((value) => {
+                              if (value == "Success: SHIPMENTID matches")
+                                {
+                                  if (serialNoList.contains(
+                                      _serialNoController.text.toString()))
+                                    {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content:
+                                              Text("Serial No already exists"),
+                                          duration: Duration(seconds: 2),
+                                        ),
+                                      ),
+                                    }
+                                  else
+                                    {
+                                      serialNoList.add(
+                                          _serialNoController.text.toString()),
+                                      setState(() {})
+                                    }
+                                }
+                              else
+                                {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(value),
+                                      duration: const Duration(seconds: 2),
+                                    ),
+                                  ),
+                                }
+                            });
+                  },
+                  onFieldSubmitted: (p0) {},
+                ),
+              ),
+              const SizedBox(height: 10),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.width * 0.05,
+                  right: MediaQuery.of(context).size.width * 0.05,
+                  top: 10,
+                  bottom: 10,
+                ),
+                child: const Text(
+                  "Serial No:",
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.3,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.grey,
+                    width: 1,
+                  ),
+                ),
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  itemCount: serialNoList.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        print("Tapped");
+                      },
+                      child: Card(
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.black38,
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                              left: MediaQuery.of(context).size.width * 0.05,
+                              right: MediaQuery.of(context).size.width * 0.05,
+                              top: 10,
+                              bottom: 10,
+                            ),
+                            child: Text(
+                              serialNoList[index].toString(),
+                              style: const TextStyle(
+                                fontSize: 20,
+                                color: Colors.white60,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 20),
+              Center(
+                child: ElevatedButtonWidget(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  title: "Generate",
+                  onPressed: () {
+                    GenerateAndUpdatePalletIdController
+                            .generateAndUpdatePalletId(serialNoList)
+                        .then((value) {
+                      if (value ==
+                          "PalletIDs generated and updated successfully.") {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(value),
+                            duration: const Duration(seconds: 2),
+                          ),
+                        );
+                        setState(() {
+                          serialNoList.clear();
+                          _serialNoController.clear();
+                        });
+                        Get.offAll(const HomeScreen());
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(value),
+                            duration: const Duration(seconds: 2),
+                          ),
+                        );
+                      }
+                    });
+                  },
+                  textColor: Colors.white,
+                  color: Colors.orange,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
