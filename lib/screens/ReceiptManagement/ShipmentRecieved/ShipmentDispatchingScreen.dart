@@ -135,7 +135,7 @@ class _ShipmentDispatchingScreenState extends State<ShipmentDispatchingScreen> {
               Container(
                 margin: const EdgeInsets.only(left: 20, top: 10),
                 child: const TextWidget(
-                  text: "Container ID*",
+                  text: "Shipment ID*",
                   fontSize: 16,
                 ),
               ),
