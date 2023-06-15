@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:supercharged/supercharged.dart';
 
 import '../../controllers/PhysicalInventory/getWmsJournalCountingOnlyCLByAssignedToUserIdController.dart';
 import '../../controllers/PhysicalInventory/incrementQTYSCANNEDInJournalCountingOnlyCLController.dart';
@@ -14,7 +11,6 @@ import 'package:get/get.dart';
 
 import '../../../../widgets/AppBarWidget.dart';
 import '../../../../widgets/TextWidget.dart';
-import '../../widgets/ElevatedButtonWidget.dart';
 import '../../widgets/TextFormField.dart';
 
 class PhysicalInventoryScreen extends StatefulWidget {

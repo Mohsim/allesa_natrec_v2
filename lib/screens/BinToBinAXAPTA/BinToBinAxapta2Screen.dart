@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import '../../controllers/BinToBinFromAXAPTA/getPalletTableController.dart';
 import '../../controllers/BinToBinFromAXAPTA/getSerialTableController.dart';
 import '../../controllers/BinToBinFromAXAPTA/getmapBarcodeDataByItemCodeController.dart';
@@ -44,7 +46,6 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
       TextEditingController();
   final TextEditingController _scanLocationController = TextEditingController();
   final TextEditingController _palletTypeController = TextEditingController();
-  final TextEditingController _serailController = TextEditingController();
 
   String result = "0";
   List<String> serialNoList = [];

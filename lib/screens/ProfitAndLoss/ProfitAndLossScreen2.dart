@@ -1,15 +1,9 @@
-import 'dart:convert';
-
-import 'package:alessa_v2/controllers/BinToBinFromAXAPTA/getmapBarcodeDataByItemCodeController.dart';
 import 'package:alessa_v2/controllers/PickListAssigned/GetPickListTableDataController.dart';
-import 'package:alessa_v2/controllers/PickListAssigned/InsertPickListController.dart';
 import 'package:alessa_v2/controllers/PickListAssigned/getMappedBarcodedsByItemCodeAndBinLocationController.dart';
 import 'package:alessa_v2/models/getMappedBarcodedsByItemCodeAndBinLocationModel.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/services.dart';
 
-import '../../controllers/JournalMovement/insertJournalMovementCLDetsController.dart';
-import '../../controllers/JournalMovement/updateWmsJournalMovementClQtyScannedController.dart';
 import '../../controllers/ProfitAndLoss/insertJournalProfitLostClDetsController.dart';
 import '../../controllers/ProfitAndLoss/updateWmsJournalProfitLostClQtyScannedController.dart';
 import '../../models/updateWmsJournalMovementClQtyScannedModel.dart';
@@ -19,6 +13,7 @@ import 'package:flutter/material.dart';
 import '../../../../widgets/TextFormField.dart';
 import '../../../../widgets/TextWidget.dart';
 
+// ignore: must_be_immutable
 class ProfitAndLossScreen2 extends StatefulWidget {
   String iTEMID;
   String iTEMNAME;
@@ -62,10 +57,8 @@ class ProfitAndLossScreen2 extends StatefulWidget {
 
 class _ProfitAndLossScreen2State extends State<ProfitAndLossScreen2> {
   final TextEditingController _transferIdController = TextEditingController();
-  final TextEditingController _scanLocationController = TextEditingController();
   final TextEditingController _palletTypeController = TextEditingController();
   final TextEditingController _serialNoController = TextEditingController();
-  final TextEditingController _withBarCodeController = TextEditingController();
 
   String result = "0";
   String result2 = "0";
@@ -121,7 +114,6 @@ class _ProfitAndLossScreen2State extends State<ProfitAndLossScreen2> {
   }
 
   String _site = "By Serial";
-  String _barCode = '';
 
   String? dropDownValue;
   List<String> dropDownList = [];

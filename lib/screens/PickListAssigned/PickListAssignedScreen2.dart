@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:alessa_v2/controllers/BinToBinFromAXAPTA/getmapBarcodeDataByItemCodeController.dart';
 import 'package:alessa_v2/controllers/PickListAssigned/GetPickListTableDataController.dart';
 import 'package:alessa_v2/controllers/PickListAssigned/InsertPickListController.dart';
 import 'package:alessa_v2/controllers/PickListAssigned/getMappedBarcodedsByItemCodeAndBinLocationController.dart';
@@ -8,10 +5,6 @@ import 'package:alessa_v2/models/getMappedBarcodedsByItemCodeAndBinLocationModel
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/services.dart';
 
-import '../../controllers/BinToBinJournal/GetTableByPalletController.dart';
-import '../../controllers/BinToBinJournal/GetTableBySerialController.dart';
-import '../../controllers/BinToBinJournal/updateJournalController.dart';
-import '../../models/BinToBinJournalTableModel.dart';
 import '../../utils/Constants.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +12,7 @@ import '../../../../widgets/ElevatedButtonWidget.dart';
 import '../../../../widgets/TextFormField.dart';
 import '../../../../widgets/TextWidget.dart';
 
+// ignore: must_be_immutable
 class PickListAssingedScreen2 extends StatefulWidget {
   String PICKINGROUTEID;
   String INVENTLOCATIONID;

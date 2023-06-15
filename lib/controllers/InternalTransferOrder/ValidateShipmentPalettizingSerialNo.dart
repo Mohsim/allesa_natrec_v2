@@ -33,7 +33,7 @@ class ValidateShipmentPalettizingSerialNoController {
         return palletizeSerialNo;
       } else {
         print("Status Code: ${response.statusCode}");
-        var data = json.decode(response.body);
+
         String palletizeSerialNo = "SHIPMENTID does not match.";
         return palletizeSerialNo;
       }

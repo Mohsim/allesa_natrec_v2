@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+// ignore: must_be_immutable
 class AppBarWidget extends StatefulWidget {
   VoidCallback? onPressed;
   final String title;

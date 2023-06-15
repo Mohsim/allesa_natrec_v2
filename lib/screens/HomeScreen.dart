@@ -136,8 +136,6 @@ class _HomeScreenState extends State<HomeScreen> {
     ],
   };
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   void _showUserInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');

@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../controllers/BarcodeMapping/getAllTblMappedBarcodesController.dart';
 import '../../controllers/BarcodeMapping/insertIntoMappedBarcodeOrUpdateBySerialNoController.dart';
 import '../../models/GetShipmentReceivedTableModel.dart';
-import '../../models/getInventTableWMSDataByItemIdOrItemNameModel.dart';
 import '../../utils/Constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

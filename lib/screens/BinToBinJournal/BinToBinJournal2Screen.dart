@@ -9,6 +9,7 @@ import '../../../../widgets/ElevatedButtonWidget.dart';
 import '../../../../widgets/TextFormField.dart';
 import '../../../../widgets/TextWidget.dart';
 
+// ignore: must_be_immutable
 class BinToBinJournal2Screen extends StatefulWidget {
   String TRANSFERID;
   int TRANSFERSTATUS;

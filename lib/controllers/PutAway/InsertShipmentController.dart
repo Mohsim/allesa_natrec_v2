@@ -1,6 +1,4 @@
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/Constants.dart';
@@ -61,10 +59,8 @@ class InsertShipmentController {
 
       if (response.statusCode == 200) {
         print("Status Code: ${response.statusCode}");
-        var data = json.decode(response.body);
       } else {
         print("Status Code: ${response.statusCode}");
-        var data = json.decode(response.body);
       }
     } catch (e) {
       print(e);

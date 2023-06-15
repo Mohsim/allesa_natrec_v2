@@ -8,6 +8,7 @@ import '../../../../widgets/ElevatedButtonWidget.dart';
 import '../../../../widgets/TextWidget.dart';
 import '../../controllers/WareHouseOperationController/GetAllTableZoneController.dart';
 
+// ignore: must_be_immutable
 class PalletProceedScreen extends StatefulWidget {
   String ALS_PACKINGSLIPREF;
   int ALS_TRANSFERORDERTYPE;
@@ -41,8 +42,6 @@ class PalletProceedScreen extends StatefulWidget {
 }
 
 class _PalletProceedScreenState extends State<PalletProceedScreen> {
-  TextEditingController _listOfSerialNoController = TextEditingController();
-  TextEditingController _warehouseZoneController = TextEditingController();
   final TextEditingController _receivingZoneController =
       TextEditingController();
 

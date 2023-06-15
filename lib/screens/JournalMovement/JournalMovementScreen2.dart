@@ -1,8 +1,6 @@
-import 'dart:convert';
+// ignore_for_file: must_be_immutable
 
-import 'package:alessa_v2/controllers/BinToBinFromAXAPTA/getmapBarcodeDataByItemCodeController.dart';
 import 'package:alessa_v2/controllers/PickListAssigned/GetPickListTableDataController.dart';
-import 'package:alessa_v2/controllers/PickListAssigned/InsertPickListController.dart';
 import 'package:alessa_v2/controllers/PickListAssigned/getMappedBarcodedsByItemCodeAndBinLocationController.dart';
 import 'package:alessa_v2/models/getMappedBarcodedsByItemCodeAndBinLocationModel.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -14,7 +12,6 @@ import '../../models/updateWmsJournalMovementClQtyScannedModel.dart';
 import '../../utils/Constants.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../widgets/ElevatedButtonWidget.dart';
 import '../../../../widgets/TextFormField.dart';
 import '../../../../widgets/TextWidget.dart';
 
@@ -61,10 +58,8 @@ class JournalMovementScreen2 extends StatefulWidget {
 
 class _JournalMovementScreen2State extends State<JournalMovementScreen2> {
   final TextEditingController _transferIdController = TextEditingController();
-  final TextEditingController _scanLocationController = TextEditingController();
   final TextEditingController _palletTypeController = TextEditingController();
   final TextEditingController _serialNoController = TextEditingController();
-  final TextEditingController _withBarCodeController = TextEditingController();
 
   String result = "0";
   String result2 = "0";
@@ -120,7 +115,6 @@ class _JournalMovementScreen2State extends State<JournalMovementScreen2> {
   }
 
   String _site = "By Serial";
-  String _barCode = '';
 
   String? dropDownValue;
   List<String> dropDownList = [];

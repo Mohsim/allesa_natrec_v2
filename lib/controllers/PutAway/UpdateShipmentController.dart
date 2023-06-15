@@ -1,6 +1,5 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/Constants.dart';
@@ -22,8 +21,6 @@ class UpdateShipmentController {
 
     String url = '${Constants.baseUrl}updateShipmentRecievedDataCL';
     print("url : $url");
-
-    final body = {'records': records};
 
     print("Body: ${jsonEncode({"records": records})}");
 

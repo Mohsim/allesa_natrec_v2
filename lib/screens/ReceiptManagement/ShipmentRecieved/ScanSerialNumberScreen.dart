@@ -10,6 +10,7 @@ import '../../../widgets/TextWidget.dart';
 import 'SaveScreen.dart';
 import 'ShipmentDispatchingScreen.dart';
 
+// ignore: must_be_immutable
 class ScanSerialNumberScreen extends StatefulWidget {
   String shipmentStatus;
   String shipmentId;

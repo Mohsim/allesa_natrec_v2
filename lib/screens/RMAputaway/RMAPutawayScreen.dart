@@ -21,7 +21,6 @@ class RMAPutawayScreen extends StatefulWidget {
 }
 
 class _RMAPutawayScreenState extends State<RMAPutawayScreen> {
-  TextEditingController _searchController = TextEditingController();
   TextEditingController _binLocationController = TextEditingController();
   String total = "0";
   List<getWmsReturnSalesOrderClByAssignedToUserIdModel>

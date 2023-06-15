@@ -3,7 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 import '../../models/getMappedBarcodedsByItemCodeAndBinLocationModel.dart';
-import '../../models/updateWmsJournalMovementClQtyScannedModel.dart';
 import '../../utils/Constants.dart';
 
 class insertIntoWmsReturnSalesOrderClController {

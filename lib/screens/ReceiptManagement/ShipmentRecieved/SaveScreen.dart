@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'ShipmentDispatchingScreen.dart';
 
+// ignore: must_be_immutable
 class SaveScreen extends StatefulWidget {
   String shipmentStatus;
   String shipmentId;
@@ -330,12 +331,12 @@ class _SaveScreenState extends State<SaveScreen> {
                   autofocus: false,
                   controller: _serialNoController,
                   onFieldSubmitted: (p0) {
-                    if (_serialNoController.text.isEmpty ||
-                        _remarksController.text.isEmpty) {
+                    if (_serialNoController.text.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text(
-                              "Please Enter/Scan Serial Number and Remarks"),
+                          content: Text("Please Enter/Scan Serial No."),
+                          backgroundColor: Colors.red,
+                          duration: Duration(seconds: 2),
                         ),
                       );
                       return;

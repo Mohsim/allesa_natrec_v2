@@ -2,7 +2,6 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
-import '../../models/getAllTblStockMasterModel.dart';
 import '../../models/getInventTableWMSDataByItemIdOrItemNameModel.dart';
 import '../../utils/Constants.dart';
 
@@ -45,8 +44,6 @@ class insertIntoWmsJournalCountingOnlyCLController {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         print("Status Code: ${response.statusCode}");
-
-        var data = json.decode(response.body);
       } else {
         print("Status Code: ${response.statusCode}");
 

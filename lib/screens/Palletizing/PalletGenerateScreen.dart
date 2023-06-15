@@ -10,6 +10,7 @@ import '../../../../widgets/TextFormField.dart';
 import '../../../../widgets/TextWidget.dart';
 import '../HomeScreen.dart';
 
+// ignore: must_be_immutable
 class PalletGenerateScreen extends StatefulWidget {
   List<String> receivedZoneList;
   String ALS_PACKINGSLIPREF;
