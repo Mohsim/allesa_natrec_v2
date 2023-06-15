@@ -64,7 +64,6 @@ class insertIntoMappedBarcodeOrUpdateBySerialNoController {
         print("Data: $data");
       } else {
         print("Status Code: ${response.statusCode}");
-        var data = json.decode(response.body);
       }
     } catch (e) {
       print(e);

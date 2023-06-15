@@ -1,4 +1,4 @@
-import 'package:alessa_v2/models/LoginModel.dart';
+import '../../models/LoginModel.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';

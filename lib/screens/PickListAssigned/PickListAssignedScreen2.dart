@@ -1,7 +1,7 @@
-import 'package:alessa_v2/controllers/PickListAssigned/GetPickListTableDataController.dart';
-import 'package:alessa_v2/controllers/PickListAssigned/InsertPickListController.dart';
-import 'package:alessa_v2/controllers/PickListAssigned/getMappedBarcodedsByItemCodeAndBinLocationController.dart';
-import 'package:alessa_v2/models/getMappedBarcodedsByItemCodeAndBinLocationModel.dart';
+import '../../controllers/PickListAssigned/GetPickListTableDataController.dart';
+import '../../controllers/PickListAssigned/InsertPickListController.dart';
+import '../../controllers/PickListAssigned/getMappedBarcodedsByItemCodeAndBinLocationController.dart';
+import '../../models/getMappedBarcodedsByItemCodeAndBinLocationModel.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/services.dart';
 

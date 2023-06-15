@@ -1,6 +1,6 @@
-import 'package:alessa_v2/controllers/Dispatching/GetDispatchingTableController.dart';
-import 'package:alessa_v2/controllers/Dispatching/InsertDispatchingScreen.dart';
-import 'package:alessa_v2/models/getDispatchingTableModel.dart';
+import '../../controllers/Dispatching/GetDispatchingTableController.dart';
+import '../../controllers/Dispatching/InsertDispatchingScreen.dart';
+import '../../models/getDispatchingTableModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/Constants.dart';
 import 'package:flutter/material.dart';

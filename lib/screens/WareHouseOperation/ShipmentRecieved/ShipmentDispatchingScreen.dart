@@ -1,27 +1,27 @@
-import '../../controllers/PickListAssigned/GetPickingListController.dart';
-import '../../models/GetPickingListModel.dart';
-import '../../screens/PickListAssigned/PickListAssignedScreen2.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../utils/Constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../widgets/AppBarWidget.dart';
-import '../../../../widgets/TextFormField.dart';
-import '../../../../widgets/TextWidget.dart';
+import '../../../controllers/WareHouseOperationController/GetShipmentDataController.dart';
+import '../../../models/GetShipmentDataModel.dart';
+import '../../../utils/Constants.dart';
+import '../../../widgets/AppBarWidget.dart';
+import '../../../widgets/TextFormField.dart';
+import '../../../widgets/TextWidget.dart';
+import 'ScanSerialNumberScreen.dart';
 
-class PickListAssignedScreen extends StatefulWidget {
-  const PickListAssignedScreen({super.key});
+class ShipmentDispatchingScreen extends StatefulWidget {
+  const ShipmentDispatchingScreen({super.key});
 
   @override
-  State<PickListAssignedScreen> createState() => _PickListAssignedScreenState();
+  State<ShipmentDispatchingScreen> createState() =>
+      _ShipmentDispatchingScreenState();
 }
 
-class _PickListAssignedScreenState extends State<PickListAssignedScreen> {
-  final TextEditingController _routeIdController = TextEditingController();
+class _ShipmentDispatchingScreenState extends State<ShipmentDispatchingScreen> {
+  TextEditingController _shipmentIdController = TextEditingController();
   String total = "0";
-  List<GetPickingListModel> BinToBinJournalTableList = [];
+  List<GetShipmentDataModel> getAllAssetByLocationList = [];
   List<bool> isMarked = [];
 
   String userName = "";
@@ -58,7 +58,7 @@ class _PickListAssignedScreenState extends State<PickListAssignedScreen> {
           onPressed: () {
             Get.back();
           },
-          title: "Pick List Form".toUpperCase(),
+          title: "Shipment Dispatching".toUpperCase(),
           actions: [
             Container(
               padding: const EdgeInsets.only(right: 10),
@@ -112,7 +112,7 @@ class _PickListAssignedScreenState extends State<PickListAssignedScreen> {
               Container(
                 margin: const EdgeInsets.only(left: 20, top: 10),
                 child: const TextWidget(
-                  text: "Route ID*",
+                  text: "Shipment ID*",
                   fontSize: 16,
                 ),
               ),
@@ -124,36 +124,45 @@ class _PickListAssignedScreenState extends State<PickListAssignedScreen> {
                     Container(
                       margin: const EdgeInsets.only(left: 20),
                       child: TextFormFieldWidget(
-                        controller: _routeIdController,
-                        hintText: "Enter/Scan Journal ID",
+                        controller: _shipmentIdController,
                         width: MediaQuery.of(context).size.width * 0.73,
                         onEditingComplete: () {
-                          // unfocus from keyboard
-                          FocusScope.of(context).unfocus();
                           Constants.showLoadingDialog(context);
-                          GetPickingListController.getAllTable(
-                                  _routeIdController.text.trim())
+                          GetShipmentDataController.getShipmentData(
+                                  _shipmentIdController.text.trim())
                               .then((value) {
                             setState(() {
-                              BinToBinJournalTableList = value;
-                              total = value.length.toString();
-                              isMarked = List<bool>.filled(value.length, false);
-                            });
-                            Navigator.pop(context);
-                          }).onError(
-                            (error, stackTrace) {
+                              getAllAssetByLocationList = value;
+                              total =
+                                  getAllAssetByLocationList.length.toString();
+                              isMarked = List<bool>.filled(
+                                  getAllAssetByLocationList.length, false);
                               Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    error
-                                        .toString()
-                                        .replaceAll("Exception:", ""),
-                                  ),
-                                ),
-                              );
-                            },
-                          );
+                            });
+                          }).onError((error, stackTrace) {
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(error.toString())));
+                          });
+                        },
+                        onFieldSubmitted: (p0) {
+                          Constants.showLoadingDialog(context);
+                          GetShipmentDataController.getShipmentData(
+                                  _shipmentIdController.text.trim())
+                              .then((value) {
+                            setState(() {
+                              getAllAssetByLocationList = value;
+                              total =
+                                  getAllAssetByLocationList.length.toString();
+                              isMarked = List<bool>.filled(
+                                  getAllAssetByLocationList.length, false);
+                              Navigator.pop(context);
+                            });
+                          }).onError((error, stackTrace) {
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(error.toString())));
+                          });
                         },
                       ),
                     ),
@@ -165,32 +174,23 @@ class _PickListAssignedScreenState extends State<PickListAssignedScreen> {
                       ),
                       child: GestureDetector(
                         onTap: () {
-                          // unfocus from keyboard
-                          FocusScope.of(context).unfocus();
                           Constants.showLoadingDialog(context);
-                          GetPickingListController.getAllTable(
-                                  _routeIdController.text.trim())
+                          GetShipmentDataController.getShipmentData(
+                                  _shipmentIdController.text.trim())
                               .then((value) {
                             setState(() {
-                              BinToBinJournalTableList = value;
-                              total = value.length.toString();
-                              isMarked = List<bool>.filled(value.length, false);
-                            });
-                            Navigator.pop(context);
-                          }).onError(
-                            (error, stackTrace) {
+                              getAllAssetByLocationList = value;
+                              total =
+                                  getAllAssetByLocationList.length.toString();
+                              isMarked = List<bool>.filled(
+                                  getAllAssetByLocationList.length, false);
                               Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    error
-                                        .toString()
-                                        .replaceAll("Exception:", ""),
-                                  ),
-                                ),
-                              );
-                            },
-                          );
+                            });
+                          }).onError((error, stackTrace) {
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(error.toString())));
+                          });
                         },
                         child: Image.asset('assets/finder.png',
                             width: MediaQuery.of(context).size.width * 0.15,
@@ -204,7 +204,7 @@ class _PickListAssignedScreenState extends State<PickListAssignedScreen> {
               Container(
                 margin: const EdgeInsets.only(left: 10, top: 10),
                 child: const TextWidget(
-                  text: "Items*",
+                  text: "Shipment Details*",
                   fontSize: 16,
                 ),
               ),
@@ -244,143 +244,109 @@ class _PickListAssignedScreenState extends State<PickListAssignedScreen> {
                           textAlign: TextAlign.center,
                         )),
                         DataColumn(
-                            label: Text('PICKING ROUTE ID',
+                            label: Text('Shipment Status',
                                 style: TextStyle(color: Colors.white))),
                         DataColumn(
-                            label: Text('INVENT LOCATION ID',
+                            label: Text('Shipment ID',
                                 style: TextStyle(color: Colors.white))),
                         DataColumn(
                             label: Text(
-                          'CONFIG ID',
+                          'Entity',
                           style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
                         )),
                         DataColumn(
                             label: Text(
-                          'ITEM ID',
+                          'Container ID',
                           style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
                         )),
                         DataColumn(
                             label: Text(
-                          'ITEM NAME',
+                          'Arrival Warehouse',
                           style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
                         )),
                         DataColumn(
                             label: Text(
-                          'QTY',
+                          'Item Name',
                           style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
                         )),
                         DataColumn(
                             label: Text(
-                          'CUSTOMER',
+                          'QTY.',
                           style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
                         )),
                         DataColumn(
                             label: Text(
-                          'DLV DATE',
+                          'Item ID',
                           style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
                         )),
                         DataColumn(
                             label: Text(
-                          'TRANSREF ID',
+                          'Perchase ID',
                           style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
                         )),
                         DataColumn(
                             label: Text(
-                          'EXP EDITION STATUS',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'DATE TIME ASSIGNED',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'ASSIGNED TOUSER ID',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'PICK STATUS',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'QTY PICKED',
+                          'Classifications',
                           style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
                         )),
                       ],
-                      rows: BinToBinJournalTableList.map((e) {
+                      rows: getAllAssetByLocationList.map((e) {
                         return DataRow(
                             onSelectChanged: (value) {
-                              // Navigate to another screen
+                              // keybord hide
+                              FocusScope.of(context).requestFocus(FocusNode());
                               Get.to(
-                                () => PickListAssingedScreen2(
-                                  PICKINGROUTEID: e.pICKINGROUTEID.toString(),
-                                  INVENTLOCATIONID:
-                                      e.iNVENTLOCATIONID.toString(),
-                                  CONFIGID: e.cONFIGID.toString(),
-                                  ITEMID: e.iTEMID.toString(),
-                                  ITEMNAME: e.iTEMNAME.toString(),
-                                  QTY: e.qTY.toString(),
-                                  CUSTOMER: e.cUSTOMER.toString(),
-                                  DLVDATE: e.dLVDATE.toString(),
-                                  TRANSREFID: e.tRANSREFID.toString(),
-                                  EXPEDITIONSTATUS:
-                                      e.eXPEDITIONSTATUS.toString(),
-                                  DATETIMEASSIGNED:
-                                      e.dATETIMEASSIGNED.toString(),
-                                  ASSIGNEDTOUSERID:
-                                      e.aSSIGNEDTOUSERID.toString(),
-                                  PICKSTATUS: e.pICKSTATUS.toString(),
-                                  QTYPICKED: e.qTYPICKED.toString(),
+                                () => ScanSerialNumberScreen(
+                                  arrivalWarehouse:
+                                      e.aRRIVALWAREHOUSE.toString(),
+                                  classification: e.cLASSIFICATION.toString(),
+                                  containerId: e.cONTAINERID.toString(),
+                                  entity: e.eNTITY.toString(),
+                                  itemId: e.iTEMID.toString(),
+                                  itemName: e.iTEMNAME.toString(),
+                                  purchId: e.pURCHID.toString(),
+                                  qty: e.qTY.toString(),
+                                  shipmentId: e.sHIPMENTID.toString(),
+                                  shipmentStatus: e.sHIPMENTSTATUS.toString(),
                                 ),
                               );
                             },
                             cells: [
                               DataCell(Text(
-                                  (BinToBinJournalTableList.indexOf(e) + 1)
+                                  (getAllAssetByLocationList.indexOf(e) + 1)
                                       .toString())),
-                              DataCell(Text(e.pICKINGROUTEID ?? "")),
-                              DataCell(Text(e.iNVENTLOCATIONID ?? "")),
-                              DataCell(Text(e.cONFIGID ?? "")),
-                              DataCell(Text(e.iTEMID ?? "")),
-                              DataCell(Text(e.iTEMNAME ?? "")),
+                              DataCell(Text(e.sHIPMENTSTATUS.toString())),
+                              DataCell(Text(e.sHIPMENTID.toString())),
+                              DataCell(Text(e.eNTITY.toString())),
+                              DataCell(Text(e.cONTAINERID.toString())),
+                              DataCell(Text(e.aRRIVALWAREHOUSE.toString())),
+                              DataCell(Text(e.iTEMNAME.toString())),
                               DataCell(Text(e.qTY.toString())),
-                              DataCell(Text(e.cUSTOMER ?? "")),
-                              DataCell(Text(e.dLVDATE ?? "")),
-                              DataCell(Text(e.tRANSREFID ?? "")),
-                              DataCell(Text(e.eXPEDITIONSTATUS.toString())),
-                              DataCell(Text(e.dATETIMEASSIGNED ?? "")),
-                              DataCell(Text(e.aSSIGNEDTOUSERID ?? "")),
-                              DataCell(Text(e.pICKSTATUS ?? "")),
-                              DataCell(Text(e.qTYPICKED.toString())),
+                              DataCell(Text(e.iTEMID.toString())),
+                              DataCell(Text(e.pURCHID.toString())),
+                              DataCell(Text(e.cLASSIFICATION.toString())),
                             ]);
                       }).toList(),
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   const TextWidget(text: "TOTAL"),
-                  const SizedBox(width: 5),
+                  const SizedBox(width: 10),
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.4,
+                    width: 100,
                     height: 50,
                     decoration: BoxDecoration(
                       border: Border.all(
@@ -395,7 +361,6 @@ class _PickListAssignedScreenState extends State<PickListAssignedScreen> {
                   const SizedBox(width: 20),
                 ],
               ),
-              const SizedBox(height: 10),
             ],
           ),
         ),

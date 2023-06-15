@@ -1,11 +1,11 @@
-import 'package:alessa_v2/screens/Authentication/LoginScreen.dart';
-import 'package:alessa_v2/screens/CycleCounting/CycleCountingScreen1.dart';
-import 'package:alessa_v2/screens/DispatchingForm/DispatchingFormScreen.dart';
-import 'package:alessa_v2/screens/JournalMovement/JournalMovementScreen1.dart';
-import 'package:alessa_v2/screens/PhysicalInventory/PhysicalInventoryScreen.dart';
-import 'package:alessa_v2/screens/ProfitAndLoss/ProfitAndLossScreen1.dart';
-import 'package:alessa_v2/screens/ReturnRMA/ReturnRMAScreen1.dart';
-import 'package:alessa_v2/screens/WMSInventory/WMSInventoryScreen.dart';
+import '../../screens/Authentication/LoginScreen.dart';
+import '../../screens/CycleCounting/CycleCountingScreen1.dart';
+import '../../screens/DispatchingForm/DispatchingFormScreen.dart';
+import '../../screens/JournalMovement/JournalMovementScreen1.dart';
+import '../../screens/PhysicalInventory/PhysicalInventoryScreen.dart';
+import '../../screens/ProfitAndLoss/ProfitAndLossScreen1.dart';
+import '../../screens/ReturnRMA/ReturnRMAScreen1.dart';
+import '../../screens/WMSInventory/WMSInventoryScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Core/Animation/Fade_Animation.dart';
@@ -190,50 +190,56 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    FadeAnimation(
-                      delay: 2,
-                      child: Container(
-                        margin: const EdgeInsets.only(left: 10),
-                        child: Image.asset(
-                          'assets/alessa.png',
-                          width: 150,
-                          height: 80,
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      FadeAnimation(
+                        delay: 2,
+                        child: Container(
+                          margin: const EdgeInsets.only(left: 10),
+                          child: Image.asset(
+                            'assets/alessa.png',
+                            width: 150,
+                            height: 80,
+                          ),
                         ),
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () async {
-                        return await showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: const Text('Are you sure?'),
-                            content: const Text('Do you want to exit an App'),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () =>
-                                    Navigator.of(context).pop(false),
-                                child: const Text('No'),
-                              ),
-                              TextButton(
-                                onPressed: () =>
-                                    Navigator.of(context).pop(true),
-                                child: const Text('Yes'),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                      child: Image.asset(
-                        "assets/back_button.png",
-                        width: 50,
-                        height: 50,
+                      GestureDetector(
+                        onTap: () async {
+                          return await showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Are you sure?'),
+                              content: const Text('Do you want to exit an App'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(false),
+                                  child: const Text('No'),
+                                ),
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(true),
+                                  child: const Text('Yes'),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        child: Image.asset(
+                          "assets/back_button.png",
+                          width: 50,
+                          height: 50,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
+                const Divider(color: Colors.black, thickness: 1),
                 FadeAnimation(
                   delay: 1,
                   child: ListView.separated(
@@ -259,7 +265,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemCount: data["images"].length,
                   ),
                 ),
-                const SizedBox(height: 20),
+                const Divider(color: Colors.black, thickness: 1),
               ],
             ),
           ),

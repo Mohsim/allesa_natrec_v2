@@ -1,4 +1,4 @@
-import 'package:alessa_v2/screens/JournalMovement/JournalMovementScreen2.dart';
+import '../../screens/JournalMovement/JournalMovementScreen2.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
