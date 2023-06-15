@@ -1,6 +1,5 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/GetShipmentReceivedModel.dart';
@@ -37,7 +36,6 @@ class GetShipmentReceivedController {
             data.map((e) => GetShipmentReceivedModel.fromJson(e)).toList();
         return getAllAssetByLocationList;
       } else {
-        var data = json.decode(response.body);
         throw Exception("Failed to get data");
       }
     } catch (e) {

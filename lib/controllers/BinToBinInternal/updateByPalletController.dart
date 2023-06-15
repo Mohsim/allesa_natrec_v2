@@ -1,6 +1,5 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/Constants.dart';
@@ -39,7 +38,7 @@ class updateByPalletController {
       var response = await http.put(uri, headers: headers, body: body);
 
       if (response.statusCode == 200) {
-        var data = json.decode(response.body);
+        print("Status Code: ${response.statusCode}");
       } else {
         print("Status Code: ${response.statusCode}");
         throw Exception("Failded to update bin");

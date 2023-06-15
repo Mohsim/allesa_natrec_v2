@@ -62,8 +62,6 @@ class InsertAllDataController {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         print("Status Code: ${response.statusCode}");
-
-        var data = json.decode(response.body);
       } else {
         print("Status Code: ${response.statusCode}");
         var data = json.decode(response.body);

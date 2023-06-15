@@ -37,8 +37,6 @@ class UpdateJournalController {
 
       if (response.statusCode == 200) {
         print("Status Code: ${response.statusCode}");
-
-        var data = json.decode(response.body);
       } else {
         print("Status Code: ${response.statusCode}");
         var data = json.decode(response.body);
