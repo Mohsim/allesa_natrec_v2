@@ -465,7 +465,7 @@ class _SaveScreenState extends State<SaveScreen> {
                             ),
                             DataCell(
                               Text(
-                                dropdownList[index],
+                                dropdownValue,
                                 style: TextStyle(
                                   color: Colors.blue[900]!,
                                   fontSize: 12,
