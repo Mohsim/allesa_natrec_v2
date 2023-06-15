@@ -23,6 +23,7 @@ import 'BarcodeMapping/BarcodeMappingScreen.dart';
 import 'PhysicalInverntoryByBinLocation/PhysicalInventoryByBinLocationScreen.dart';
 import 'PickListAssigned/PickListAssignedScreen.dart';
 import 'RMAputaway/RMAPutawayScreen.dart';
+import 'ReceivedByContainer/ReceivedByContainer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -36,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
     "images": [
       "assets/picking.png",
       "assets/receipt_management.png",
+      "assets/container.png",
       "assets/work_in_progress.png",
       "assets/stock_management.png",
       "assets/gtin_tracking.png",
@@ -57,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
     "titles": [
       "Picking Slip",
       "Receipt Management",
+      "Received By Container",
       "Dispatching",
       "Put-Away Transaction",
       "Palletization",
@@ -81,6 +84,9 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       () {
         Get.to(() => const ShipmentDispatchingScreen());
+      },
+      () {
+        Get.to(() => const ReceivedByContainer());
       },
       () {
         Get.to(() => const DispatchingFormScreen());

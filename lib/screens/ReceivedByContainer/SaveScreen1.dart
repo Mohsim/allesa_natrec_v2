@@ -4,10 +4,10 @@ import '../../../widgets/TextFormField.dart';
 import '../../../widgets/TextWidget.dart';
 import 'package:flutter/material.dart';
 
-import 'ShipmentDispatchingScreen.dart';
+import 'ReceivedByContainer.dart';
 
 // ignore: must_be_immutable
-class SaveScreen extends StatefulWidget {
+class SaveScreen1 extends StatefulWidget {
   String shipmentStatus;
   String shipmentId;
   String entity;
@@ -22,7 +22,7 @@ class SaveScreen extends StatefulWidget {
   String receivingZone;
   int receivedQty;
 
-  SaveScreen({
+  SaveScreen1({
     super.key,
     required this.shipmentStatus,
     required this.shipmentId,
@@ -40,10 +40,10 @@ class SaveScreen extends StatefulWidget {
   });
 
   @override
-  State<SaveScreen> createState() => _SaveScreenState();
+  State<SaveScreen1> createState() => _SaveScreen1State();
 }
 
-class _SaveScreenState extends State<SaveScreen> {
+class _SaveScreen1State extends State<SaveScreen1> {
   final TextEditingController _jobOrderNoController = TextEditingController();
   final TextEditingController _containerNoController = TextEditingController();
   final TextEditingController _itemNameController = TextEditingController();
@@ -219,7 +219,7 @@ class _SaveScreenState extends State<SaveScreen> {
                                 ),
                                 const SizedBox(height: 10),
                                 TextWidget(
-                                  text: "Received*\n$RCQTY",
+                                  text: "Received*\n$RCQTY1",
                                   fontSize: 15,
                                   color: Colors.white,
                                   textAlign: TextAlign.center,
@@ -374,7 +374,7 @@ class _SaveScreenState extends State<SaveScreen> {
                         configList.add(dropdownValue);
                         remarksList.add(_remarksController.text);
 
-                        RCQTY = RCQTY + 1;
+                        RCQTY1 = RCQTY1 + 1;
 
                         _serialNoController.clear();
                         // focus back to serial no field

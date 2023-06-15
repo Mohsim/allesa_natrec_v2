@@ -33,10 +33,14 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
   String? dropDownValue = "Select Config";
   List<String> dropDownList = [
     "Select Config",
-    "G/WG",
-    "D/WG",
-    "S/WG",
-    "PRMDL (V)",
+    "G",
+    "D",
+    "S",
+    "WG",
+    "WD",
+    "WS",
+    "V",
+    "U",
   ];
 
   String total = "0";
@@ -239,195 +243,7 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                     ],
                   ),
                 ),
-                // SingleChildScrollView(
-                //   child: PaginatedDataTable(
-                //     // header: Text(
-                //     //   "Total: $total",
-                //     //   style: TextStyle(
-                //     //     fontSize: 20,
-                //     //     fontWeight: FontWeight.bold,
-                //     //     color: Colors.blue[900]!,
-                //     //   ),
-                //     // ),
-
-                //     columnSpacing: 10,
-                //     horizontalMargin: 20,
-                //     showCheckboxColumn: false,
-                //     headingRowHeight: 30,
-                //     dataRowHeight: 60,
-                //     primary: true,
-                //     showFirstLastButtons: true,
-                //     source:
-                //         StudentDataSource(BinToBinJournalTableList, context),
-                //     rowsPerPage: 5,
-                //     checkboxHorizontalMargin: 10,
-                //     columns: [
-                //       DataColumn(
-                //         label: Text(
-                //           'Select',
-                //           style: TextStyle(
-                //             fontSize: 16,
-                //             color: Colors.blue[900]!,
-                //           ),
-                //         ),
-                //       ),
-                //       DataColumn(
-                //           label: Text(
-                //         'Item Code',
-                //         style: TextStyle(
-                //           fontSize: 16,
-                //           color: Colors.blue[900]!,
-                //         ),
-                //       )),
-                //       DataColumn(
-                //         label: Text(
-                //           'Item Desc',
-                //           style: TextStyle(
-                //             fontSize: 16,
-                //             color: Colors.blue[900]!,
-                //           ),
-                //         ),
-                //       ),
-                //       DataColumn(
-                //         label: Text(
-                //           'GTIN',
-                //           style: TextStyle(
-                //             fontSize: 16,
-                //             color: Colors.blue[900]!,
-                //           ),
-                //         ),
-                //       ),
-                //       DataColumn(
-                //         label: Text(
-                //           'Remarks',
-                //           style: TextStyle(
-                //             fontSize: 16,
-                //             color: Colors.blue[900]!,
-                //           ),
-                //         ),
-                //       ),
-                //       DataColumn(
-                //         label: Text(
-                //           'User',
-                //           style: TextStyle(
-                //             fontSize: 16,
-                //             color: Colors.blue[900]!,
-                //           ),
-                //         ),
-                //       ),
-                //       DataColumn(
-                //         label: Text(
-                //           'Classification',
-                //           style: TextStyle(
-                //             fontSize: 16,
-                //             color: Colors.blue[900]!,
-                //           ),
-                //         ),
-                //       ),
-                //       DataColumn(
-                //         label: Text(
-                //           'Main Location',
-                //           style: TextStyle(
-                //             fontSize: 16,
-                //             color: Colors.blue[900]!,
-                //           ),
-                //         ),
-                //       ),
-                //       DataColumn(
-                //         label: Text(
-                //           'Bin Location',
-                //           style: TextStyle(
-                //             fontSize: 16,
-                //             color: Colors.blue[900]!,
-                //           ),
-                //         ),
-                //       ),
-                //       DataColumn(
-                //         label: Text(
-                //           'Int Code',
-                //           style: TextStyle(
-                //             fontSize: 16,
-                //             color: Colors.blue[900]!,
-                //           ),
-                //         ),
-                //       ),
-                //       DataColumn(
-                //         label: Text(
-                //           'Item Serial No.',
-                //           style: TextStyle(
-                //             fontSize: 16,
-                //             color: Colors.blue[900]!,
-                //           ),
-                //         ),
-                //       ),
-                //       DataColumn(
-                //         label: Text(
-                //           'Map Date',
-                //           style: TextStyle(
-                //             fontSize: 16,
-                //             color: Colors.blue[900]!,
-                //           ),
-                //         ),
-                //       ),
-                //       DataColumn(
-                //         label: Text(
-                //           'Pallet Code',
-                //           style: TextStyle(
-                //             fontSize: 16,
-                //             color: Colors.blue[900]!,
-                //           ),
-                //         ),
-                //       ),
-                //       DataColumn(
-                //         label: Text(
-                //           'Reference',
-                //           style: TextStyle(
-                //             fontSize: 16,
-                //             color: Colors.blue[900]!,
-                //           ),
-                //         ),
-                //       ),
-                //       DataColumn(
-                //         label: Text(
-                //           'SID',
-                //           style: TextStyle(
-                //             fontSize: 16,
-                //             color: Colors.blue[900]!,
-                //           ),
-                //         ),
-                //       ),
-                //       DataColumn(
-                //         label: Text(
-                //           'CID',
-                //           style: TextStyle(
-                //             fontSize: 16,
-                //             color: Colors.blue[900]!,
-                //           ),
-                //         ),
-                //       ),
-                //       DataColumn(
-                //         label: Text(
-                //           'PO',
-                //           style: TextStyle(
-                //             fontSize: 16,
-                //             color: Colors.blue[900]!,
-                //           ),
-                //         ),
-                //       ),
-                //       DataColumn(
-                //         label: Text(
-                //           "Trans",
-                //           style: TextStyle(
-                //             fontSize: 16,
-                //             color: Colors.blue[900]!,
-                //           ),
-                //         ),
-                //       ),
-                //     ], // Adjust the number of rows per page as needed
-                //   ),
-                // ),
                 const SizedBox(height: 20),
-
                 Center(
                   child: Container(
                       width: MediaQuery.of(context).size.width * 0.9,
@@ -440,7 +256,6 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                         textAlign: TextAlign.center,
                       )),
                 ),
-
                 const SizedBox(height: 20),
                 Container(
                   margin: const EdgeInsets.only(left: 20),
