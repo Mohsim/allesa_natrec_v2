@@ -8,8 +8,8 @@ class getWmsJournalCountingOnlyCLByAssignedToUserIdModel {
   String? tRXUSERIDASSIGNED;
   String? tRXUSERIDASSIGNEDBY;
   int? qTYSCANNED;
-  int? qTYDIFFERENCE;
-  double? qTYONHAND;
+  double? qTYDIFFERENCE;
+  int? qTYONHAND;
   int? jOURNALID;
   String? bINLOCATION;
 
