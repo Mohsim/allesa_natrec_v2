@@ -4,21 +4,21 @@ import 'dart:convert';
 
 import '../../utils/Constants.dart';
 
-class getAllTblShipmentReceivedCLController {
+class getAllTblContainerReceivedCLController {
   static Future<int> getAllTableZone(
     String POQTY,
-    String SHIPMENTID,
+    String CONTAINERID,
     String ITEMID,
   ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
 
     print("POQTY: $POQTY");
-    print("SHIPMENTID: $SHIPMENTID");
+    print("ContainerID: $CONTAINERID");
     print("ITEMID: $ITEMID");
 
     String url =
-        "${Constants.baseUrl}getShipmentRecievedClCountByPoqtyShipmentIdAndItemId?POQTY=$POQTY&SHIPMENTID=$SHIPMENTID&ITEMID=$ITEMID";
+        "${Constants.baseUrl}getShipmentRecievedClCountByPoqtyContainerIdAndItemId?POQTY=$POQTY&CONTAINERID=$CONTAINERID&ITEMID=$ITEMID";
 
     print("URL: $url");
 

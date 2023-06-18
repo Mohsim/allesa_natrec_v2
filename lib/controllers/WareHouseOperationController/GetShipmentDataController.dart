@@ -16,8 +16,8 @@ class GetShipmentDataController {
     final uri = Uri.parse(url);
 
     final headers = <String, String>{
-      "Authorization": "$token",
-      "Host": "${Constants.host}",
+      "Authorization": token,
+      "Host": Constants.host,
       "Accept": "application/json",
     };
 

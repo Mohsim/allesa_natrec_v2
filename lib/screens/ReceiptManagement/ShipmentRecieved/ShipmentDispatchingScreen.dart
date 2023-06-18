@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../controllers/WareHouseOperationController/GetShipmentDataController.dart';
-import '../../../controllers/WareHouseOperationController/getAllTblShipmentReceivedCLController.dart';
 import '../../../models/GetShipmentDataModel.dart';
 import '../../../models/getAllTblShipmentReceivedCLModel.dart';
 import '../../../utils/Constants.dart';
@@ -51,23 +50,6 @@ class _ShipmentDispatchingScreenState extends State<ShipmentDispatchingScreen> {
   void initState() {
     super.initState();
     _showUserInfo();
-    Future.delayed(Duration.zero, () {
-      // hide keyboard
-      FocusScope.of(context).unfocus();
-      getAllTblShipmentReceivedCLController.getAllTableZone().then((value) {
-        setState(() {
-          getAllTblShipmentReceivedCLList = value;
-          RCQTY = getAllTblShipmentReceivedCLList.length;
-        });
-      }).onError((error, stackTrace) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(error.toString().replaceAll("Exception:", "")),
-            backgroundColor: Colors.red,
-          ),
-        );
-      });
-    });
   }
 
   @override
@@ -254,56 +236,126 @@ class _ShipmentDispatchingScreenState extends State<ShipmentDispatchingScreen> {
                           textAlign: TextAlign.center,
                         )),
                         DataColumn(
-                            label: Text('Shipment Status',
-                                style: TextStyle(color: Colors.white))),
-                        DataColumn(
-                            label: Text('Shipment ID',
-                                style: TextStyle(color: Colors.white))),
+                            label: Text(
+                          'SHIPMENT ID',
+                          style: TextStyle(color: Colors.white),
+                        )),
                         DataColumn(
                             label: Text(
-                          'Entity',
+                          'CONTAINER ID',
+                          style: TextStyle(color: Colors.white),
+                        )),
+                        DataColumn(
+                            label: Text(
+                          'ARRIVAL WAREHOUSE',
                           style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
                         )),
                         DataColumn(
                             label: Text(
-                          'Container ID',
+                          'ITEM NAME',
                           style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
                         )),
                         DataColumn(
                             label: Text(
-                          'Arrival Warehouse',
+                          'ITEM ID',
                           style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
                         )),
                         DataColumn(
                             label: Text(
-                          'Item Name',
+                          'PURCH ID',
                           style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
                         )),
                         DataColumn(
                             label: Text(
-                          'QTY.',
+                          'CLASSIFICATION',
                           style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
                         )),
                         DataColumn(
                             label: Text(
-                          'Item ID',
+                          'SERIAL No.',
                           style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
                         )),
                         DataColumn(
                             label: Text(
-                          'Perchase ID',
+                          'RCVD CONFIG ID',
                           style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
                         )),
                         DataColumn(
                             label: Text(
-                          'Classifications',
+                          'RCVD DATE',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        )),
+                        DataColumn(
+                            label: Text(
+                          'GTIN',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        )),
+                        DataColumn(
+                            label: Text(
+                          'RZONE',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        )),
+                        DataColumn(
+                            label: Text(
+                          'PALLET DATE',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        )),
+                        DataColumn(
+                            label: Text(
+                          'PALLETCODE',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        )),
+                        DataColumn(
+                            label: Text(
+                          'BIN',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        )),
+                        DataColumn(
+                            label: Text(
+                          'REMARKS',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        )),
+                        DataColumn(
+                            label: Text(
+                          'PO QTY',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        )),
+                        DataColumn(
+                            label: Text(
+                          'RCV QTY',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        )),
+                        DataColumn(
+                            label: Text(
+                          'REMAINING QTY',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        )),
+                        DataColumn(
+                            label: Text(
+                          'USER  ID',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        )),
+                        DataColumn(
+                            label: Text(
+                          'TRX DATE TIME',
                           style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
                         )),
@@ -315,19 +367,29 @@ class _ShipmentDispatchingScreenState extends State<ShipmentDispatchingScreen> {
                               FocusScope.of(context).requestFocus(FocusNode());
                               Get.to(
                                 () => ScanSerialNumberScreen(
-                                  arrivalWarehouse:
+                                  aRRIVALWAREHOUSE:
                                       e.aRRIVALWAREHOUSE.toString(),
-                                  classification: e.cLASSIFICATION.toString(),
-                                  containerId: e.cONTAINERID.toString(),
-                                  entity: e.eNTITY.toString(),
-                                  itemId: e.iTEMID.toString(),
-                                  itemName: e.iTEMNAME.toString(),
-                                  purchId: e.pURCHID.toString(),
-                                  qty: e.qTY.toString(),
-                                  shipmentId: e.sHIPMENTID.toString(),
-                                  shipmentStatus: e.sHIPMENTSTATUS.toString(),
-                                  receivedQty:
-                                      getAllTblShipmentReceivedCLList.length,
+                                  cLASSIFICATION: e.cLASSIFICATION.toString(),
+                                  cONTAINERID: e.cONTAINERID.toString(),
+                                  bIN: e.bIN.toString(),
+                                  gTIN: e.gTIN.toString(),
+                                  iTEMID: e.iTEMID.toString(),
+                                  iTEMNAME: e.iTEMNAME.toString(),
+                                  pALLETCODE: e.pALLETCODE.toString(),
+                                  pALLETDATE: e.pALLETDATE.toString(),
+                                  pURCHID: e.pURCHID.toString(),
+                                  pOQTY: int.parse(e.pOQTY.toString()),
+                                  rCVDCONFIGID: e.rCVDCONFIGID.toString(),
+                                  rCVDDATE: e.rCVDDATE.toString(),
+                                  rCVQTY: int.parse(e.rCVQTY.toString()),
+                                  rEMAININGQTY:
+                                      int.parse(e.rEMAININGQTY.toString()),
+                                  rEMARKS: e.rEMARKS.toString(),
+                                  rZONE: e.rZONE.toString(),
+                                  sERIALNUM: e.sERIALNUM.toString(),
+                                  sHIPMENTID: e.sHIPMENTID.toString(),
+                                  tRXDATETIME: e.tRXDATETIME.toString(),
+                                  uSERID: e.uSERID.toString(),
                                 ),
                               );
                             },
@@ -335,16 +397,27 @@ class _ShipmentDispatchingScreenState extends State<ShipmentDispatchingScreen> {
                               DataCell(Text(
                                   (getAllAssetByLocationList.indexOf(e) + 1)
                                       .toString())),
-                              DataCell(Text(e.sHIPMENTSTATUS.toString())),
                               DataCell(Text(e.sHIPMENTID.toString())),
-                              DataCell(Text(e.eNTITY.toString())),
                               DataCell(Text(e.cONTAINERID.toString())),
                               DataCell(Text(e.aRRIVALWAREHOUSE.toString())),
                               DataCell(Text(e.iTEMNAME.toString())),
-                              DataCell(Text(e.qTY.toString())),
                               DataCell(Text(e.iTEMID.toString())),
                               DataCell(Text(e.pURCHID.toString())),
                               DataCell(Text(e.cLASSIFICATION.toString())),
+                              DataCell(Text(e.sERIALNUM.toString())),
+                              DataCell(Text(e.rCVDCONFIGID.toString())),
+                              DataCell(Text(e.rCVDDATE.toString())),
+                              DataCell(Text(e.gTIN.toString())),
+                              DataCell(Text(e.rZONE.toString())),
+                              DataCell(Text(e.pALLETDATE.toString())),
+                              DataCell(Text(e.pALLETCODE.toString())),
+                              DataCell(Text(e.bIN.toString())),
+                              DataCell(Text(e.rEMARKS.toString())),
+                              DataCell(Text(e.pOQTY.toString())),
+                              DataCell(Text(e.rCVQTY.toString())),
+                              DataCell(Text(e.rEMAININGQTY.toString())),
+                              DataCell(Text(e.uSERID.toString())),
+                              DataCell(Text(e.tRXDATETIME.toString())),
                             ]);
                       }).toList(),
                     ),

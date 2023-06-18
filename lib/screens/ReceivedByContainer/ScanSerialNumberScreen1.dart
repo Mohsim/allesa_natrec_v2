@@ -7,37 +7,58 @@ import '../../../utils/Constants.dart';
 import '../../../widgets/ElevatedButtonWidget.dart';
 import '../../../widgets/TextFormField.dart';
 import '../../../widgets/TextWidget.dart';
+import '../../controllers/ReceivedByContainer/getAllTblContainerReceivedCLController.dart';
 import 'ReceivedByContainer.dart';
 import 'SaveScreen1.dart';
 
 // ignore: must_be_immutable
 class ScanSerialNumberScreen1 extends StatefulWidget {
-  String shipmentStatus;
-  String shipmentId;
-  String entity;
-  String containerId;
-  String arrivalWarehouse;
-  String itemName;
-  String qty;
-  String itemId;
-  String purchId;
-  String classification;
-  int receivedQty;
+  String sHIPMENTID;
+  String cONTAINERID;
+  String aRRIVALWAREHOUSE;
+  String iTEMNAME;
+  String iTEMID;
+  String pURCHID;
+  String cLASSIFICATION;
+  String sERIALNUM;
+  String rCVDCONFIGID;
+  String rCVDDATE;
+  String gTIN;
+  String rZONE;
+  String pALLETDATE;
+  String pALLETCODE;
+  String bIN;
+  String rEMARKS;
+  int pOQTY;
+  int rCVQTY;
+  int rEMAININGQTY;
+  String uSERID;
+  String tRXDATETIME;
 
-  ScanSerialNumberScreen1({
-    super.key,
-    required this.shipmentStatus,
-    required this.shipmentId,
-    required this.entity,
-    required this.containerId,
-    required this.arrivalWarehouse,
-    required this.itemName,
-    required this.qty,
-    required this.itemId,
-    required this.purchId,
-    required this.classification,
-    required this.receivedQty,
-  });
+  ScanSerialNumberScreen1(
+      {Key? key,
+      required this.sHIPMENTID,
+      required this.cONTAINERID,
+      required this.aRRIVALWAREHOUSE,
+      required this.iTEMNAME,
+      required this.iTEMID,
+      required this.pURCHID,
+      required this.cLASSIFICATION,
+      required this.sERIALNUM,
+      required this.rCVDCONFIGID,
+      required this.rCVDDATE,
+      required this.gTIN,
+      required this.rZONE,
+      required this.pALLETDATE,
+      required this.pALLETCODE,
+      required this.bIN,
+      required this.rEMARKS,
+      required this.pOQTY,
+      required this.rCVQTY,
+      required this.rEMAININGQTY,
+      required this.uSERID,
+      required this.tRXDATETIME})
+      : super(key: key);
 
   @override
   State<ScanSerialNumberScreen1> createState() =>
@@ -59,9 +80,9 @@ class _ScanSerialNumberScreen1State extends State<ScanSerialNumberScreen1> {
   void initState() {
     super.initState();
 
-    _jobOrderNoController.text = widget.shipmentId;
-    _containerNoController.text = widget.containerId;
-    _itemNameController.text = widget.itemName;
+    _jobOrderNoController.text = widget.sHIPMENTID;
+    _containerNoController.text = widget.cONTAINERID;
+    _itemNameController.text = widget.iTEMNAME;
 
     Future.delayed(const Duration(seconds: 0), () {
       Constants.showLoadingDialog(context);
@@ -69,9 +90,30 @@ class _ScanSerialNumberScreen1State extends State<ScanSerialNumberScreen1> {
         dropdownValue = dropdownList[0];
         for (int i = 0; i < value.length; i++) {
           dropdownList.add(value[i].rZONE.toString());
+          dropdownList = dropdownList.toSet().toList();
         }
         setState(() {});
-        Navigator.pop(context);
+
+        getAllTblContainerReceivedCLController
+            .getAllTableZone(
+          widget.pOQTY.toString(),
+          widget.cONTAINERID,
+          widget.iTEMID,
+        )
+            .then((value) {
+          setState(() {
+            RCQTY1 = value;
+          });
+          Navigator.pop(context);
+        }).onError((error, stackTrace) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(error.toString().replaceAll("Exception:", "")),
+              backgroundColor: Colors.red,
+            ),
+          );
+          Navigator.pop(context);
+        });
       }).onError((error, stackTrace) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -164,7 +206,7 @@ class _ScanSerialNumberScreen1State extends State<ScanSerialNumberScreen1> {
                                 ),
                                 const SizedBox(height: 10),
                                 TextWidget(
-                                  text: "Quantity*\n${widget.qty}",
+                                  text: "PO QTY*\n${widget.pOQTY}",
                                   fontSize: 15,
                                   color: Colors.white,
                                   textAlign: TextAlign.center,
@@ -174,7 +216,7 @@ class _ScanSerialNumberScreen1State extends State<ScanSerialNumberScreen1> {
                             Column(
                               children: [
                                 TextWidget(
-                                  text: widget.itemId,
+                                  text: widget.iTEMID,
                                   fontSize: 16,
                                   color: Colors.white,
                                 ),
@@ -196,7 +238,7 @@ class _ScanSerialNumberScreen1State extends State<ScanSerialNumberScreen1> {
                                 ),
                                 const SizedBox(height: 10),
                                 TextWidget(
-                                  text: widget.classification,
+                                  text: widget.cLASSIFICATION,
                                   fontSize: 15,
                                   color: Colors.white,
                                 ),
@@ -297,19 +339,27 @@ class _ScanSerialNumberScreen1State extends State<ScanSerialNumberScreen1> {
                       return;
                     }
                     Get.to(() => SaveScreen1(
-                          shipmentStatus: widget.shipmentStatus,
-                          shipmentId: widget.shipmentId,
-                          qty: widget.qty,
-                          itemName: widget.itemName,
-                          arrivalWarehouse: widget.arrivalWarehouse,
-                          classification: widget.classification,
-                          containerId: widget.containerId,
-                          entity: widget.entity,
-                          gtin: _gtinNoController.text.trim(),
-                          itemId: widget.itemId,
-                          purchId: widget.purchId,
-                          receivingZone: dropdownValue,
-                          receivedQty: widget.receivedQty,
+                          aRRIVALWAREHOUSE: widget.aRRIVALWAREHOUSE,
+                          cLASSIFICATION: widget.cLASSIFICATION,
+                          bIN: widget.bIN,
+                          sHIPMENTID: widget.sHIPMENTID,
+                          cONTAINERID: widget.cONTAINERID,
+                          gTIN: widget.gTIN,
+                          iTEMID: widget.iTEMID,
+                          iTEMNAME: widget.iTEMNAME,
+                          pALLETCODE: widget.pALLETCODE,
+                          pALLETDATE: widget.pALLETDATE,
+                          pOQTY: widget.pOQTY,
+                          pURCHID: widget.pURCHID,
+                          rCVDCONFIGID: widget.rCVDCONFIGID,
+                          rCVDDATE: widget.rCVDDATE,
+                          rCVQTY: widget.rCVQTY,
+                          rEMAININGQTY: widget.rEMAININGQTY,
+                          rEMARKS: widget.rEMARKS,
+                          rZONE: widget.rZONE,
+                          sERIALNUM: widget.sERIALNUM,
+                          tRXDATETIME: widget.tRXDATETIME,
+                          uSERID: widget.uSERID,
                         ));
                   },
                   textColor: Colors.white,

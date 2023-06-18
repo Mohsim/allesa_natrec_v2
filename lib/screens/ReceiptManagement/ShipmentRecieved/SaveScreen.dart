@@ -8,36 +8,52 @@ import 'ShipmentDispatchingScreen.dart';
 
 // ignore: must_be_immutable
 class SaveScreen extends StatefulWidget {
-  String shipmentStatus;
-  String shipmentId;
-  String entity;
-  String containerId;
-  String arrivalWarehouse;
-  String itemName;
-  String qty;
-  String itemId;
-  String purchId;
-  String classification;
-  String gtin;
-  String receivingZone;
-  int receivedQty;
+  String sHIPMENTID;
+  String cONTAINERID;
+  String aRRIVALWAREHOUSE;
+  String iTEMNAME;
+  String iTEMID;
+  String pURCHID;
+  String cLASSIFICATION;
+  String sERIALNUM;
+  String rCVDCONFIGID;
+  String rCVDDATE;
+  String gTIN;
+  String rZONE;
+  String pALLETDATE;
+  String pALLETCODE;
+  String bIN;
+  String rEMARKS;
+  int pOQTY;
+  int rCVQTY;
+  int rEMAININGQTY;
+  String uSERID;
+  String tRXDATETIME;
 
   SaveScreen({
-    super.key,
-    required this.shipmentStatus,
-    required this.shipmentId,
-    required this.entity,
-    required this.containerId,
-    required this.arrivalWarehouse,
-    required this.itemName,
-    required this.qty,
-    required this.itemId,
-    required this.purchId,
-    required this.classification,
-    required this.gtin,
-    required this.receivingZone,
-    required this.receivedQty,
-  });
+    Key? key,
+    required this.sHIPMENTID,
+    required this.cONTAINERID,
+    required this.aRRIVALWAREHOUSE,
+    required this.iTEMNAME,
+    required this.iTEMID,
+    required this.pURCHID,
+    required this.cLASSIFICATION,
+    required this.sERIALNUM,
+    required this.rCVDCONFIGID,
+    required this.rCVDDATE,
+    required this.gTIN,
+    required this.rZONE,
+    required this.pALLETDATE,
+    required this.pALLETCODE,
+    required this.bIN,
+    required this.rEMARKS,
+    required this.pOQTY,
+    required this.rCVQTY,
+    required this.rEMAININGQTY,
+    required this.uSERID,
+    required this.tRXDATETIME,
+  }) : super(key: key);
 
   @override
   State<SaveScreen> createState() => _SaveScreenState();
@@ -58,23 +74,23 @@ class _SaveScreenState extends State<SaveScreen> {
     FocusScope.of(context).unfocus();
 
     InsertShipmentReceivedDataController.insertShipmentData(
-      widget.shipmentId,
-      widget.containerId,
-      widget.arrivalWarehouse,
-      widget.itemName,
-      widget.itemId,
-      widget.purchId,
-      int.parse(widget.classification),
+      widget.sHIPMENTID,
+      widget.cONTAINERID,
+      widget.aRRIVALWAREHOUSE,
+      widget.iTEMNAME,
+      widget.iTEMID,
+      widget.pURCHID,
+      int.parse(widget.cLASSIFICATION),
       _serialNoController.text,
       dropdownValue,
       DateTime.now().toString(),
-      widget.gtin,
-      widget.receivingZone,
+      widget.gTIN,
+      widget.rZONE,
       DateTime.now().toString(),
       "PalletCode123",
       "BIN123",
       _remarksController.text,
-      int.parse(widget.qty),
+      int.parse(widget.pOQTY.toString()),
     ).then((value) {
       setState(() {
         serialNoList.add(_serialNoController.text);
@@ -97,9 +113,9 @@ class _SaveScreenState extends State<SaveScreen> {
   @override
   void initState() {
     super.initState();
-    _jobOrderNoController.text = widget.shipmentId;
-    _containerNoController.text = widget.containerId;
-    _itemNameController.text = widget.itemName;
+    _jobOrderNoController.text = widget.sHIPMENTID;
+    _containerNoController.text = widget.cONTAINERID;
+    _itemNameController.text = widget.iTEMNAME;
   }
 
   @override
@@ -203,7 +219,7 @@ class _SaveScreenState extends State<SaveScreen> {
                                 ),
                                 const SizedBox(height: 10),
                                 TextWidget(
-                                  text: "Quantity*\n${widget.qty}",
+                                  text: "PO QTY*\n${widget.pOQTY}",
                                   fontSize: 15,
                                   color: Colors.white,
                                   textAlign: TextAlign.center,
@@ -213,7 +229,7 @@ class _SaveScreenState extends State<SaveScreen> {
                             Column(
                               children: [
                                 TextWidget(
-                                  text: widget.itemId,
+                                  text: widget.iTEMID,
                                   fontSize: 17,
                                   color: Colors.white,
                                 ),
@@ -235,7 +251,7 @@ class _SaveScreenState extends State<SaveScreen> {
                                 ),
                                 const SizedBox(height: 10),
                                 TextWidget(
-                                  text: widget.classification,
+                                  text: widget.cLASSIFICATION,
                                   fontSize: 15,
                                   color: Colors.white,
                                 ),
@@ -265,9 +281,7 @@ class _SaveScreenState extends State<SaveScreen> {
                   readOnly: true,
                 ),
               ),
-
               const SizedBox(height: 10),
-
               Container(
                 margin: const EdgeInsets.only(left: 20),
                 child: const TextWidget(
@@ -283,9 +297,7 @@ class _SaveScreenState extends State<SaveScreen> {
                   hintText: "Enter Remarks (User Input  )",
                 ),
               ),
-
               const SizedBox(height: 10),
-
               Container(
                 margin: const EdgeInsets.only(left: 20),
                 child: const TextWidget(
@@ -337,6 +349,18 @@ class _SaveScreenState extends State<SaveScreen> {
                   autofocus: false,
                   controller: _serialNoController,
                   onFieldSubmitted: (p0) {
+                    if (RCQTY >= widget.pOQTY) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content:
+                              Text("Sorry! The Remaining Quantity is Zero."),
+                          backgroundColor: Colors.red,
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                      return;
+                    }
+
                     if (_serialNoController.text.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -351,23 +375,23 @@ class _SaveScreenState extends State<SaveScreen> {
                     Constants.showLoadingDialog(context);
                     FocusScope.of(context).unfocus();
                     InsertShipmentReceivedDataController.insertShipmentData(
-                      widget.shipmentId,
-                      widget.containerId,
-                      widget.arrivalWarehouse,
-                      widget.itemName,
-                      widget.itemId,
-                      widget.purchId,
-                      int.parse(widget.classification),
+                      widget.sHIPMENTID,
+                      widget.cONTAINERID,
+                      widget.aRRIVALWAREHOUSE,
+                      widget.iTEMNAME,
+                      widget.iTEMID,
+                      widget.pURCHID,
+                      int.parse(widget.cLASSIFICATION),
                       _serialNoController.text,
                       dropdownValue,
                       DateTime.now().toString(),
-                      widget.gtin,
-                      widget.receivingZone,
+                      widget.gTIN,
+                      widget.rZONE,
                       DateTime.now().toString(),
                       "",
                       "",
                       _remarksController.text,
-                      int.parse(widget.qty),
+                      int.parse(widget.pOQTY.toString()),
                     ).then((value) {
                       setState(() {
                         serialNoList.add(_serialNoController.text);
@@ -498,37 +522,6 @@ class _SaveScreenState extends State<SaveScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              // Center(
-              //   child: GestureDetector(
-              //     onTap: () {},
-              //     child: Container(
-              //       width: MediaQuery.of(context).size.width * 0.4,
-              //       height: 50,
-              //       decoration: BoxDecoration(
-              //         color: Colors.orange,
-              //         borderRadius: BorderRadius.circular(10),
-              //       ),
-              //       child: Center(
-              //         child: Row(
-              //           mainAxisAlignment: MainAxisAlignment.spaceAround,
-              //           children: [
-              //             const TextWidget(
-              //               text: "SAVE",
-              //               fontSize: 20,
-              //               color: Colors.white,
-              //             ),
-              //             Image.asset(
-              //               'assets/save.png',
-              //               height: 25,
-              //               width: 25,
-              //             ),
-              //           ],
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // const SizedBox(height: 20),
             ],
           ),
         ),
