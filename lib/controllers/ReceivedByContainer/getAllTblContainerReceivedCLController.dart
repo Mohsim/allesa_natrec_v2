@@ -41,9 +41,8 @@ class getAllTblContainerReceivedCLController {
         return itemCount;
       } else {
         print("Status Code: ${response.statusCode}");
-        var data = json.decode(response.body);
-        var message = data['message'];
-        return message;
+        var itemCount = 0;
+        return itemCount;
       }
     } catch (e) {
       print(e);

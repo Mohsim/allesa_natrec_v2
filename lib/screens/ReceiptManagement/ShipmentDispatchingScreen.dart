@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../controllers/WareHouseOperationController/GetShipmentDataController.dart';
 import '../../models/DummyModel.dart';
-import '../../models/getAllTblShipmentReceivedCLModel.dart';
 import '../../utils/Constants.dart';
 import '../../widgets/AppBarWidget.dart';
 import '../../widgets/TextFormField.dart';
@@ -43,8 +42,6 @@ class _ShipmentDispatchingScreenState extends State<ShipmentDispatchingScreen> {
       userID = userId!;
     });
   }
-
-  List<getAllTblShipmentReceivedCLModel> getAllTblShipmentReceivedCLList = [];
 
   @override
   void initState() {

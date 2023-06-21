@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/DummyModel.dart';
-import '../../models/GetShipmentDataModel.dart';
 import '../../utils/Constants.dart';
 
 class GetShipmentDataController {
@@ -36,7 +35,9 @@ class GetShipmentDataController {
         return shipmentData;
       } else {
         print("Status Code: ${response.statusCode}");
-        throw Exception('Failed to load Data');
+        var data = json.decode(response.body);
+        var message = data['message'];
+        throw Exception(message);
       }
     } catch (e) {
       print(e);

@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../models/GetShipmentDataModel.dart';
-import '../../../models/getAllTblShipmentReceivedCLModel.dart';
 import '../../../utils/Constants.dart';
 import '../../../widgets/AppBarWidget.dart';
 import '../../../widgets/TextFormField.dart';
 import '../../../widgets/TextWidget.dart';
 import '../../controllers/ReceivedByContainer/ReceivedDataByContainerController.dart';
+import '../../models/DummyModel.dart';
 import 'ScanSerialNumberScreen1.dart';
 
 int RCQTY1 = 0;
@@ -23,7 +22,7 @@ class ReceivedByContainer extends StatefulWidget {
 class _ReceivedByContainerState extends State<ReceivedByContainer> {
   TextEditingController _shipmentIdController = TextEditingController();
   String total = "0";
-  List<GetShipmentDataModel> getAllAssetByLocationList = [];
+  List<DummyModel> getAllAssetByLocationList = [];
   List<bool> isMarked = [];
 
   String userName = "";
@@ -42,8 +41,6 @@ class _ReceivedByContainerState extends State<ReceivedByContainer> {
       userID = userId!;
     });
   }
-
-  List<getAllTblShipmentReceivedCLModel> getAllTblShipmentReceivedCLList = [];
 
   @override
   void initState() {
@@ -268,23 +265,31 @@ class _ReceivedByContainerState extends State<ReceivedByContainer> {
                         )),
                         DataColumn(
                             label: Text(
-                          'SHIPMENT ID',
-                          style: TextStyle(color: Colors.white),
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'CONTAINER ID',
-                          style: TextStyle(color: Colors.white),
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'ARRIVAL WAREHOUSE',
+                          'PURCH ID',
                           style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
                         )),
                         DataColumn(
                             label: Text(
-                          'ITEM NAME',
+                          'CREATED DATE TIME',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        )),
+                        DataColumn(
+                            label: Text(
+                          'SHIPMENT ID',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        )),
+                        DataColumn(
+                            label: Text(
+                          'SHIPMENT STATUS',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        )),
+                        DataColumn(
+                            label: Text(
+                          'CONTAINER ID',
                           style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
                         )),
@@ -296,97 +301,7 @@ class _ReceivedByContainerState extends State<ReceivedByContainer> {
                         )),
                         DataColumn(
                             label: Text(
-                          'PURCH ID',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'CLASSIFICATION',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'SERIAL No.',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'RCVD CONFIG ID',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'RCVD DATE',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'GTIN',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'RZONE',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'PALLET DATE',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'PALLETCODE',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'BIN',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'REMARKS',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'PO QTY',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'RCV QTY',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'REMAINING QTY',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'USER  ID',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'TRX DATE TIME',
+                          'QTY',
                           style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
                         )),
@@ -399,29 +314,13 @@ class _ReceivedByContainerState extends State<ReceivedByContainer> {
                               Navigator.of(context)
                                   .push(MaterialPageRoute(builder: (context) {
                                 return ScanSerialNumberScreen1(
-                                  aRRIVALWAREHOUSE:
-                                      e.aRRIVALWAREHOUSE.toString(),
-                                  cLASSIFICATION: e.cLASSIFICATION.toString(),
-                                  cONTAINERID: e.cONTAINERID.toString(),
-                                  bIN: e.bIN.toString(),
-                                  gTIN: e.gTIN.toString(),
-                                  iTEMID: e.iTEMID.toString(),
-                                  iTEMNAME: e.iTEMNAME.toString(),
-                                  pALLETCODE: e.pALLETCODE.toString(),
-                                  pALLETDATE: e.pALLETDATE.toString(),
-                                  pURCHID: e.pURCHID.toString(),
-                                  pOQTY: int.parse(e.pOQTY.toString()),
-                                  rCVDCONFIGID: e.rCVDCONFIGID.toString(),
-                                  rCVDDATE: e.rCVDDATE.toString(),
-                                  rCVQTY: int.parse(e.rCVQTY.toString()),
-                                  rEMAININGQTY:
-                                      int.parse(e.rEMAININGQTY.toString()),
-                                  rEMARKS: e.rEMARKS.toString(),
-                                  rZONE: e.rZONE.toString(),
-                                  sERIALNUM: e.sERIALNUM.toString(),
-                                  sHIPMENTID: e.sHIPMENTID.toString(),
-                                  tRXDATETIME: e.tRXDATETIME.toString(),
-                                  uSERID: e.uSERID.toString(),
+                                  containerId: e.cONTAINERID ?? "",
+                                  itemId: e.iTEMID ?? "",
+                                  qty: e.qTY ?? 0,
+                                  shipmentId: e.sHIPMENTID ?? "",
+                                  shipmentStatus: e.sHIPMENTSTATUS ?? 0,
+                                  purchId: e.pURCHID ?? "",
+                                  createdDateTime: e.cREATEDDATETIME ?? "",
                                 );
                               }));
                             },
@@ -429,27 +328,13 @@ class _ReceivedByContainerState extends State<ReceivedByContainer> {
                               DataCell(Text(
                                   (getAllAssetByLocationList.indexOf(e) + 1)
                                       .toString())),
-                              DataCell(Text(e.sHIPMENTID.toString())),
-                              DataCell(Text(e.cONTAINERID.toString())),
-                              DataCell(Text(e.aRRIVALWAREHOUSE.toString())),
-                              DataCell(Text(e.iTEMNAME.toString())),
-                              DataCell(Text(e.iTEMID.toString())),
-                              DataCell(Text(e.pURCHID.toString())),
-                              DataCell(Text(e.cLASSIFICATION.toString())),
-                              DataCell(Text(e.sERIALNUM.toString())),
-                              DataCell(Text(e.rCVDCONFIGID.toString())),
-                              DataCell(Text(e.rCVDDATE.toString())),
-                              DataCell(Text(e.gTIN.toString())),
-                              DataCell(Text(e.rZONE.toString())),
-                              DataCell(Text(e.pALLETDATE.toString())),
-                              DataCell(Text(e.pALLETCODE.toString())),
-                              DataCell(Text(e.bIN.toString())),
-                              DataCell(Text(e.rEMARKS.toString())),
-                              DataCell(Text(e.pOQTY.toString())),
-                              DataCell(Text(e.rCVQTY.toString())),
-                              DataCell(Text(e.rEMAININGQTY.toString())),
-                              DataCell(Text(e.uSERID.toString())),
-                              DataCell(Text(e.tRXDATETIME.toString())),
+                              DataCell(Text(e.pURCHID ?? "")),
+                              DataCell(Text(e.cREATEDDATETIME ?? "")),
+                              DataCell(Text(e.sHIPMENTID ?? "")),
+                              DataCell(Text(e.sHIPMENTSTATUS.toString())),
+                              DataCell(Text(e.cONTAINERID ?? "")),
+                              DataCell(Text(e.iTEMID ?? "")),
+                              DataCell(Text(e.qTY.toString())),
                             ]);
                       }).toList(),
                     ),
