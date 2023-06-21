@@ -193,13 +193,44 @@ class _ReceivedByContainerState extends State<ReceivedByContainer> {
                   ],
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.only(left: 10, top: 10),
-                child: const TextWidget(
-                  text: "Container Details*",
-                  fontSize: 16,
-                ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(left: 10, top: 10),
+                    child: const TextWidget(
+                      text: "Container Details*",
+                      fontSize: 16,
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      const TextWidget(
+                        text: "TOTAL",
+                        fontSize: 16,
+                      ),
+                      const SizedBox(width: 10),
+                      Container(
+                        width: 50,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.blue,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: TextWidget(text: total),
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                    ],
+                  ),
+                ],
               ),
+              const SizedBox(height: 10),
               Container(
                 height: MediaQuery.of(context).size.height * 0.5,
                 decoration: BoxDecoration(
@@ -365,8 +396,9 @@ class _ReceivedByContainerState extends State<ReceivedByContainer> {
                             onSelectChanged: (value) {
                               // keybord hide
                               FocusScope.of(context).requestFocus(FocusNode());
-                              Get.to(
-                                () => ScanSerialNumberScreen1(
+                              Navigator.of(context)
+                                  .push(MaterialPageRoute(builder: (context) {
+                                return ScanSerialNumberScreen1(
                                   aRRIVALWAREHOUSE:
                                       e.aRRIVALWAREHOUSE.toString(),
                                   cLASSIFICATION: e.cLASSIFICATION.toString(),
@@ -390,8 +422,8 @@ class _ReceivedByContainerState extends State<ReceivedByContainer> {
                                   sHIPMENTID: e.sHIPMENTID.toString(),
                                   tRXDATETIME: e.tRXDATETIME.toString(),
                                   uSERID: e.uSERID.toString(),
-                                ),
-                              );
+                                );
+                              }));
                             },
                             cells: [
                               DataCell(Text(
@@ -425,27 +457,6 @@ class _ReceivedByContainerState extends State<ReceivedByContainer> {
                 ),
               ),
               const SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  const TextWidget(text: "TOTAL"),
-                  const SizedBox(width: 10),
-                  Container(
-                    width: 100,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.blue,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Center(
-                      child: TextWidget(text: total),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                ],
-              ),
             ],
           ),
         ),

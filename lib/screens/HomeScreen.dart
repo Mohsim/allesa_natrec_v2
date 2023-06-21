@@ -15,7 +15,7 @@ import '../../screens/BinToBinJournal/BinToBinJournalScreen.dart';
 import '../../screens/ItemReAllocation/ItemReAllocationScreen.dart';
 import '../../screens/Palletizing/ShipmentPalletizingScreen.dart';
 import '../../screens/PutAway/PutAwayScreen.dart';
-import 'ReceiptManagement/ShipmentRecieved/ShipmentDispatchingScreen.dart';
+import 'ReceiptManagement/ShipmentDispatchingScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -197,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.white,
                   ),
                   child: Row(
@@ -236,10 +236,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           );
                         },
-                        child: Image.asset(
-                          "assets/back_button.png",
-                          width: 50,
-                          height: 50,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 20, top: 10),
+                          child: Image.asset(
+                            "assets/back_button.png",
+                            width: 50,
+                            height: 50,
+                          ),
                         ),
                       ),
                     ],

@@ -49,6 +49,7 @@ dependencies:
   build_web_compilers: ^3.2.3
   pin_code_fields: ^7.4.0
   provider: ^6.0.5
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:

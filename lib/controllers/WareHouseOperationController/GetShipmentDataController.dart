@@ -2,16 +2,19 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../models/DummyModel.dart';
 import '../../models/GetShipmentDataModel.dart';
 import '../../utils/Constants.dart';
 
 class GetShipmentDataController {
-  static Future<List<GetShipmentDataModel>> getShipmentData(String id) async {
+  static Future<List<DummyModel>> getShipmentData(String id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
 
     String url =
         "${Constants.baseUrl}getShipmentDataFromtShipmentReceiving?SHIPMENTID=$id";
+
+    print("URL: $url");
 
     final uri = Uri.parse(url);
 
@@ -28,8 +31,8 @@ class GetShipmentDataController {
         print("Status Code: ${response.statusCode}");
 
         var data = json.decode(response.body) as List;
-        List<GetShipmentDataModel> shipmentData =
-            data.map((e) => GetShipmentDataModel.fromJson(e)).toList();
+        List<DummyModel> shipmentData =
+            data.map((e) => DummyModel.fromJson(e)).toList();
         return shipmentData;
       } else {
         print("Status Code: ${response.statusCode}");

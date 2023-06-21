@@ -4,23 +4,12 @@ import 'dart:convert';
 
 import '../../utils/Constants.dart';
 
-class getAllTblShipmentReceivedCLController {
-  static Future<int> getAllTableZone(
-    String POQTY,
-    String SHIPMENTID,
-    String ITEMID,
-  ) async {
+class GetItemNameByItemIdController {
+  static Future<String> getName(String itemId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
 
-    print("POQTY: $POQTY");
-    print("SHIPMENTID: $SHIPMENTID");
-    print("ITEMID: $ITEMID");
-
-    String url =
-        "${Constants.baseUrl}getShipmentRecievedClCountByPoqtyShipmentIdAndItemId?POQTY=$POQTY&SHIPMENTID=$SHIPMENTID&ITEMID=$ITEMID";
-
-    print("URL: $url");
+    String url = "${Constants.baseUrl}getInventTableWMSDataByItemId";
 
     final uri = Uri.parse(url);
 
@@ -28,21 +17,24 @@ class getAllTblShipmentReceivedCLController {
       "Authorization": token,
       "Host": Constants.host,
       "Accept": "application/json",
+      "ITEMID": itemId,
     };
 
+    print(headers);
+
     try {
-      var response = await http.get(uri, headers: headers);
+      var response = await http.post(uri, headers: headers);
 
       if (response.statusCode == 200) {
         print("Status Code: ${response.statusCode}");
 
         var data = json.decode(response.body);
-        var itemCount = data['itemCount'];
-        return itemCount;
+        var itemName = data[0]['ITEMNAME'];
+        return itemName;
       } else {
         print("Status Code: ${response.statusCode}");
-        var itemCount = 0;
-        return itemCount;
+        var itemName = "";
+        return itemName;
       }
     } catch (e) {
       print(e);

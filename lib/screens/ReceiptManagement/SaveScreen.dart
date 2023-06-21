@@ -1,59 +1,36 @@
-import '../../../controllers/WareHouseOperationController/InsertShipmentReceivedData.dart';
-import '../../../utils/Constants.dart';
-import '../../../widgets/TextFormField.dart';
-import '../../../widgets/TextWidget.dart';
+import '../../controllers/WareHouseOperationController/InsertShipmentReceivedData.dart';
+import '../../utils/Constants.dart';
+import '../../widgets/TextFormField.dart';
+import '../../widgets/TextWidget.dart';
 import 'package:flutter/material.dart';
 
 import 'ShipmentDispatchingScreen.dart';
 
 // ignore: must_be_immutable
 class SaveScreen extends StatefulWidget {
-  String sHIPMENTID;
-  String cONTAINERID;
-  String aRRIVALWAREHOUSE;
-  String iTEMNAME;
-  String iTEMID;
-  String pURCHID;
-  String cLASSIFICATION;
-  String sERIALNUM;
-  String rCVDCONFIGID;
-  String rCVDDATE;
-  String gTIN;
-  String rZONE;
-  String pALLETDATE;
-  String pALLETCODE;
-  String bIN;
-  String rEMARKS;
-  int pOQTY;
-  int rCVQTY;
-  int rEMAININGQTY;
-  String uSERID;
-  String tRXDATETIME;
+  String gtin;
+  String rZone;
+  String itemName;
+  String createdDateTime;
+  String purchId;
+  String shipmentId;
+  int shipmentStatus;
+  String containerId;
+  String itemId;
+  int qty;
 
   SaveScreen({
-    Key? key,
-    required this.sHIPMENTID,
-    required this.cONTAINERID,
-    required this.aRRIVALWAREHOUSE,
-    required this.iTEMNAME,
-    required this.iTEMID,
-    required this.pURCHID,
-    required this.cLASSIFICATION,
-    required this.sERIALNUM,
-    required this.rCVDCONFIGID,
-    required this.rCVDDATE,
-    required this.gTIN,
-    required this.rZONE,
-    required this.pALLETDATE,
-    required this.pALLETCODE,
-    required this.bIN,
-    required this.rEMARKS,
-    required this.pOQTY,
-    required this.rCVQTY,
-    required this.rEMAININGQTY,
-    required this.uSERID,
-    required this.tRXDATETIME,
-  }) : super(key: key);
+    required this.gtin,
+    required this.itemName,
+    required this.createdDateTime,
+    required this.purchId,
+    required this.shipmentId,
+    required this.shipmentStatus,
+    required this.containerId,
+    required this.itemId,
+    required this.qty,
+    required this.rZone,
+  });
 
   @override
   State<SaveScreen> createState() => _SaveScreenState();
@@ -74,23 +51,23 @@ class _SaveScreenState extends State<SaveScreen> {
     FocusScope.of(context).unfocus();
 
     InsertShipmentReceivedDataController.insertShipmentData(
-      widget.sHIPMENTID,
-      widget.cONTAINERID,
-      widget.aRRIVALWAREHOUSE,
-      widget.iTEMNAME,
-      widget.iTEMID,
-      widget.pURCHID,
-      int.parse(widget.cLASSIFICATION),
+      widget.shipmentId,
+      widget.containerId,
+      "",
+      widget.itemName,
+      widget.itemId,
+      widget.purchId,
+      0,
       _serialNoController.text,
       dropdownValue,
       DateTime.now().toString(),
-      widget.gTIN,
-      widget.rZONE,
+      widget.gtin,
+      widget.rZone,
       DateTime.now().toString(),
-      "PalletCode123",
-      "BIN123",
+      "",
+      "",
       _remarksController.text,
-      int.parse(widget.pOQTY.toString()),
+      int.parse(widget.qty.toString()),
     ).then((value) {
       setState(() {
         serialNoList.add(_serialNoController.text);
@@ -113,9 +90,9 @@ class _SaveScreenState extends State<SaveScreen> {
   @override
   void initState() {
     super.initState();
-    _jobOrderNoController.text = widget.sHIPMENTID;
-    _containerNoController.text = widget.cONTAINERID;
-    _itemNameController.text = widget.iTEMNAME;
+    _jobOrderNoController.text = widget.shipmentId;
+    _containerNoController.text = widget.containerId;
+    _itemNameController.text = widget.itemName;
   }
 
   @override
@@ -219,7 +196,7 @@ class _SaveScreenState extends State<SaveScreen> {
                                 ),
                                 const SizedBox(height: 10),
                                 TextWidget(
-                                  text: "PO QTY*\n${widget.pOQTY}",
+                                  text: "PO QTY*\n${widget.qty}",
                                   fontSize: 15,
                                   color: Colors.white,
                                   textAlign: TextAlign.center,
@@ -229,7 +206,7 @@ class _SaveScreenState extends State<SaveScreen> {
                             Column(
                               children: [
                                 TextWidget(
-                                  text: widget.iTEMID,
+                                  text: widget.itemId,
                                   fontSize: 17,
                                   color: Colors.white,
                                 ),
@@ -242,16 +219,16 @@ class _SaveScreenState extends State<SaveScreen> {
                                 ),
                               ],
                             ),
-                            Column(
+                            const Column(
                               children: [
-                                const TextWidget(
+                                TextWidget(
                                   text: "CON",
                                   fontSize: 17,
                                   color: Colors.white,
                                 ),
-                                const SizedBox(height: 10),
+                                SizedBox(height: 10),
                                 TextWidget(
-                                  text: widget.cLASSIFICATION,
+                                  text: "1",
                                   fontSize: 15,
                                   color: Colors.white,
                                 ),
@@ -349,7 +326,7 @@ class _SaveScreenState extends State<SaveScreen> {
                   autofocus: false,
                   controller: _serialNoController,
                   onFieldSubmitted: (p0) {
-                    if (RCQTY >= widget.pOQTY) {
+                    if (RCQTY >= widget.qty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content:
@@ -375,23 +352,23 @@ class _SaveScreenState extends State<SaveScreen> {
                     Constants.showLoadingDialog(context);
                     FocusScope.of(context).unfocus();
                     InsertShipmentReceivedDataController.insertShipmentData(
-                      widget.sHIPMENTID,
-                      widget.cONTAINERID,
-                      widget.aRRIVALWAREHOUSE,
-                      widget.iTEMNAME,
-                      widget.iTEMID,
-                      widget.pURCHID,
-                      int.parse(widget.cLASSIFICATION),
+                      widget.shipmentId,
+                      widget.containerId,
+                      '',
+                      widget.itemName,
+                      widget.itemId,
+                      widget.purchId,
+                      0,
                       _serialNoController.text,
                       dropdownValue,
                       DateTime.now().toString(),
-                      widget.gTIN,
-                      widget.rZONE,
+                      widget.gtin,
+                      widget.rZone,
                       DateTime.now().toString(),
                       "",
                       "",
                       _remarksController.text,
-                      int.parse(widget.pOQTY.toString()),
+                      int.parse(widget.qty.toString()),
                     ).then((value) {
                       setState(() {
                         serialNoList.add(_serialNoController.text);

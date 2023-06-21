@@ -138,6 +138,7 @@ class _DispatchingFormScreenState extends State<DispatchingFormScreen> {
                         },
                       ),
                     ),
+                    const SizedBox(width: 10),
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.transparent,
