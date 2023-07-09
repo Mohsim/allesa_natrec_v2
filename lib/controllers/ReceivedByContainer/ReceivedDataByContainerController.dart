@@ -13,6 +13,8 @@ class ReceivedDataByContainerController {
     String url =
         "${Constants.baseUrl}getShipmentDataFromtShipmentReceivingByContainerId?CONTAINERID=$id";
 
+    print("URL: $url");
+
     final uri = Uri.parse(url);
 
     final headers = <String, String>{

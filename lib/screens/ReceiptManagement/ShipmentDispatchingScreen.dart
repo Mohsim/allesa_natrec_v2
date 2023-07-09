@@ -318,7 +318,8 @@ class _ShipmentDispatchingScreenState extends State<ShipmentDispatchingScreen> {
                                   itemId: e.iTEMID ?? "",
                                   qty: e.qTY ?? 0,
                                   shipmentId: e.sHIPMENTID ?? "",
-                                  shipmentStatus: e.sHIPMENTSTATUS ?? 0,
+                                  shipmentStatus:
+                                      int.parse(e.sHIPMENTSTATUS.toString()),
                                   purchId: e.pURCHID ?? "",
                                   createdDateTime: e.cREATEDDATETIME ?? "",
                                 );

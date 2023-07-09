@@ -206,21 +206,21 @@ class _ScanSerialNumberScreenState extends State<ScanSerialNumberScreen> {
                                 ),
                               ],
                             ),
-                            const Column(
-                              children: [
-                                TextWidget(
-                                  text: "CON",
-                                  fontSize: 16,
-                                  color: Colors.white,
-                                ),
-                                SizedBox(height: 10),
-                                TextWidget(
-                                  text: "1",
-                                  fontSize: 15,
-                                  color: Colors.white,
-                                ),
-                              ],
-                            ),
+                            // const Column(
+                            //   children: [
+                            //     TextWidget(
+                            //       text: "CON",
+                            //       fontSize: 16,
+                            //       color: Colors.white,
+                            //     ),
+                            //     SizedBox(height: 10),
+                            //     TextWidget(
+                            //       text: "1",
+                            //       fontSize: 15,
+                            //       color: Colors.white,
+                            //     ),
+                            //   ],
+                            // ),
                           ],
                         ),
                       ),
@@ -241,7 +241,7 @@ class _ScanSerialNumberScreenState extends State<ScanSerialNumberScreen> {
                 child: TextFormFieldWidget(
                   controller: _itemNameController,
                   width: MediaQuery.of(context).size.width * 0.9,
-                  hintText: "Item Name/Description",
+                  hintText: "Item Name",
                   readOnly: true,
                 ),
               ),

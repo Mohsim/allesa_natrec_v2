@@ -9,7 +9,7 @@ class GetItemNameByItemIdController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
 
-    String url = "${Constants.baseUrl}getInventTableWMSDataByItemId";
+    String url = "${Constants.baseUrl}InventTableWMSDataByItemId";
 
     final uri = Uri.parse(url);
 
@@ -17,7 +17,7 @@ class GetItemNameByItemIdController {
       "Authorization": token,
       "Host": Constants.host,
       "Accept": "application/json",
-      "ITEMID": itemId,
+      "itemId": itemId,
     };
 
     print(headers);
