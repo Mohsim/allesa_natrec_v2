@@ -49,6 +49,7 @@ class _ScanSerialNumberScreen1State extends State<ScanSerialNumberScreen1> {
   List<String> dropdownList = ['Select Zone'];
 
   String itemName = '';
+  String cond = '';
 
   @override
   void initState() {
@@ -67,33 +68,33 @@ class _ScanSerialNumberScreen1State extends State<ScanSerialNumberScreen1> {
           // convert the dropdownList to a list of strings
           dropdownList = dropdownList.toSet().toList();
         }
-        GetItemNameByItemIdController.getName(widget.itemId).then((value) {
+        getAllTblContainerReceivedCLController
+            .getAllTableZone(
+          widget.qty.toString(),
+          widget.containerId,
+          widget.itemId,
+        )
+            .then((value) {
           setState(() {
-            itemName = value;
-          });
-          getAllTblContainerReceivedCLController
-              .getAllTableZone(
-            widget.qty.toString(),
-            widget.containerId,
-            widget.itemId,
-          )
-              .then((value) {
-            setState(() {
-              RCQTY1 = value;
-            });
-            Navigator.pop(context);
-          }).onError((error, stackTrace) {
-            setState(() {
-              RCQTY1 = 0;
-            });
-            Navigator.pop(context);
+            RCQTY1 = value;
           });
         }).onError((error, stackTrace) {
+          setState(() {
+            RCQTY1 = 0;
+          });
+        });
+        GetItemNameByItemIdController.getName(widget.itemId).then((value) {
+          setState(() {
+            itemName = value[0].itemDesc ?? "";
+            _itemNameController.text = value[0].itemDesc ?? "";
+            cond = value[0].classification ?? "";
+          });
           Navigator.pop(context);
-          itemName = "";
+        }).onError((error, stackTrace) {
+          itemName = "Item Name";
+          cond = "";
         });
       }).onError((error, stackTrace) {
-        Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(error.toString().replaceAll("Exception:", "")),
@@ -207,21 +208,21 @@ class _ScanSerialNumberScreen1State extends State<ScanSerialNumberScreen1> {
                                 ),
                               ],
                             ),
-                            // const Column(
-                            //   children: [
-                            //     TextWidget(
-                            //       text: "CON",
-                            //       fontSize: 16,
-                            //       color: Colors.white,
-                            //     ),
-                            //     SizedBox(height: 10),
-                            //     TextWidget(
-                            //       text: "1",
-                            //       fontSize: 15,
-                            //       color: Colors.white,
-                            //     ),
-                            //   ],
-                            // ),
+                            Column(
+                              children: [
+                                const TextWidget(
+                                  text: "CON",
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                                const SizedBox(height: 10),
+                                TextWidget(
+                                  text: cond,
+                                  fontSize: 15,
+                                  color: Colors.white,
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ),

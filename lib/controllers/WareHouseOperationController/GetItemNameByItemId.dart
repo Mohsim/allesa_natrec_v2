@@ -2,14 +2,15 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
+import '../../models/BinToBinInternalModel.dart';
 import '../../utils/Constants.dart';
 
 class GetItemNameByItemIdController {
-  static Future<String> getName(String itemId) async {
+  static Future<List<BinToBinInternalModel>> getName(String itemId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
 
-    String url = "${Constants.baseUrl}InventTableWMSDataByItemId";
+    String url = "${Constants.baseUrl}getOneMapBarcodeDataByItemCode";
 
     final uri = Uri.parse(url);
 
@@ -17,24 +18,20 @@ class GetItemNameByItemIdController {
       "Authorization": token,
       "Host": Constants.host,
       "Accept": "application/json",
-      "itemId": itemId,
+      "itemcode": itemId,
     };
-
-    print(headers);
 
     try {
       var response = await http.post(uri, headers: headers);
 
       if (response.statusCode == 200) {
         print("Status Code: ${response.statusCode}");
-
-        var data = json.decode(response.body);
-        var itemName = data[0]['ITEMNAME'];
-        return itemName;
+        var data = json.decode(response.body) as List;
+        List<BinToBinInternalModel> allData =
+            data.map((e) => BinToBinInternalModel.fromJson(e)).toList();
+        return allData;
       } else {
-        print("Status Code: ${response.statusCode}");
-        var itemName = "";
-        return itemName;
+        throw Exception("No Data Found");
       }
     } catch (e) {
       print(e);
