@@ -82,6 +82,7 @@ class _ScanSerialNumberScreen1State extends State<ScanSerialNumberScreen1> {
           setState(() {
             RCQTY1 = 0;
           });
+          Navigator.pop(context);
         });
         GetItemNameByItemIdController.getName(widget.itemId).then((value) {
           setState(() {
@@ -91,8 +92,12 @@ class _ScanSerialNumberScreen1State extends State<ScanSerialNumberScreen1> {
           });
           Navigator.pop(context);
         }).onError((error, stackTrace) {
-          itemName = "Item Name";
-          cond = "";
+          setState(() {
+            itemName = "";
+            _itemNameController.text = "";
+            cond = "";
+          });
+          Navigator.pop(context);
         });
       }).onError((error, stackTrace) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -100,6 +105,7 @@ class _ScanSerialNumberScreen1State extends State<ScanSerialNumberScreen1> {
             content: Text(error.toString().replaceAll("Exception:", "")),
           ),
         );
+        Navigator.pop(context);
       });
     });
   }

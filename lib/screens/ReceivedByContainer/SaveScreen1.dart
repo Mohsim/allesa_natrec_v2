@@ -383,12 +383,14 @@ class _SaveScreen1State extends State<SaveScreen1> {
                       });
                       Navigator.pop(context);
                     }).onError((error, stackTrace) {
-                      Navigator.pop(context);
+                      _serialNoController.clear();
+                      FocusScope.of(context).requestFocus(secondFocusNode);
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text("Serial Number already exists.!"),
+                          content: Text("Serial Number already exists!"),
                         ),
                       );
+                      Navigator.pop(context);
                     });
                   },
                 ),
