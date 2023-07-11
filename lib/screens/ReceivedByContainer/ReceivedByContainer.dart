@@ -21,6 +21,7 @@ class ReceivedByContainer extends StatefulWidget {
 
 class _ReceivedByContainerState extends State<ReceivedByContainer> {
   TextEditingController _shipmentIdController = TextEditingController();
+  TextEditingController _filterController = TextEditingController();
   String total = "0";
   List<DummyModel> getAllAssetByLocationList = [];
   List<bool> isMarked = [];
@@ -190,6 +191,39 @@ class _ReceivedByContainerState extends State<ReceivedByContainer> {
                   ],
                 ),
               ),
+              total != "0"
+                  ? Container(
+                      margin: const EdgeInsets.only(left: 20, top: 10),
+                      child: const TextWidget(
+                        text: " Filter By Container ID*",
+                        fontSize: 16,
+                      ),
+                    )
+                  : Container(),
+              total != "0"
+                  ? Container(
+                      margin: const EdgeInsets.only(left: 20),
+                      child: TextFormFieldWidget(
+                        controller: _filterController,
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        onEditingComplete: () {
+                          FocusScope.of(context).unfocus();
+                          // Filter by Container Id
+                          setState(() {
+                            getAllAssetByLocationList =
+                                getAllAssetByLocationList
+                                    .where((element) =>
+                                        element.cONTAINERID!.contains(
+                                            _filterController.text.trim()))
+                                    .toList();
+                            total = getAllAssetByLocationList.length.toString();
+                            isMarked = List<bool>.filled(
+                                getAllAssetByLocationList.length, false);
+                          });
+                        },
+                      ),
+                    )
+                  : Container(),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
