@@ -36,6 +36,8 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
   final TextEditingController _heightController = TextEditingController();
   final TextEditingController _weightController = TextEditingController();
 
+  FocusNode focusNode = FocusNode();
+
   String? dropDownValue = "Select Config";
   List<String> dropDownList = [
     "Select Config",
@@ -245,6 +247,8 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                     hintText: "Enter/Scan Serial No",
                     controller: _serialNoController,
                     width: MediaQuery.of(context).size.width * 0.9,
+                    focusNode: focusNode,
+                    textInputAction: TextInputAction.next,
                     onFieldSubmitted: (p0) {
                       FocusScope.of(context).unfocus();
                     },
@@ -267,6 +271,7 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                   child: TextFormFieldWidget(
                     hintText: "Enter/Scan GTIN",
                     controller: _gtinController,
+                    textInputAction: TextInputAction.next,
                     width: MediaQuery.of(context).size.width * 0.9,
                     onFieldSubmitted: (p0) {
                       FocusScope.of(context).unfocus();
@@ -354,6 +359,7 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                     hintText: "Enter/Scan QR Code",
                     controller: _qrCodeController,
                     width: MediaQuery.of(context).size.width * 0.9,
+                    textInputAction: TextInputAction.next,
                     onFieldSubmitted: (p0) {
                       FocusScope.of(context).unfocus();
                     },
@@ -376,6 +382,7 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                   child: TextFormFieldWidget(
                     hintText: "Enter/Scan Bin Location",
                     controller: _binLocationController,
+                    textInputAction: TextInputAction.next,
                     width: MediaQuery.of(context).size.width * 0.9,
                     onFieldSubmitted: (p0) {
                       FocusScope.of(context).unfocus();
@@ -399,6 +406,7 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                   child: TextFormFieldWidget(
                     hintText: "Enter/Scan Reference",
                     controller: _referenceController,
+                    textInputAction: TextInputAction.next,
                     width: MediaQuery.of(context).size.width * 0.9,
                     onFieldSubmitted: (p0) {
                       FocusScope.of(context).unfocus();
@@ -422,6 +430,7 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                   child: TextFormFieldWidget(
                     hintText: "Enter/Scan Length",
                     controller: _lengthController,
+                    textInputAction: TextInputAction.next,
                     width: MediaQuery.of(context).size.width * 0.9,
                     onFieldSubmitted: (p0) {
                       FocusScope.of(context).unfocus();
@@ -445,6 +454,7 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                   child: TextFormFieldWidget(
                     hintText: "Enter/Scan Width",
                     controller: _widthController,
+                    textInputAction: TextInputAction.next,
                     width: MediaQuery.of(context).size.width * 0.9,
                     onFieldSubmitted: (p0) {
                       FocusScope.of(context).unfocus();
@@ -468,6 +478,7 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                   child: TextFormFieldWidget(
                     hintText: "Enter/Scan Height",
                     controller: _heightController,
+                    textInputAction: TextInputAction.next,
                     width: MediaQuery.of(context).size.width * 0.9,
                     onFieldSubmitted: (p0) {
                       FocusScope.of(context).unfocus();
@@ -491,6 +502,7 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                   child: TextFormFieldWidget(
                     hintText: "Enter/Scan Weight",
                     controller: _weightController,
+                    textInputAction: TextInputAction.done,
                     width: MediaQuery.of(context).size.width * 0.9,
                     onFieldSubmitted: (p0) {
                       FocusScope.of(context).unfocus();
@@ -564,6 +576,7 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                           // itemGroupId = "";
                           // groupName = "";
                         });
+                        FocusScope.of(context).requestFocus(focusNode);
                       }).onError((error, stackTrace) {
                         Navigator.of(context).pop();
                         ScaffoldMessenger.of(context).showSnackBar(

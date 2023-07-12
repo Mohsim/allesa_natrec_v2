@@ -15,6 +15,7 @@ class TextFormFieldWidget extends StatelessWidget {
   final bool? autofocus;
   final FocusNode? focusNode;
   final Widget? suffixIcon;
+  final TextInputAction? textInputAction;
 
   const TextFormFieldWidget({
     super.key,
@@ -32,6 +33,7 @@ class TextFormFieldWidget extends StatelessWidget {
     this.autofocus,
     this.focusNode,
     this.suffixIcon,
+    this.textInputAction,
   });
 
   @override
@@ -67,6 +69,7 @@ class TextFormFieldWidget extends StatelessWidget {
             fontSize: 16,
           ),
         ),
+        textInputAction: textInputAction,
         enableSuggestions: true,
         validator: validator,
         onTapOutside: (event) {

@@ -43,8 +43,7 @@ class _SaveScreen1State extends State<SaveScreen1> {
   final TextEditingController _remarksController = TextEditingController();
   final TextEditingController _serialNoController = TextEditingController();
 
-  FocusNode firstFocusNode = FocusNode();
-  FocusNode secondFocusNode = FocusNode();
+  FocusNode focusNode = FocusNode();
 
   void method() {
     Constants.showLoadingDialog(context);
@@ -97,8 +96,7 @@ class _SaveScreen1State extends State<SaveScreen1> {
 
   @override
   void dispose() {
-    firstFocusNode.removeListener(() {});
-    secondFocusNode.removeListener(() {});
+    focusNode.removeListener(() {});
     super.dispose();
   }
 
@@ -320,7 +318,7 @@ class _SaveScreen1State extends State<SaveScreen1> {
               Container(
                 margin: const EdgeInsets.only(left: 20),
                 child: TextFormFieldWidget(
-                  focusNode: secondFocusNode,
+                  focusNode: focusNode,
                   width: MediaQuery.of(context).size.width * 0.9,
                   hintText: "Enter/Scan GTIN Number",
                   autofocus: false,
@@ -379,12 +377,12 @@ class _SaveScreen1State extends State<SaveScreen1> {
 
                         _serialNoController.clear();
                         // focus back to serial no field
-                        FocusScope.of(context).requestFocus(secondFocusNode);
+                        FocusScope.of(context).requestFocus(focusNode);
                       });
                       Navigator.pop(context);
                     }).onError((error, stackTrace) {
                       _serialNoController.clear();
-                      FocusScope.of(context).requestFocus(secondFocusNode);
+                      FocusScope.of(context).requestFocus(focusNode);
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text("Serial Number already exists!"),
