@@ -2,6 +2,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../controllers/BarcodeMapping/GetTblStockMasterByItemIdController.dart';
 import '../../controllers/BarcodeMapping/getAllTblMappedBarcodesController.dart';
 import '../../controllers/BarcodeMapping/insertIntoMappedBarcodeOrUpdateBySerialNoController.dart';
 import '../../models/GetShipmentReceivedTableModel.dart';
@@ -190,28 +191,7 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                           controller: _searchController,
                           width: MediaQuery.of(context).size.width * 0.73,
                           onEditingComplete: () {
-                            FocusScope.of(context).unfocus();
-                            Constants.showLoadingDialog(context);
-                            getAllTblMappedBarcodesController
-                                .getData(_searchController.text.trim())
-                                .then((value) {
-                              setState(() {
-                                itemName = "${value[0].iTEMNAME}";
-                                itemID = "${value[0].iTEMID}";
-                                itemGroupId = "${value[0].iTEMGROUPID}";
-                                groupName = "${value[0].gROUPNAME}";
-                              });
-                              Navigator.of(context).pop();
-                            }).onError((error, stackTrace) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(error
-                                      .toString()
-                                      .replaceAll("Exception:", "")),
-                                ),
-                              );
-                              Navigator.of(context).pop();
-                            });
+                            _onSearchItem();
                           },
                         ),
                       ),
@@ -223,28 +203,7 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                         ),
                         child: GestureDetector(
                           onTap: () {
-                            FocusScope.of(context).unfocus();
-                            Constants.showLoadingDialog(context);
-                            getAllTblMappedBarcodesController
-                                .getData(_searchController.text.trim())
-                                .then((value) {
-                              setState(() {
-                                itemName = "${value[0].iTEMNAME}";
-                                itemID = "${value[0].iTEMID}";
-                                itemGroupId = "${value[0].iTEMGROUPID}";
-                                groupName = "${value[0].gROUPNAME}";
-                              });
-                              Navigator.of(context).pop();
-                            }).onError((error, stackTrace) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(error
-                                      .toString()
-                                      .replaceAll("Exception:", "")),
-                                ),
-                              );
-                              Navigator.of(context).pop();
-                            });
+                            _onSearchItem();
                           },
                           child: Image.asset('assets/finder.png',
                               width: MediaQuery.of(context).size.width * 0.15,
@@ -545,16 +504,21 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                     width: MediaQuery.of(context).size.width * 0.9,
                     title: "Save",
                     onPressed: () {
-                      if (_serialNoController.text.trim() == "" ||
+                      if (_searchController.text.trim() == "" ||
+                          _serialNoController.text.trim() == "" ||
                           _gtinController.text.trim() == "" ||
                           dropDownValue == "Select Config" ||
-                          _binLocationController.text.trim() == "") {
+                          _binLocationController.text.trim() == "" ||
+                          _lengthController.text.trim() == "" ||
+                          _widthController.text.trim() == "" ||
+                          _heightController.text.trim() == "") {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text("Please fill the fields"),
+                            content: Text("Please fill the above fields"),
                             backgroundColor: Colors.red,
                           ),
                         );
+                        return;
                       }
                       FocusScope.of(context).unfocus();
                       Constants.showLoadingDialog(context);
@@ -583,22 +547,22 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                           ),
                         );
                         setState(() {
-                          _gtinController.clear();
-                          _binLocationController.clear();
+                          // _gtinController.clear();
+                          // _binLocationController.clear();
                           _serialNoController.clear();
-                          _manufacturingController.clear();
-                          _qrCodeController.clear();
-                          _referenceController.clear();
-                          _searchController.clear();
-                          _lengthController.clear();
-                          _widthController.clear();
-                          _heightController.clear();
-                          _weightController.clear();
+                          // _manufacturingController.clear();
+                          // _qrCodeController.clear();
+                          // _referenceController.clear();
+                          // _searchController.clear();
+                          // _lengthController.clear();
+                          // _widthController.clear();
+                          // _heightController.clear();
+                          // _weightController.clear();
 
-                          itemID = "";
-                          itemName = "";
-                          itemGroupId = "";
-                          groupName = "";
+                          // itemID = "";
+                          // itemName = "";
+                          // itemGroupId = "";
+                          // groupName = "";
                         });
                       }).onError((error, stackTrace) {
                         Navigator.of(context).pop();
@@ -622,6 +586,44 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
         ),
       ),
     );
+  }
+
+  void _onSearchItem() async {
+    FocusScope.of(context).unfocus();
+    Constants.showLoadingDialog(context);
+    getAllTblMappedBarcodesController
+        .getData(_searchController.text.trim())
+        .then((value) {
+      setState(() {
+        itemName = "${value[0].iTEMNAME}";
+        itemID = "${value[0].iTEMID}";
+        itemGroupId = "${value[0].iTEMGROUPID}";
+        groupName = "${value[0].gROUPNAME}";
+      });
+
+      GetTblStockMasterByItemIdController.getData(itemID).then((value) {
+        setState(() {
+          _widthController.text = "${value[0].width}";
+          _heightController.text = "${value[0].height}";
+          _lengthController.text = "${value[0].length}";
+        });
+        Navigator.of(context).pop();
+      }).onError((error, stackTrace) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error.toString().replaceAll("Exception:", "")),
+          ),
+        );
+        Navigator.of(context).pop();
+      });
+    }).onError((error, stackTrace) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.toString().replaceAll("Exception:", "")),
+        ),
+      );
+      Navigator.of(context).pop();
+    });
   }
 }
 
