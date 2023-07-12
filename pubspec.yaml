@@ -50,6 +50,7 @@ dependencies:
   pin_code_fields: ^7.4.0
   provider: ^6.0.5
   shimmer: ^3.0.0
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:

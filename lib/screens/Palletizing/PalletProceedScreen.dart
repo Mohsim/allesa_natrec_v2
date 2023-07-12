@@ -105,8 +105,8 @@ class _PalletProceedScreenState extends State<PalletProceedScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children: const <Widget>[
+                          const Row(
+                            children: <Widget>[
                               SizedBox(width: 10),
                               Icon(
                                 Icons.search,
@@ -214,31 +214,6 @@ class _PalletProceedScreenState extends State<PalletProceedScreen> {
                   selectedItem: dropdownValue,
                 ),
               ),
-
-              // Padding(
-              //   padding: const EdgeInsets.only(left: 20, right: 20),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //     children: const [
-              //       Text(
-              //         "RZone",
-              //         style: TextStyle(
-              //           fontSize: 20,
-              //           color: Colors.black,
-              //           fontWeight: FontWeight.bold,
-              //         ),
-              //       ),
-              //       Text(
-              //         "999,999",
-              //         style: TextStyle(
-              //           fontSize: 20,
-              //           color: Colors.black,
-              //           fontWeight: FontWeight.bold,
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
               const SizedBox(height: 10),
               Container(
                 height: MediaQuery.of(context).size.height * 0.35,

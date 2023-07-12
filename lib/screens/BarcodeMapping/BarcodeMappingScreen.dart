@@ -1,4 +1,5 @@
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../controllers/BarcodeMapping/getAllTblMappedBarcodesController.dart';
@@ -29,6 +30,10 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
   final TextEditingController _qrCodeController = TextEditingController();
   final TextEditingController _binLocationController = TextEditingController();
   final TextEditingController _referenceController = TextEditingController();
+  final TextEditingController _lengthController = TextEditingController();
+  final TextEditingController _widthController = TextEditingController();
+  final TextEditingController _heightController = TextEditingController();
+  final TextEditingController _weightController = TextEditingController();
 
   String? dropDownValue = "Select Config";
   List<String> dropDownList = [
@@ -49,6 +54,13 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
   String userID = "";
 
   void _showUserInfo() async {
+    DateTime now = DateTime.now();
+    var formatter = DateFormat.d().format(now);
+    var formatter1 = DateFormat().add_yM().format(now);
+
+    _manufacturingController.text =
+        "${formatter.toString()}/${formatter1.toString()}";
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     // final String? token = prefs.getString('token');
     final String? userId = prefs.getString('userId');
@@ -279,6 +291,7 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                     },
                   ),
                 ),
+                const SizedBox(height: 10),
                 Container(
                   margin: const EdgeInsets.only(left: 20),
                   child: Text(
@@ -301,6 +314,7 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                     },
                   ),
                 ),
+                const SizedBox(height: 10),
                 Container(
                   margin: const EdgeInsets.only(left: 20),
                   child: Text(
@@ -329,10 +343,11 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                     selectedItem: dropDownValue,
                   ),
                 ),
+                const SizedBox(height: 10),
                 Container(
                   margin: const EdgeInsets.only(left: 20),
                   child: Text(
-                    "Scan Manufacture Date",
+                    "Select Manufacture Date",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -362,6 +377,7 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 10),
                 Container(
                   margin: const EdgeInsets.only(left: 20),
                   child: Text(
@@ -384,6 +400,7 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                     },
                   ),
                 ),
+                const SizedBox(height: 10),
                 Container(
                   margin: const EdgeInsets.only(left: 20),
                   child: Text(
@@ -410,7 +427,7 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                 Container(
                   margin: const EdgeInsets.only(left: 20),
                   child: Text(
-                    "Reference",
+                    "Enter Reference",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -430,73 +447,169 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                   ),
                 ),
                 const SizedBox(height: 10),
+                Container(
+                  margin: const EdgeInsets.only(left: 20),
+                  child: Text(
+                    "Enter Length",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue[900]!,
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(left: 20),
+                  child: TextFormFieldWidget(
+                    hintText: "Enter/Scan Length",
+                    controller: _lengthController,
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    onFieldSubmitted: (p0) {
+                      FocusScope.of(context).unfocus();
+                    },
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  margin: const EdgeInsets.only(left: 20),
+                  child: Text(
+                    "Enter Width",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue[900]!,
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(left: 20),
+                  child: TextFormFieldWidget(
+                    hintText: "Enter/Scan Width",
+                    controller: _widthController,
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    onFieldSubmitted: (p0) {
+                      FocusScope.of(context).unfocus();
+                    },
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  margin: const EdgeInsets.only(left: 20),
+                  child: Text(
+                    "Enter Height",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue[900]!,
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(left: 20),
+                  child: TextFormFieldWidget(
+                    hintText: "Enter/Scan Height",
+                    controller: _heightController,
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    onFieldSubmitted: (p0) {
+                      FocusScope.of(context).unfocus();
+                    },
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  margin: const EdgeInsets.only(left: 20),
+                  child: Text(
+                    "Enter Weight",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue[900]!,
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(left: 20),
+                  child: TextFormFieldWidget(
+                    hintText: "Enter/Scan Weight",
+                    controller: _weightController,
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    onFieldSubmitted: (p0) {
+                      FocusScope.of(context).unfocus();
+                    },
+                  ),
+                ),
+                const SizedBox(height: 20),
                 Center(
                   child: ElevatedButtonWidget(
                     height: 50,
                     width: MediaQuery.of(context).size.width * 0.9,
                     title: "Save",
                     onPressed: () {
-                      if (_serialNoController.text.isEmpty ||
-                          _gtinController.text.isEmpty ||
-                          _manufacturingController.text.isEmpty ||
-                          _qrCodeController.text.isEmpty ||
-                          _binLocationController.text.isEmpty ||
-                          _referenceController.text.isEmpty ||
-                          _searchController.text.isEmpty) {
+                      if (_serialNoController.text.trim() == "" ||
+                          _gtinController.text.trim() == "" ||
+                          dropDownValue == "Select Config" ||
+                          _binLocationController.text.trim() == "") {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text("Please fill all the fields"),
+                            content: Text("Please fill the fields"),
                             backgroundColor: Colors.red,
                           ),
                         );
-                      } else {
-                        FocusScope.of(context).unfocus();
-                        Constants.showLoadingDialog(context);
-                        insertIntoMappedBarcodeOrUpdateBySerialNoController
-                            .insert(
-                          itemID,
-                          itemName,
-                          _referenceController.text.trim(),
-                          _gtinController.text.trim(),
-                          _binLocationController.text.trim(),
-                          _serialNoController.text.trim(),
-                          _manufacturingController.text.trim(),
-                          _qrCodeController.text.trim(),
-                        )
-                            .then((value) {
-                          Get.back();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Data saved successfully"),
-                              backgroundColor: Colors.green,
-                            ),
-                          );
-                          setState(() {
-                            _gtinController.clear();
-                            _binLocationController.clear();
-                            _serialNoController.clear();
-                            _manufacturingController.clear();
-                            _qrCodeController.clear();
-                            _referenceController.clear();
-                            _searchController.clear();
-
-                            itemID = "";
-                            itemName = "";
-                            itemGroupId = "";
-                            groupName = "";
-                          });
-                        }).onError((error, stackTrace) {
-                          Get.back();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(error
-                                  .toString()
-                                  .replaceAll("Exception:", "")),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                        });
                       }
+                      FocusScope.of(context).unfocus();
+                      Constants.showLoadingDialog(context);
+                      insertIntoMappedBarcodeOrUpdateBySerialNoController
+                          .insert(
+                        itemID,
+                        itemName,
+                        _referenceController.text.trim(),
+                        _gtinController.text.trim(),
+                        _binLocationController.text.trim(),
+                        _serialNoController.text.trim(),
+                        _manufacturingController.text.trim(),
+                        dropDownValue.toString(),
+                        _qrCodeController.text.trim(),
+                        int.parse(_lengthController.text.trim()),
+                        int.parse(_widthController.text.trim()),
+                        int.parse(_heightController.text.trim()),
+                        int.parse(_weightController.text.trim()),
+                      )
+                          .then((value) {
+                        Get.back();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Data saved successfully"),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                        setState(() {
+                          _gtinController.clear();
+                          _binLocationController.clear();
+                          _serialNoController.clear();
+                          _manufacturingController.clear();
+                          _qrCodeController.clear();
+                          _referenceController.clear();
+                          _searchController.clear();
+                          _lengthController.clear();
+                          _widthController.clear();
+                          _heightController.clear();
+                          _weightController.clear();
+
+                          itemID = "";
+                          itemName = "";
+                          itemGroupId = "";
+                          groupName = "";
+                        });
+                      }).onError((error, stackTrace) {
+                        Navigator.of(context).pop();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                error.toString().replaceAll("Exception:", "")),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      });
                     },
                     textColor: Colors.white,
                     color: Colors.orange,

@@ -14,6 +14,11 @@ class insertIntoMappedBarcodeOrUpdateBySerialNoController {
     String itemserialno,
     String mapdate,
     String cid,
+    String qrCode,
+    int length,
+    int width,
+    int height,
+    int weight,
   ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
@@ -36,20 +41,16 @@ class insertIntoMappedBarcodeOrUpdateBySerialNoController {
       "itemcode": itemId,
       "itemdesc": itemName,
       "gtin": gtin,
-      // "remarks": data['Remarks'],
-      // "classification": data['Classification'],
-      // "mainlocation": data['MainLocation'],
       "binlocation": binlocation,
-      // "intcode": data['IntCode'],
       "itemserialno": itemserialno,
       "mapdate": mapdate,
-      // "palletcode": data['PalletCode'],
-      // "palletdesc": data['PalletDesc'],
       "reference": reference,
-      // "sid": data['SID'],
-      "cid": cid,
-      // "po": data['PO'],
-      // "trans": data['trans']
+      "classification": cid,
+      "qrcode": qrCode,
+      "length": length,
+      "width": width,
+      "height": height,
+      "weight": weight,
     };
 
     print("Body: ${jsonEncode(body)}");

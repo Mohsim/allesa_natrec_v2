@@ -98,8 +98,8 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children: const <Widget>[
+                          const Row(
+                            children: <Widget>[
                               SizedBox(width: 10),
                               Icon(
                                 Icons.search,
@@ -330,9 +330,7 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                   itemCount: serialNoList.length,
                   itemBuilder: (context, index) {
                     return GestureDetector(
-                      onTap: () {
-                        print("Tapped");
-                      },
+                      onTap: () {},
                       child: Card(
                         child: Container(
                           decoration: const BoxDecoration(
