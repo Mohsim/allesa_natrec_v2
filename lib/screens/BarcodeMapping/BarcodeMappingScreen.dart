@@ -620,6 +620,7 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
               double.parse(value[0].height.toString()).toString();
           _lengthController.text =
               double.parse(value[0].length.toString()).toString();
+          _weightController.text = "0.0";
         });
         print("width: ${value[0].width}");
         print("height: ${value[0].height}");
@@ -631,6 +632,7 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
           _widthController.text = "0.0";
           _heightController.text = "0.0";
           _lengthController.text = "0.0";
+          _weightController.text = "0.0";
         });
       });
     }).onError((error, stackTrace) {

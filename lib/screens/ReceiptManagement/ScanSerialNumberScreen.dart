@@ -97,34 +97,55 @@ class _ScanSerialNumberScreenState extends State<ScanSerialNumberScreen> {
             _itemNameController.text = value[0].itemDesc ?? "";
             cond = value[0].classification ?? "";
           });
-          Navigator.pop(context);
+          GetTblStockMasterByItemIdController.getData(widget.itemId)
+              .then((value) {
+            setState(() {
+              _widthController.text =
+                  double.parse(value[0].width.toString()).toString();
+              _heightController.text =
+                  double.parse(value[0].height.toString()).toString();
+              _lengthController.text =
+                  double.parse(value[0].length.toString()).toString();
+            });
+            print("width: ${value[0].width}");
+            print("height: ${value[0].height}");
+            print("length: ${value[0].length}");
+            Navigator.of(context).pop();
+          }).onError((error, stackTrace) {
+            Navigator.of(context).pop();
+            setState(() {
+              _widthController.text = "0.0";
+              _heightController.text = "0.0";
+              _lengthController.text = "0.0";
+            });
+          });
         }).onError((error, stackTrace) {
           setState(() {
             itemName = "";
             _itemNameController.text = "";
             cond = "";
           });
-        });
-        GetTblStockMasterByItemIdController.getData(widget.containerId)
-            .then((value) {
-          setState(() {
-            _widthController.text =
-                double.parse(value[0].width.toString()).toString();
-            _heightController.text =
-                double.parse(value[0].height.toString()).toString();
-            _lengthController.text =
-                double.parse(value[0].length.toString()).toString();
-          });
-          print("width: ${value[0].width}");
-          print("height: ${value[0].height}");
-          print("length: ${value[0].length}");
-          Navigator.of(context).pop();
-        }).onError((error, stackTrace) {
-          Navigator.of(context).pop();
-          setState(() {
-            _widthController.text = "0.0";
-            _heightController.text = "0.0";
-            _lengthController.text = "0.0";
+          GetTblStockMasterByItemIdController.getData(widget.itemId)
+              .then((value) {
+            setState(() {
+              _widthController.text =
+                  double.parse(value[0].width.toString()).toString();
+              _heightController.text =
+                  double.parse(value[0].height.toString()).toString();
+              _lengthController.text =
+                  double.parse(value[0].length.toString()).toString();
+            });
+            print("width: ${value[0].width}");
+            print("height: ${value[0].height}");
+            print("length: ${value[0].length}");
+            Navigator.of(context).pop();
+          }).onError((error, stackTrace) {
+            Navigator.of(context).pop();
+            setState(() {
+              _widthController.text = "0.0";
+              _heightController.text = "0.0";
+              _lengthController.text = "0.0";
+            });
           });
         });
       }).onError((error, stackTrace) {
