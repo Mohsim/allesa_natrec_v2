@@ -15,10 +15,10 @@ class insertIntoMappedBarcodeOrUpdateBySerialNoController {
     String mapdate,
     String cid,
     String qrCode,
-    int length,
-    int width,
-    int height,
-    int weight,
+    double length,
+    double width,
+    double height,
+    double weight,
   ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
@@ -65,6 +65,7 @@ class insertIntoMappedBarcodeOrUpdateBySerialNoController {
         print("Data: $data");
       } else {
         print("Status Code: ${response.statusCode}");
+        throw Exception('Failed to insert data');
       }
     } catch (e) {
       print(e);

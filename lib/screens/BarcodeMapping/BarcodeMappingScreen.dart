@@ -58,11 +58,9 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
 
   void _showUserInfo() async {
     DateTime now = DateTime.now();
-    var formatter = DateFormat.d().format(now);
-    var formatter1 = DateFormat().add_yM().format(now);
+    var formatter = DateFormat.yMd().format(now);
 
-    _manufacturingController.text =
-        "${formatter.toString()}/${formatter1.toString()}";
+    _manufacturingController.text = formatter;
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     // final String? token = prefs.getString('token');
@@ -90,7 +88,7 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
       setState(() {
         // assign the date to the controller in format of dd/mm/yyyy
         _manufacturingController.text =
-            "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+            "${pickedDate.month}/${pickedDate.day}/${pickedDate.year}";
       });
     }
   }
@@ -545,10 +543,10 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                         _manufacturingController.text.trim(),
                         dropDownValue.toString(),
                         _qrCodeController.text.trim(),
-                        int.parse(_lengthController.text.trim()),
-                        int.parse(_widthController.text.trim()),
-                        int.parse(_heightController.text.trim()),
-                        int.parse(_weightController.text.trim()),
+                        double.parse(_lengthController.text.trim()),
+                        double.parse(_widthController.text.trim()),
+                        double.parse(_heightController.text.trim()),
+                        double.parse(_weightController.text.trim()),
                       )
                           .then((value) {
                         Get.back();
@@ -616,18 +614,24 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
 
       GetTblStockMasterByItemIdController.getData(itemID).then((value) {
         setState(() {
-          _widthController.text = "${value[0].width}";
-          _heightController.text = "${value[0].height}";
-          _lengthController.text = "${value[0].length}";
+          _widthController.text =
+              double.parse(value[0].width.toString()).toString();
+          _heightController.text =
+              double.parse(value[0].height.toString()).toString();
+          _lengthController.text =
+              double.parse(value[0].length.toString()).toString();
         });
+        print("width: ${value[0].width}");
+        print("height: ${value[0].height}");
+        print("length: ${value[0].length}");
         Navigator.of(context).pop();
       }).onError((error, stackTrace) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(error.toString().replaceAll("Exception:", "")),
-          ),
-        );
-        Navigator.of(context).pop();
+        Navigator.pop(context);
+        setState(() {
+          _widthController.text = "0.0";
+          _heightController.text = "0.0";
+          _lengthController.text = "0.0";
+        });
       });
     }).onError((error, stackTrace) {
       ScaffoldMessenger.of(context).showSnackBar(

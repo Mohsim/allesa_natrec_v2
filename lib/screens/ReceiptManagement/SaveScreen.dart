@@ -18,6 +18,10 @@ class SaveScreen extends StatefulWidget {
   String containerId;
   String itemId;
   int qty;
+  double length;
+  double width;
+  double height;
+  double weight;
 
   SaveScreen({
     required this.gtin,
@@ -30,6 +34,10 @@ class SaveScreen extends StatefulWidget {
     required this.itemId,
     required this.qty,
     required this.rZone,
+    required this.length,
+    required this.width,
+    required this.height,
+    required this.weight,
   });
 
   @override
@@ -68,6 +76,10 @@ class _SaveScreenState extends State<SaveScreen> {
       "",
       _remarksController.text,
       int.parse(widget.qty.toString()),
+      widget.length,
+      widget.width,
+      widget.height,
+      widget.weight,
     ).then((value) {
       setState(() {
         serialNoList.add(_serialNoController.text);
@@ -369,6 +381,10 @@ class _SaveScreenState extends State<SaveScreen> {
                       "",
                       _remarksController.text,
                       int.parse(widget.qty.toString()),
+                      widget.length,
+                      widget.width,
+                      widget.height,
+                      widget.weight,
                     ).then((value) {
                       setState(() {
                         serialNoList.add(_serialNoController.text);

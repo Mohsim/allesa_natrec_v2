@@ -2,6 +2,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../controllers/BarcodeMapping/GetTblStockMasterByItemIdController.dart';
 import '../../controllers/WareHouseOperationController/GetAllTableZoneController.dart';
 import '../../controllers/WareHouseOperationController/GetItemNameByItemId.dart';
 import '../../controllers/WareHouseOperationController/getAllTblShipmentReceivedCLController.dart';
@@ -43,6 +44,10 @@ class _ScanSerialNumberScreenState extends State<ScanSerialNumberScreen> {
   final TextEditingController _gtinNoController = TextEditingController();
   final TextEditingController _receivingZoneController =
       TextEditingController();
+  final TextEditingController _lengthController = TextEditingController();
+  final TextEditingController _widthController = TextEditingController();
+  final TextEditingController _heightController = TextEditingController();
+  final TextEditingController _weightController = TextEditingController();
 
   String dropdownValue = 'Select Zone';
   List<String> dropdownList = ['Select Zone'];
@@ -57,6 +62,7 @@ class _ScanSerialNumberScreenState extends State<ScanSerialNumberScreen> {
     _jobOrderNoController.text = widget.shipmentId;
     _containerNoController.text = widget.containerId;
     _itemNameController.text = itemName;
+    _weightController.text = "0.0";
 
     Future.delayed(Duration.zero, () {
       Constants.showLoadingDialog(context);
@@ -98,7 +104,28 @@ class _ScanSerialNumberScreenState extends State<ScanSerialNumberScreen> {
             _itemNameController.text = "";
             cond = "";
           });
-          Navigator.pop(context);
+        });
+        GetTblStockMasterByItemIdController.getData(widget.containerId)
+            .then((value) {
+          setState(() {
+            _widthController.text =
+                double.parse(value[0].width.toString()).toString();
+            _heightController.text =
+                double.parse(value[0].height.toString()).toString();
+            _lengthController.text =
+                double.parse(value[0].length.toString()).toString();
+          });
+          print("width: ${value[0].width}");
+          print("height: ${value[0].height}");
+          print("length: ${value[0].length}");
+          Navigator.of(context).pop();
+        }).onError((error, stackTrace) {
+          Navigator.of(context).pop();
+          setState(() {
+            _widthController.text = "0.0";
+            _heightController.text = "0.0";
+            _lengthController.text = "0.0";
+          });
         });
       }).onError((error, stackTrace) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -308,6 +335,64 @@ class _ScanSerialNumberScreenState extends State<ScanSerialNumberScreen> {
                   selectedItem: "Select Receiving Zone",
                 ),
               ),
+              const SizedBox(height: 10),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TextWidget(
+                    text: "Length",
+                    fontSize: 15,
+                  ),
+                  TextWidget(
+                    text: "Width",
+                    fontSize: 15,
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TextFormFieldWidget(
+                    controller: _lengthController,
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    hintText: "Enter/Scan Length",
+                  ),
+                  TextFormFieldWidget(
+                    controller: _widthController,
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    hintText: "Enter/Scan Width",
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TextWidget(
+                    text: "Height",
+                    fontSize: 15,
+                  ),
+                  TextWidget(
+                    text: "Weight",
+                    fontSize: 15,
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TextFormFieldWidget(
+                    controller: _heightController,
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    hintText: "Enter/Scan Length",
+                  ),
+                  TextFormFieldWidget(
+                    controller: _weightController,
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    hintText: "Enter/Scan Weight",
+                  ),
+                ],
+              ),
               const SizedBox(height: 30),
               Center(
                 child: ElevatedButtonWidget(
@@ -335,6 +420,14 @@ class _ScanSerialNumberScreenState extends State<ScanSerialNumberScreen> {
                           qty: widget.qty,
                           shipmentId: widget.shipmentId,
                           shipmentStatus: widget.shipmentStatus,
+                          length: double.parse(
+                              _lengthController.text.trim().toString()),
+                          width: double.parse(
+                              _widthController.text.trim().toString()),
+                          height: double.parse(
+                              _heightController.text.trim().toString()),
+                          weight: double.parse(
+                              _weightController.text.trim().toString()),
                         ));
                   },
                   textColor: Colors.white,
@@ -344,6 +437,7 @@ class _ScanSerialNumberScreenState extends State<ScanSerialNumberScreen> {
                   color: Colors.orange,
                 ),
               ),
+              const SizedBox(height: 20),
             ],
           ),
         ),
