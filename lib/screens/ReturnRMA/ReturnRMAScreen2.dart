@@ -213,25 +213,49 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 20),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          const Text(
-                            "Item ID:",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              const Text(
+                                "Item ID:",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                widget.iTEMID,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 10),
-                          Text(
-                            widget.iTEMID,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                            ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Text(
+                                "Sales ID: ",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                widget.sALESID.toString(),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -241,26 +265,6 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const Text(
-                                  "Sales ID: ",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  widget.sALESID.toString(),
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ],
-                            ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
@@ -655,9 +659,6 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                             duration: Duration(seconds: 1),
                           ),
                         );
-                        Future.delayed(const Duration(seconds: 1), () {
-                          createPdf(value);
-                        });
                       }).onError((error, stackTrace) {
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -1166,53 +1167,53 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
     );
   }
 
-  void createPdf(String value) async {
-    final doc = pw.Document();
+  // void createPdf(String value) async {
+  //   final doc = pw.Document();
 
-    final image = await imageFromAssetBundle("assets/alessa.png");
+  //   final image = await imageFromAssetBundle("assets/alessa.png");
 
-    doc.addPage(
-      pw.Page(
-          pageFormat: const PdfPageFormat(300, 250),
-          orientation: pw.PageOrientation.landscape,
-          clip: true,
-          build: (pw.Context context) {
-            return buildPdf(value, image);
-          }),
-    );
+  //   doc.addPage(
+  //     pw.Page(
+  //         pageFormat: const PdfPageFormat(300, 250),
+  //         orientation: pw.PageOrientation.landscape,
+  //         clip: true,
+  //         build: (pw.Context context) {
+  //           return buildPdf(value, image);
+  //         }),
+  //   );
 
-    await Printing.layoutPdf(
-        onLayout: (PdfPageFormat format) async => doc.save());
-  }
+  //   await Printing.layoutPdf(
+  //       onLayout: (PdfPageFormat format) async => doc.save());
+  // }
 
-  buildPdf(String uniqId, image) {
-    return pw.Center(
-      child: pw.Column(
-        mainAxisAlignment: pw.MainAxisAlignment.center,
-        crossAxisAlignment: pw.CrossAxisAlignment.center,
-        children: [
-          pw.SizedBox(
-            height: 50,
-            width: double.infinity,
-            child: pw.Image(
-              image,
-              width: double.infinity,
-            ),
-          ),
-          pw.Container(
-            margin: const pw.EdgeInsets.symmetric(horizontal: 20),
-            alignment: pw.Alignment.topCenter,
-            child: pw.BarcodeWidget(
-              barcode: Barcode.code39(),
-              drawText: true,
-              width: 300,
-              height: 100,
-              data: uniqId,
-              textStyle: const pw.TextStyle(fontSize: 10),
-            ),
-          )
-        ],
-      ),
-    );
-  }
+  // buildPdf(String uniqId, image) {
+  //   return pw.Center(
+  //     child: pw.Column(
+  //       mainAxisAlignment: pw.MainAxisAlignment.center,
+  //       crossAxisAlignment: pw.CrossAxisAlignment.center,
+  //       children: [
+  //         pw.SizedBox(
+  //           height: 50,
+  //           width: double.infinity,
+  //           child: pw.Image(
+  //             image,
+  //             width: double.infinity,
+  //           ),
+  //         ),
+  //         pw.Container(
+  //           margin: const pw.EdgeInsets.symmetric(horizontal: 20),
+  //           alignment: pw.Alignment.topCenter,
+  //           child: pw.BarcodeWidget(
+  //             barcode: Barcode.code39(),
+  //             drawText: true,
+  //             width: 300,
+  //             height: 100,
+  //             data: uniqId,
+  //             textStyle: const pw.TextStyle(fontSize: 10),
+  //           ),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 }

@@ -62,7 +62,7 @@ class _ScanSerialNumberScreenState extends State<ScanSerialNumberScreen> {
     _jobOrderNoController.text = widget.shipmentId;
     _containerNoController.text = widget.containerId;
     _itemNameController.text = itemName;
-    _weightController.text = "";
+    _weightController.text = "0";
 
     Future.delayed(Duration.zero, () {
       Constants.showLoadingDialog(context);
@@ -422,8 +422,7 @@ class _ScanSerialNumberScreenState extends State<ScanSerialNumberScreen> {
                     if (_gtinNoController.text.trim().isEmpty ||
                         _lengthController.text.trim().isEmpty ||
                         _weightController.text.trim().isEmpty ||
-                        _heightController.text.trim().isEmpty ||
-                        _widthController.text.trim().isEmpty) {
+                        _heightController.text.trim().isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text("Please enter all the required fields"),

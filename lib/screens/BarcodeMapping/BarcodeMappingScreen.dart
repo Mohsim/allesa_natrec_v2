@@ -98,6 +98,7 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
   void initState() {
     super.initState();
     _showUserInfo();
+    _weightController.text = "0";
   }
 
   String itemName = '';
@@ -522,8 +523,7 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                           _binLocationController.text.trim() == "" ||
                           _lengthController.text.trim() == "" ||
                           _widthController.text.trim() == "" ||
-                          _heightController.text.trim() == "" ||
-                          _weightController.text.trim() == "") {
+                          _heightController.text.trim() == "") {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text("Please fill the above fields"),
