@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../controllers/BarcodeMapping/GetTblStockMasterByItemIdController.dart';
 import '../../controllers/BarcodeMapping/getAllTblMappedBarcodesController.dart';
 import '../../controllers/BarcodeMapping/insertIntoMappedBarcodeOrUpdateBySerialNoController.dart';
+import '../../controllers/WareHouseOperationController/UpdateStockMasterDataController.dart';
 import '../../models/GetShipmentReceivedTableModel.dart';
 import '../../utils/Constants.dart';
 import 'package:flutter/material.dart';
@@ -521,7 +522,8 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                           _binLocationController.text.trim() == "" ||
                           _lengthController.text.trim() == "" ||
                           _widthController.text.trim() == "" ||
-                          _heightController.text.trim() == "") {
+                          _heightController.text.trim() == "" ||
+                          _weightController.text.trim() == "") {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text("Please fill the above fields"),
@@ -574,6 +576,13 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                           // itemGroupId = "";
                           // groupName = "";
                         });
+                        UpdateStockMasterDataController.insertShipmentData(
+                          itemID,
+                          double.parse(_lengthController.text.trim()),
+                          double.parse(_widthController.text.trim()),
+                          double.parse(_heightController.text.trim()),
+                          double.parse(_weightController.text.trim()),
+                        );
                         FocusScope.of(context).requestFocus(focusNode);
                       }).onError((error, stackTrace) {
                         Navigator.of(context).pop();

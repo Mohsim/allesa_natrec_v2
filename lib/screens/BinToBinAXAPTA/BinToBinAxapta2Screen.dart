@@ -68,10 +68,10 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
           });
         }
 
-        // // convert list to set to remove duplicate values
-        // Set<String> set = dropDownList.toSet();
-        // // convert set to list to get all values
-        // dropDownList = set.toList();
+        // convert list to set to remove duplicate values
+        Set<String> set = dropDownList.toSet();
+        // convert set to list to get all values
+        dropDownList = set.toList();
 
         setState(() {
           dropDownValue = dropDownList[0];
@@ -94,7 +94,7 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Container(
+      body: SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
@@ -134,37 +134,46 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
                           onEditingComplete: () {},
                         ),
                       ),
+                      const SizedBox(height: 10),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
-                            margin: const EdgeInsets.only(left: 20, top: 10),
-                            child: const TextWidget(
-                              text: "From: ",
-                              color: Colors.white,
-                            ),
+                          const TextWidget(
+                            text: "From:",
+                            color: Colors.white,
+                            fontSize: 18,
                           ),
-                          // make dropdown based on dropdown list
-                          Container(
-                            decoration: const BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
+                          // // make dropdown based on dropdown list
+                          // Container(
+                          //   decoration: const BoxDecoration(
+                          //     borderRadius:
+                          //         BorderRadius.all(Radius.circular(10)),
+                          //     color: Colors.white,
+                          //   ),
+                          //   width: MediaQuery.of(context).size.width * 0.68,
+                          //   margin: const EdgeInsets.only(left: 20, top: 10),
+                          //   child: DropdownSearch<String>(
+                          //     items: dropDownList,
+                          //     onChanged: (value) {
+                          //       setState(() {
+                          //         dropDownValue = value!;
+                          //       });
+                          //     },
+                          //     selectedItem: dropDownValue,
+                          //   ),
+                          // ),
+                          const SizedBox(width: 10),
+
+                          Text(
+                            widget.INVENTLOCATIONIDFROM,
+                            style: const TextStyle(
                               color: Colors.white,
-                            ),
-                            width: MediaQuery.of(context).size.width * 0.68,
-                            margin: const EdgeInsets.only(left: 20, top: 10),
-                            child: DropdownSearch<String>(
-                              items: dropDownList,
-                              onChanged: (value) {
-                                setState(() {
-                                  dropDownValue = value!;
-                                });
-                              },
-                              selectedItem: dropDownValue,
+                              fontSize: 16,
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -172,7 +181,7 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
                             "Item Code:",
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 20,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -181,77 +190,75 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
                             widget.ITEMID,
                             style: const TextStyle(
                               color: Colors.white,
-                              fontSize: 20,
+                              fontSize: 16,
                             ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 10),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Column(
-                              children: [
-                                const Text(
-                                  "Qty Received",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Column(
+                            children: [
+                              const Text(
+                                "Qty Received",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                Text(
-                                  widget.QTYRECEIVED.toString(),
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                  ),
+                              ),
+                              Text(
+                                widget.QTYRECEIVED.toString(),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
                                 ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                const Text(
-                                  "Qty Transfer",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              const Text(
+                                "Qty Transfer",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                Text(
-                                  widget.QTYTRANSFER.toString(),
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                  ),
+                              ),
+                              Text(
+                                widget.QTYTRANSFER.toString(),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
                                 ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                const Text(
-                                  "Group ID",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              const Text(
+                                "Group ID",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                Text(
-                                  widget.GROUPID.toString(),
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                  ),
+                              ),
+                              Text(
+                                widget.GROUPID.toString(),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
                                 ),
-                              ],
-                            ),
-                          ],
-                        ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
+                      const SizedBox(height: 10),
                       Visibility(
                         visible: dropDownValue == null ? false : true,
                         child: Container(
@@ -301,7 +308,6 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
               Visibility(
                 visible: _site != '' ? true : false,
                 child: Container(
@@ -504,7 +510,6 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
               Container(
                 margin: const EdgeInsets.only(left: 20, top: 10),
                 child: TextWidget(
@@ -513,16 +518,34 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
                   fontSize: 15,
                 ),
               ),
+              // Container(
+              //   margin: const EdgeInsets.only(left: 20),
+              //   child: TextFormFieldWidget(
+              //     controller: _scanLocationController,
+              //     readOnly: false,
+              //     hintText: "Enter/Scan Location",
+              //     width: MediaQuery.of(context).size.width * 0.9,
+              //   ),
+              // ),
+              // make dropdown based on dropdown list
               Container(
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  color: Colors.white,
+                ),
+                width: MediaQuery.of(context).size.width * 0.9,
                 margin: const EdgeInsets.only(left: 20),
-                child: TextFormFieldWidget(
-                  controller: _scanLocationController,
-                  readOnly: false,
-                  hintText: "Enter/Scan Location",
-                  width: MediaQuery.of(context).size.width * 0.9,
+                child: DropdownSearch<String>(
+                  items: dropDownList,
+                  onChanged: (value) {
+                    setState(() {
+                      dropDownValue = value!;
+                    });
+                  },
+                  selectedItem: dropDownValue,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               Center(
                 child: ElevatedButtonWidget(
                   height: 50,
@@ -544,16 +567,17 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
   }
 
   void insertData() {
-    if (_scanLocationController.text.trim().isEmpty) {
+    if (_palletTypeController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Please Scan Location"),
+        content: Text("Please Select by Pallet or Serial"),
+        backgroundColor: Colors.red,
       ));
       return;
     }
     FocusScope.of(context).requestFocus(FocusNode());
     Constants.showLoadingDialog(context);
     InsertAllDataController.postData(
-      _scanLocationController.text.trim(),
+      dropDownValue.toString(),
       _site,
       GetShipmentPalletizingList,
       widget.TRANSFERID,

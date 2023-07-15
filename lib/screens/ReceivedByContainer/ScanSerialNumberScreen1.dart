@@ -63,7 +63,7 @@ class _ScanSerialNumberScreen1State extends State<ScanSerialNumberScreen1> {
     _jobOrderNoController.text = widget.shipmentId;
     _containerNoController.text = widget.containerId;
     _itemNameController.text = itemName;
-    _weightController.text = "0.0";
+    _weightController.text = "";
 
     Future.delayed(Duration.zero, () {
       Constants.showLoadingDialog(context);
@@ -113,9 +113,9 @@ class _ScanSerialNumberScreen1State extends State<ScanSerialNumberScreen1> {
           }).onError((error, stackTrace) {
             Navigator.of(context).pop();
             setState(() {
-              _widthController.text = "0.0";
-              _heightController.text = "0.0";
-              _lengthController.text = "0.0";
+              _widthController.text = "";
+              _heightController.text = "";
+              _lengthController.text = "";
             });
           });
         }).onError((error, stackTrace) {
@@ -141,9 +141,9 @@ class _ScanSerialNumberScreen1State extends State<ScanSerialNumberScreen1> {
           }).onError((error, stackTrace) {
             Navigator.of(context).pop();
             setState(() {
-              _widthController.text = "0.0";
-              _heightController.text = "0.0";
-              _lengthController.text = "0.0";
+              _widthController.text = "";
+              _heightController.text = "";
+              _lengthController.text = "";
             });
           });
         });
@@ -375,12 +375,12 @@ class _ScanSerialNumberScreen1State extends State<ScanSerialNumberScreen1> {
                   TextFormFieldWidget(
                     controller: _lengthController,
                     width: MediaQuery.of(context).size.width * 0.4,
-                    hintText: "Enter/Scan Length",
+                    hintText: "Enter Length",
                   ),
                   TextFormFieldWidget(
                     controller: _widthController,
                     width: MediaQuery.of(context).size.width * 0.4,
-                    hintText: "Enter/Scan Width",
+                    hintText: "Enter Width",
                   ),
                 ],
               ),
@@ -404,12 +404,12 @@ class _ScanSerialNumberScreen1State extends State<ScanSerialNumberScreen1> {
                   TextFormFieldWidget(
                     controller: _heightController,
                     width: MediaQuery.of(context).size.width * 0.4,
-                    hintText: "Enter/Scan Length",
+                    hintText: "Enter Length",
                   ),
                   TextFormFieldWidget(
                     controller: _weightController,
                     width: MediaQuery.of(context).size.width * 0.4,
-                    hintText: "Enter/Scan Weight",
+                    hintText: "Enter Weight",
                   ),
                 ],
               ),
@@ -419,12 +419,13 @@ class _ScanSerialNumberScreen1State extends State<ScanSerialNumberScreen1> {
                   title: "Scan Serial Number",
                   onPressed: () {
                     if (_gtinNoController.text.trim().isEmpty ||
-                        dropdownValue == "Select Zone") {
-                      print(dropdownValue);
+                        _lengthController.text.trim().isEmpty ||
+                        _weightController.text.trim().isEmpty ||
+                        _heightController.text.trim().isEmpty ||
+                        _widthController.text.trim().isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text(
-                              "Please enter GTIN No and select Receiving Zone"),
+                          content: Text("Please enter all the required fields"),
                         ),
                       );
                       return;

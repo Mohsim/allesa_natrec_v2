@@ -6,19 +6,19 @@ import '../../utils/Constants.dart';
 
 class getAllTblShipmentReceivedCLController {
   static Future<int> getAllTableZone(
-    String POQTY,
+    String CONTAINERID,
     String SHIPMENTID,
     String ITEMID,
   ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
 
-    print("POQTY: $POQTY");
+    print("CONTAINERID: $CONTAINERID");
     print("SHIPMENTID: $SHIPMENTID");
     print("ITEMID: $ITEMID");
 
     String url =
-        "${Constants.baseUrl}getShipmentRecievedClCountByPoqtyShipmentIdAndItemId?POQTY=$POQTY&SHIPMENTID=$SHIPMENTID&ITEMID=$ITEMID";
+        "${Constants.baseUrl}getRemainingQtyFromShipmentCounter?CONTAINERID=$CONTAINERID&SHIPMENTID=$SHIPMENTID&ITEMID=$ITEMID";
 
     print("URL: $url");
 

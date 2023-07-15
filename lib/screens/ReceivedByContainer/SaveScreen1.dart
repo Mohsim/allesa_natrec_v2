@@ -1,4 +1,5 @@
 import '../../controllers/WareHouseOperationController/InsertShipmentReceivedData.dart';
+import '../../controllers/WareHouseOperationController/UpdateStockMasterDataController.dart';
 import '../../utils/Constants.dart';
 import '../../widgets/TextFormField.dart';
 import '../../widgets/TextWidget.dart';
@@ -393,8 +394,15 @@ class _SaveScreen1State extends State<SaveScreen1> {
 
                         _serialNoController.clear();
                         // focus back to serial no field
-                        FocusScope.of(context).requestFocus(focusNode);
                       });
+                      UpdateStockMasterDataController.insertShipmentData(
+                          widget.itemId,
+                          widget.length,
+                          widget.width,
+                          widget.height,
+                          widget.weight);
+                      FocusScope.of(context).requestFocus(focusNode);
+
                       Navigator.pop(context);
                     }).onError((error, stackTrace) {
                       _serialNoController.clear();
