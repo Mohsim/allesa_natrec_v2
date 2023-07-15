@@ -1,6 +1,8 @@
+import '../../controllers/WareHouseOperationController/GenerateSerialNumberforRecevingController.dart';
 import '../../controllers/WareHouseOperationController/InsertShipmentReceivedData.dart';
 import '../../controllers/WareHouseOperationController/UpdateStockMasterDataController.dart';
 import '../../utils/Constants.dart';
+import '../../widgets/ElevatedButtonWidget.dart';
 import '../../widgets/TextFormField.dart';
 import '../../widgets/TextWidget.dart';
 import 'package:flutter/material.dart';
@@ -335,7 +337,7 @@ class _SaveScreenState extends State<SaveScreen> {
                 child: TextFormFieldWidget(
                   focusNode: secondFocusNode,
                   width: MediaQuery.of(context).size.width * 0.9,
-                  hintText: "Enter/Scan GTIN Number",
+                  hintText: "Enter/Scan Serial No.",
                   autofocus: false,
                   controller: _serialNoController,
                   onFieldSubmitted: (p0) {
@@ -416,6 +418,73 @@ class _SaveScreenState extends State<SaveScreen> {
                       );
                       Navigator.pop(context);
                     });
+                  },
+                ),
+              ),
+              const SizedBox(height: 10),
+              Container(
+                margin: const EdgeInsets.only(left: 20, top: 10),
+                child: ElevatedButtonWidget(
+                  title: "Generate Serial No.",
+                  fontSize: 18,
+                  color: Colors.orange[100],
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  height: 50,
+                  onPressed: () {
+                    GenerateSerialNumberforRecevingController.generateSerialNo(
+                            widget.itemId)
+                        .then(
+                      (value) {
+                        Constants.showLoadingDialog(context);
+                        FocusScope.of(context).unfocus();
+                        InsertShipmentReceivedDataController.insertShipmentData(
+                          widget.shipmentId,
+                          widget.containerId,
+                          '',
+                          widget.itemName,
+                          widget.itemId,
+                          widget.purchId,
+                          0,
+                          value,
+                          dropdownValue,
+                          DateTime.now().toString(),
+                          widget.gtin,
+                          widget.rZone,
+                          DateTime.now().toString(),
+                          "",
+                          "",
+                          _remarksController.text,
+                          int.parse(widget.qty.toString()),
+                          widget.length,
+                          widget.width,
+                          widget.height,
+                          widget.weight,
+                        ).then((val) {
+                          setState(() {
+                            serialNoList.add(value);
+                            configList.add(dropdownValue);
+                            remarksList.add(_remarksController.text);
+
+                            RCQTY = RCQTY + 1;
+                          });
+                          UpdateStockMasterDataController.insertShipmentData(
+                              widget.itemId,
+                              widget.length,
+                              widget.width,
+                              widget.height,
+                              widget.weight);
+
+                          Navigator.pop(context);
+                        }).onError((error, stackTrace) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Serial No. not generated!"),
+                            ),
+                          );
+                          Navigator.pop(context);
+                        });
+                      },
+                    );
                   },
                 ),
               ),

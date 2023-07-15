@@ -106,6 +106,8 @@ class _ScanSerialNumberScreenState extends State<ScanSerialNumberScreen> {
                   double.parse(value[0].height.toString()).toString();
               _lengthController.text =
                   double.parse(value[0].length.toString()).toString();
+              _weightController.text =
+                  double.parse(value[0].Weight.toString()).toString();
             });
             print("width: ${value[0].width}");
             print("height: ${value[0].height}");
@@ -134,6 +136,8 @@ class _ScanSerialNumberScreenState extends State<ScanSerialNumberScreen> {
                   double.parse(value[0].height.toString()).toString();
               _lengthController.text =
                   double.parse(value[0].length.toString()).toString();
+              _weightController.text =
+                  double.parse(value[0].Weight.toString()).toString();
             });
             print("width: ${value[0].width}");
             print("height: ${value[0].height}");

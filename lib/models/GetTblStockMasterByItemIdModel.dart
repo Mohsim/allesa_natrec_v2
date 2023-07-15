@@ -3,9 +3,10 @@ class GetTblStockMasterByItemIdModel {
   String? iTEMNAME;
   String? iTEMGROUPID;
   String? gROUPNAME;
-  int? width;
+  double? width;
   int? height;
-  int? length;
+  double? length;
+  int? Weight;
 
   GetTblStockMasterByItemIdModel(
       {this.iTEMID,
@@ -14,7 +15,8 @@ class GetTblStockMasterByItemIdModel {
       this.gROUPNAME,
       this.width,
       this.height,
-      this.length});
+      this.length,
+      this.Weight});
 
   GetTblStockMasterByItemIdModel.fromJson(Map<String, dynamic> json) {
     iTEMID = json['ITEMID'];
@@ -24,6 +26,7 @@ class GetTblStockMasterByItemIdModel {
     width = json['Width'];
     height = json['Height'];
     length = json['Length'];
+    Weight = json['Weight'];
   }
 
   Map<String, dynamic> toJson() {
@@ -35,6 +38,7 @@ class GetTblStockMasterByItemIdModel {
     data['Width'] = width;
     data['Height'] = height;
     data['Length'] = length;
+    data['Weight'] = Weight;
     return data;
   }
 }

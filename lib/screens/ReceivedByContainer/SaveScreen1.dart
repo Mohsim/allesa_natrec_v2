@@ -1,6 +1,8 @@
+import '../../controllers/WareHouseOperationController/GenerateSerialNumberforRecevingController.dart';
 import '../../controllers/WareHouseOperationController/InsertShipmentReceivedData.dart';
 import '../../controllers/WareHouseOperationController/UpdateStockMasterDataController.dart';
 import '../../utils/Constants.dart';
+import '../../widgets/ElevatedButtonWidget.dart';
 import '../../widgets/TextFormField.dart';
 import '../../widgets/TextWidget.dart';
 import 'package:flutter/material.dart';
@@ -324,7 +326,7 @@ class _SaveScreen1State extends State<SaveScreen1> {
               Container(
                 margin: const EdgeInsets.only(left: 20),
                 child: const TextWidget(
-                  text: "Enter Serial Number",
+                  text: "Enter Serial No.",
                   fontSize: 15,
                 ),
               ),
@@ -333,7 +335,7 @@ class _SaveScreen1State extends State<SaveScreen1> {
                 child: TextFormFieldWidget(
                   focusNode: focusNode,
                   width: MediaQuery.of(context).size.width * 0.9,
-                  hintText: "Enter/Scan GTIN Number",
+                  hintText: "Enter/Scan Serial Number",
                   autofocus: false,
                   controller: _serialNoController,
                   onFieldSubmitted: (p0) {
@@ -401,8 +403,8 @@ class _SaveScreen1State extends State<SaveScreen1> {
                           widget.width,
                           widget.height,
                           widget.weight);
-                      FocusScope.of(context).requestFocus(focusNode);
 
+                      FocusScope.of(context).requestFocus(focusNode);
                       Navigator.pop(context);
                     }).onError((error, stackTrace) {
                       _serialNoController.clear();
@@ -414,6 +416,73 @@ class _SaveScreen1State extends State<SaveScreen1> {
                       );
                       Navigator.pop(context);
                     });
+                  },
+                ),
+              ),
+              const SizedBox(height: 10),
+              Container(
+                margin: const EdgeInsets.only(left: 20, top: 10),
+                child: ElevatedButtonWidget(
+                  title: "Generate Serial No.",
+                  fontSize: 18,
+                  color: Colors.orange[100],
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  height: 50,
+                  onPressed: () {
+                    GenerateSerialNumberforRecevingController.generateSerialNo(
+                            widget.itemId)
+                        .then(
+                      (value) {
+                        Constants.showLoadingDialog(context);
+                        FocusScope.of(context).unfocus();
+                        InsertShipmentReceivedDataController.insertShipmentData(
+                          widget.shipmentId,
+                          widget.containerId,
+                          '',
+                          widget.itemName,
+                          widget.itemId,
+                          widget.purchId,
+                          0,
+                          value,
+                          dropdownValue,
+                          DateTime.now().toString(),
+                          widget.gtin,
+                          widget.rZone,
+                          DateTime.now().toString(),
+                          "",
+                          "",
+                          _remarksController.text,
+                          int.parse(widget.qty.toString()),
+                          widget.length,
+                          widget.width,
+                          widget.height,
+                          widget.weight,
+                        ).then((val) {
+                          setState(() {
+                            serialNoList.add(value);
+                            configList.add(dropdownValue);
+                            remarksList.add(_remarksController.text);
+
+                            RCQTY1 = RCQTY1 + 1;
+                          });
+                          UpdateStockMasterDataController.insertShipmentData(
+                              widget.itemId,
+                              widget.length,
+                              widget.width,
+                              widget.height,
+                              widget.weight);
+
+                          Navigator.pop(context);
+                        }).onError((error, stackTrace) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Serial No. not generated!"),
+                            ),
+                          );
+                          Navigator.pop(context);
+                        });
+                      },
+                    );
                   },
                 ),
               ),

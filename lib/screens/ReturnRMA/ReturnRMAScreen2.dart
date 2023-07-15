@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../widgets/TextFormField.dart';
 import '../../../../widgets/TextWidget.dart';
-import '../../widgets/ElevatedButtonWidget.dart';
 
 // ignore: must_be_immutable
 class ReturnRMAScreen2 extends StatefulWidget {
@@ -592,34 +591,18 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                     hintText: "Enter/Scan Model No#",
                     width: MediaQuery.of(context).size.width * 0.9,
                     onEditingComplete: () {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      // Constants.showLoadingDialog(context);
-                    },
-                  ),
-                ),
-              ),
-              Visibility(
-                visible: _barCode == "No Barcode" ? true : false,
-                child: Container(
-                  margin: const EdgeInsets.only(left: 20, top: 10),
-                  child: ElevatedButtonWidget(
-                    title: "Generate Barcode",
-                    color: Colors.orange[100],
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    height: 50,
-                    onPressed: () {
-                      if (_modelNoController.text.trim().isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              "Please Enter Model No#",
-                              textAlign: TextAlign.center,
-                            ),
-                            duration: Duration(seconds: 1),
-                          ),
-                        );
-                        return;
-                      }
+                      // if (_modelNoController.text.trim().isEmpty) {
+                      //   ScaffoldMessenger.of(context).showSnackBar(
+                      //     const SnackBar(
+                      //       content: Text(
+                      //         "Please Enter Model No#",
+                      //         textAlign: TextAlign.center,
+                      //       ),
+                      //       duration: Duration(seconds: 1),
+                      //     ),
+                      //   );
+                      //   return;
+                      // }
                       FocusScope.of(context).requestFocus();
                       Constants.showLoadingDialog(context);
                       GenerateBarcodeForRmaController.getData(
@@ -645,15 +628,6 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
 
                         Navigator.pop(context);
                         _modelNoController.clear();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              "Barcode Generated Successfully",
-                              textAlign: TextAlign.center,
-                            ),
-                            duration: Duration(seconds: 1),
-                          ),
-                        );
                       }).onError((error, stackTrace) {
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -670,6 +644,19 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                   ),
                 ),
               ),
+              // Visibility(
+              //   visible: _barCode == "No Barcode" ? true : false,
+              //   child: Container(
+              //     margin: const EdgeInsets.only(left: 20, top: 10),
+              //     child: ElevatedButtonWidget(
+              //       title: "Generate Barcode",
+              //       color: Colors.orange[100],
+              //       width: MediaQuery.of(context).size.width * 0.9,
+              //       height: 50,
+              //       onPressed: () {},
+              //     ),
+              //   ),
+              // ),
               const SizedBox(height: 10),
               Visibility(
                 visible: _barCode == "Barcode" ? true : false,
