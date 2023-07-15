@@ -1,3 +1,5 @@
+import 'package:auto_size_text/auto_size_text.dart';
+
 import '../../screens/Authentication/LoginScreen.dart';
 import '../../screens/CycleCounting/CycleCountingScreen1.dart';
 import '../../screens/DispatchingForm/DispatchingFormScreen.dart';
@@ -264,7 +266,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: 50,
                           ),
                         ),
-                        title: Text(data["titles"][index]),
+                        title: AutoSizeText(data["titles"][index]),
                         onTap: data["functions"][index],
                       );
                     },
