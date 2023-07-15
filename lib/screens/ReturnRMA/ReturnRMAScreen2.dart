@@ -15,11 +15,6 @@ import '../../../../widgets/TextFormField.dart';
 import '../../../../widgets/TextWidget.dart';
 import '../../widgets/ElevatedButtonWidget.dart';
 
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:barcode_widget/barcode_widget.dart';
-import 'package:printing/printing.dart';
-
 // ignore: must_be_immutable
 class ReturnRMAScreen2 extends StatefulWidget {
   String iTEMID;
