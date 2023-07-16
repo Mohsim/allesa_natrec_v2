@@ -545,7 +545,6 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                         _gtinController.text.trim(),
                         _binLocationController.text.trim(),
                         _serialNoController.text.trim(),
-                        currentDate,
                         dropDownValue.toString(),
                         _qrCodeController.text.trim(),
                         double.parse(_lengthController.text.trim()),

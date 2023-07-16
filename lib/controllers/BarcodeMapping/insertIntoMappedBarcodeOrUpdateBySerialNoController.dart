@@ -12,7 +12,6 @@ class insertIntoMappedBarcodeOrUpdateBySerialNoController {
     String gtin,
     String binlocation,
     String itemserialno,
-    String mapdate,
     String cid,
     String qrCode,
     double length,
@@ -28,7 +27,6 @@ class insertIntoMappedBarcodeOrUpdateBySerialNoController {
         "${Constants.baseUrl}insertIntoMappedBarcodeOrUpdateBySerialNo";
 
     print("URL: $url");
-    print("Map Date: $mapdate");
 
     final uri = Uri.parse(url);
 
@@ -45,7 +43,6 @@ class insertIntoMappedBarcodeOrUpdateBySerialNoController {
       "gtin": gtin,
       "binlocation": binlocation,
       "itemserialno": itemserialno,
-      "mapdate": mapdate,
       "reference": reference,
       "classification": cid,
       "qrcode": qrCode,
