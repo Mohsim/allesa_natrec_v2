@@ -1,3 +1,5 @@
+import 'package:alessa_v2/widgets/ElevatedButtonWidget.dart';
+
 import '../../controllers/PickListAssigned/GetPickListTableDataController.dart';
 import '../../controllers/PickListAssigned/getMappedBarcodedsByItemCodeAndBinLocationController.dart';
 import '../../models/getMappedBarcodedsByItemCodeAndBinLocationModel.dart';
@@ -115,7 +117,7 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Container(
+      body: SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
@@ -590,19 +592,32 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                     readOnly: false,
                     hintText: "Enter/Scan Model No#",
                     width: MediaQuery.of(context).size.width * 0.9,
-                    onEditingComplete: () {
-                      // if (_modelNoController.text.trim().isEmpty) {
-                      //   ScaffoldMessenger.of(context).showSnackBar(
-                      //     const SnackBar(
-                      //       content: Text(
-                      //         "Please Enter Model No#",
-                      //         textAlign: TextAlign.center,
-                      //       ),
-                      //       duration: Duration(seconds: 1),
-                      //     ),
-                      //   );
-                      //   return;
-                      // }
+                    onEditingComplete: () {},
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: _barCode == "No Barcode" ? true : false,
+                child: Container(
+                  margin: const EdgeInsets.only(left: 20, top: 10),
+                  child: ElevatedButtonWidget(
+                    title: "Generate Barcode",
+                    color: Colors.orange[100],
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    height: 50,
+                    onPressed: () {
+                      if (_modelNoController.text.trim().isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "Please Enter Model No#",
+                              textAlign: TextAlign.center,
+                            ),
+                            duration: Duration(seconds: 1),
+                          ),
+                        );
+                        return;
+                      }
                       FocusScope.of(context).requestFocus();
                       Constants.showLoadingDialog(context);
                       GenerateBarcodeForRmaController.getData(
@@ -644,19 +659,6 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                   ),
                 ),
               ),
-              // Visibility(
-              //   visible: _barCode == "No Barcode" ? true : false,
-              //   child: Container(
-              //     margin: const EdgeInsets.only(left: 20, top: 10),
-              //     child: ElevatedButtonWidget(
-              //       title: "Generate Barcode",
-              //       color: Colors.orange[100],
-              //       width: MediaQuery.of(context).size.width * 0.9,
-              //       height: 50,
-              //       onPressed: () {},
-              //     ),
-              //   ),
-              // ),
               const SizedBox(height: 10),
               Visibility(
                 visible: _barCode == "Barcode" ? true : false,

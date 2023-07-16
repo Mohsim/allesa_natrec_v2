@@ -1,5 +1,6 @@
-import '../../controllers/InternalTransferOrder/GenerateAndUpdatePalletIdController.dart';
-import '../../controllers/InternalTransferOrder/ValidateShipmentPalettizingSerialNo.dart';
+import '../../controllers/Palletization/GenerateAndUpdatePalletIdController.dart';
+import '../../controllers/Palletization/GetAlltblBinLocationsController.dart';
+import '../../controllers/Palletization/ValidateShipmentPalettizingSerialNo.dart';
 
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,8 @@ import 'package:get/get.dart';
 import '../../../../widgets/ElevatedButtonWidget.dart';
 import '../../../../widgets/TextFormField.dart';
 import '../../../../widgets/TextWidget.dart';
+import '../../models/GetAlltblBinLocationsModel.dart';
+import '../../utils/Constants.dart';
 import '../HomeScreen.dart';
 
 // ignore: must_be_immutable
@@ -46,19 +49,44 @@ class PalletGenerateScreen extends StatefulWidget {
 }
 
 class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
-  TextEditingController _serialNoController = TextEditingController();
+  final TextEditingController _serialNoController = TextEditingController();
   final TextEditingController _palletTypeController = TextEditingController();
+  final TextEditingController _widthController = TextEditingController();
+  final TextEditingController _heightController = TextEditingController();
+  final TextEditingController _sizeController = TextEditingController();
+  final TextEditingController _rowController = TextEditingController();
 
-  String dropdownValue = 'Select Pallet Type';
-  List<String> dropdownList = ['Select Pallet Type', "1000*1200", "800*1200"];
+  String? dropdownValue;
+  List<String> dropdownList = [];
 
   String result = "0";
   List<String> serialNoList = [];
   List<bool> isMarked = [];
 
+  List<GetAlltblBinLocationsModel> getAlltblBinLocationsModelList = [];
+
   @override
   void initState() {
     super.initState();
+    Future.delayed(const Duration(seconds: 1), () async {
+      Constants.showLoadingDialog(context);
+      GetAlltblBinLocationsController.getShipmentPalletizing().then((value) {
+        setState(() {
+          dropdownList = value.map((e) {
+            return "${e.binTotalSize.toString()} X ${e.binType.toString()}";
+          }).toList();
+          dropdownValue = dropdownList[0];
+          _widthController.text = value[0].binWidth.toString();
+          _heightController.text = value[0].binHeight.toString();
+          _sizeController.text = value[0].binTotalSize.toString();
+          _rowController.text = value[0].binRow.toString();
+          getAlltblBinLocationsModelList = value;
+        });
+        Navigator.pop(context);
+      }).onError((error, stackTrace) {
+        Navigator.pop(context);
+      });
+    });
   }
 
   @override
@@ -130,19 +158,30 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 20),
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            Text(
-                              widget.ITEMNAME,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            Column(
+                              children: [
+                                const Text(
+                                  "Item Name",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  widget.ITEMNAME,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
                             ),
                             Column(
                               children: [
@@ -194,7 +233,7 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                               "Item Code:",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 20,
+                                fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -203,7 +242,7 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                               widget.ITEMID,
                               style: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 20,
+                                fontSize: 16,
                               ),
                             ),
                           ],
@@ -246,10 +285,86 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                     setState(() {
                       _palletTypeController.text = value!;
                       dropdownValue = value;
+
+                      // select it from the index no of the dropdown list
+                      _widthController.text = getAlltblBinLocationsModelList[
+                              dropdownList.indexOf(value)]
+                          .binWidth
+                          .toString();
+                      _heightController.text = getAlltblBinLocationsModelList[
+                              dropdownList.indexOf(value)]
+                          .binHeight
+                          .toString();
+                      _rowController.text = getAlltblBinLocationsModelList[
+                              dropdownList.indexOf(value)]
+                          .binRow
+                          .toString();
+                      _sizeController.text = getAlltblBinLocationsModelList[
+                              dropdownList.indexOf(value)]
+                          .binTotalSize
+                          .toString();
                     });
                   },
                   selectedItem: dropdownValue,
                 ),
+              ),
+              const SizedBox(height: 10),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TextWidget(
+                    text: "Width",
+                    fontSize: 15,
+                  ),
+                  TextWidget(
+                    text: "Height",
+                    fontSize: 15,
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TextFormFieldWidget(
+                    controller: _widthController,
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    hintText: "Enter Width",
+                  ),
+                  TextFormFieldWidget(
+                    controller: _heightController,
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    hintText: "Enter Height",
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TextWidget(
+                    text: "Size",
+                    fontSize: 15,
+                  ),
+                  TextWidget(
+                    text: "Row",
+                    fontSize: 15,
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TextFormFieldWidget(
+                    controller: _sizeController,
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    hintText: "Enter Size",
+                  ),
+                  TextFormFieldWidget(
+                    controller: _rowController,
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    hintText: "Enter Row",
+                  ),
+                ],
               ),
               const SizedBox(height: 30),
               Container(
@@ -367,34 +482,37 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                   onPressed: () {
                     GenerateAndUpdatePalletIdController
                             .generateAndUpdatePalletId(serialNoList)
-                        .then((value) {
-                      if (value ==
-                          "PalletIDs generated and updated successfully.") {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(value),
-                            duration: const Duration(seconds: 2),
-                          ),
-                        );
-                        setState(() {
-                          serialNoList.clear();
-                          _serialNoController.clear();
-                        });
-                        Get.offAll(const HomeScreen());
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(value),
-                            duration: const Duration(seconds: 2),
-                          ),
-                        );
-                      }
-                    });
+                        .then(
+                      (value) {
+                        if (value ==
+                            "Pallet IDs generated and updated successfully.") {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(value),
+                              duration: const Duration(seconds: 2),
+                            ),
+                          );
+                          setState(() {
+                            serialNoList.clear();
+                            _serialNoController.clear();
+                          });
+                          Get.offAll(const HomeScreen());
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(value),
+                              duration: const Duration(seconds: 2),
+                            ),
+                          );
+                        }
+                      },
+                    );
                   },
                   textColor: Colors.white,
                   color: Colors.orange,
                 ),
               ),
+              const SizedBox(height: 20),
             ],
           ),
         ),

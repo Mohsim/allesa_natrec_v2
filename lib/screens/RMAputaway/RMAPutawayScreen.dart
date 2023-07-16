@@ -85,12 +85,17 @@ class _RMAPutawayScreenState extends State<RMAPutawayScreen> {
             },
             title: "RMA  Put-Away".toUpperCase(),
             actions: [
-              Container(
-                padding: const EdgeInsets.only(right: 10),
-                child: Image.asset(
-                  "assets/delete.png",
-                  width: 30,
-                  height: 30,
+              GestureDetector(
+                onTap: () {
+                  Get.back();
+                },
+                child: Container(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: Image.asset(
+                    "assets/delete.png",
+                    width: 30,
+                    height: 30,
+                  ),
                 ),
               ),
             ],

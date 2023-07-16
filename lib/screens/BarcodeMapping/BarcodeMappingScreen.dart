@@ -431,7 +431,7 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                 Container(
                   margin: const EdgeInsets.only(left: 20),
                   child: TextFormFieldWidget(
-                    hintText: "Enter/Scan Length",
+                    hintText: "Enter Length",
                     controller: _lengthController,
                     textInputAction: TextInputAction.next,
                     width: MediaQuery.of(context).size.width * 0.9,
@@ -455,7 +455,7 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                 Container(
                   margin: const EdgeInsets.only(left: 20),
                   child: TextFormFieldWidget(
-                    hintText: "Enter/Scan Width",
+                    hintText: "Enter Width",
                     controller: _widthController,
                     textInputAction: TextInputAction.next,
                     width: MediaQuery.of(context).size.width * 0.9,
@@ -479,7 +479,7 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                 Container(
                   margin: const EdgeInsets.only(left: 20),
                   child: TextFormFieldWidget(
-                    hintText: "Enter/Scan Height",
+                    hintText: "Enter Height",
                     controller: _heightController,
                     textInputAction: TextInputAction.next,
                     width: MediaQuery.of(context).size.width * 0.9,
@@ -503,7 +503,7 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                 Container(
                   margin: const EdgeInsets.only(left: 20),
                   child: TextFormFieldWidget(
-                    hintText: "Enter/Scan Weight",
+                    hintText: "Enter Weight",
                     controller: _weightController,
                     textInputAction: TextInputAction.done,
                     width: MediaQuery.of(context).size.width * 0.9,

@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../controllers/InternalTransferOrder/GetShipmentPalletizingController.dart';
+import '../../controllers/Palletization/GetShipmentPalletizingController.dart';
 
 import '../../models/GetShipmentPalletizingModel.dart';
 import '../../screens/Palletizing/PalletProceedScreen.dart';
@@ -63,12 +63,17 @@ class _ShipmentPalletizingScreenState extends State<ShipmentPalletizingScreen> {
           },
           title: "Palletization".toUpperCase(),
           actions: [
-            Container(
-              padding: const EdgeInsets.only(right: 10),
-              child: Image.asset(
-                "assets/delete.png",
-                width: 30,
-                height: 30,
+            GestureDetector(
+              onTap: () {
+                Get.back();
+              },
+              child: Container(
+                padding: const EdgeInsets.only(right: 10),
+                child: Image.asset(
+                  "assets/delete.png",
+                  width: 30,
+                  height: 30,
+                ),
               ),
             ),
           ],

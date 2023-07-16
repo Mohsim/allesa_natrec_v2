@@ -82,12 +82,17 @@ class _ProfitAndLossScreen1State extends State<ProfitAndLossScreen1> {
             },
             title: "Journal Movement".toUpperCase(),
             actions: [
-              Container(
-                padding: const EdgeInsets.only(right: 10),
-                child: Image.asset(
-                  "assets/delete.png",
-                  width: 30,
-                  height: 30,
+              GestureDetector(
+                onTap: () {
+                  Get.back();
+                },
+                child: Container(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: Image.asset(
+                    "assets/delete.png",
+                    width: 30,
+                    height: 30,
+                  ),
                 ),
               ),
             ],

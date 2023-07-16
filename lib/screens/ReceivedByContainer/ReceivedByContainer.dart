@@ -62,12 +62,17 @@ class _ReceivedByContainerState extends State<ReceivedByContainer> {
           },
           title: "Shipment Receiving".toUpperCase(),
           actions: [
-            Container(
-              padding: const EdgeInsets.only(right: 10),
-              child: Image.asset(
-                "assets/delete.png",
-                width: 30,
-                height: 30,
+            GestureDetector(
+              onTap: () {
+                Get.back();
+              },
+              child: Container(
+                padding: const EdgeInsets.only(right: 10),
+                child: Image.asset(
+                  "assets/delete.png",
+                  width: 30,
+                  height: 30,
+                ),
               ),
             ),
           ],
