@@ -56,12 +56,14 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
 
   String userName = "";
   String userID = "";
+  String currentDate = "";
 
   void _showUserInfo() async {
     DateTime now = DateTime.now();
     var formatter = DateFormat.yMd().format(now);
 
     _manufacturingController.text = formatter;
+    currentDate = formatter;
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     // final String? token = prefs.getString('token');
@@ -87,7 +89,6 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
 
     if (pickedDate != null) {
       setState(() {
-        // assign the date to the controller in format of dd/mm/yyyy
         _manufacturingController.text =
             "${pickedDate.month}/${pickedDate.day}/${pickedDate.year}";
       });
@@ -99,6 +100,8 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
     super.initState();
     _showUserInfo();
     _weightController.text = "0";
+
+    print("current date: $currentDate");
   }
 
   String itemName = '';
@@ -542,13 +545,14 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
                         _gtinController.text.trim(),
                         _binLocationController.text.trim(),
                         _serialNoController.text.trim(),
-                        _manufacturingController.text.trim(),
+                        currentDate,
                         dropDownValue.toString(),
                         _qrCodeController.text.trim(),
                         double.parse(_lengthController.text.trim()),
                         double.parse(_widthController.text.trim()),
                         double.parse(_heightController.text.trim()),
                         double.parse(_weightController.text.trim()),
+                        _manufacturingController.text.trim(),
                       )
                           .then((value) {
                         Get.back();

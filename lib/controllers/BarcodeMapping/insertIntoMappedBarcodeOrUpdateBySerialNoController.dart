@@ -19,6 +19,7 @@ class insertIntoMappedBarcodeOrUpdateBySerialNoController {
     double width,
     double height,
     double weight,
+    String manufacturingDate,
   ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
@@ -27,6 +28,7 @@ class insertIntoMappedBarcodeOrUpdateBySerialNoController {
         "${Constants.baseUrl}insertIntoMappedBarcodeOrUpdateBySerialNo";
 
     print("URL: $url");
+    print("Map Date: $mapdate");
 
     final uri = Uri.parse(url);
 
@@ -51,6 +53,7 @@ class insertIntoMappedBarcodeOrUpdateBySerialNoController {
       "width": width,
       "height": height,
       "weight": weight,
+      "trxdate": manufacturingDate
     };
 
     print("Body: ${jsonEncode(body)}");
