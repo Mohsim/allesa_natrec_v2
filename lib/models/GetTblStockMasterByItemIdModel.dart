@@ -3,10 +3,10 @@ class GetTblStockMasterByItemIdModel {
   String? iTEMNAME;
   String? iTEMGROUPID;
   String? gROUPNAME;
-  double? width;
-  int? height;
-  double? length;
-  int? Weight;
+  num? width;
+  num? height;
+  num? length;
+  num? Weight;
 
   GetTblStockMasterByItemIdModel(
       {this.iTEMID,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class Constants {
   // static String baseUrl = 'http://gs1ksa.org:3005/api/';
@@ -12,9 +13,12 @@ class Constants {
       context: context,
       builder: (context) {
         return const Center(
-            child: CircularProgressIndicator(
-          color: Colors.orange,
-        ));
+          child: SpinKitSquareCircle(
+            duration: Duration(milliseconds: 1200),
+            color: Colors.orange,
+            size: 50.0,
+          ),
+        );
       },
     );
   }
