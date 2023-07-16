@@ -63,8 +63,8 @@ class _PutAwayScreenState extends State<PutAwayScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children: const <Widget>[
+                          const Row(
+                            children: <Widget>[
                               SizedBox(width: 10),
                               Icon(
                                 Icons.search,
