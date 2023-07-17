@@ -53,7 +53,7 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
   final TextEditingController _palletTypeController = TextEditingController();
   final TextEditingController _widthController = TextEditingController();
   final TextEditingController _heightController = TextEditingController();
-  final TextEditingController _sizeController = TextEditingController();
+  final TextEditingController _lengthController = TextEditingController();
   final TextEditingController _rowController = TextEditingController();
 
   String? dropdownValue;
@@ -73,13 +73,13 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
       GetAlltblBinLocationsController.getShipmentPalletizing().then((value) {
         setState(() {
           dropdownList = value.map((e) {
-            return "${e.binTotalSize.toString()} X ${e.binType.toString()}";
+            return "${e.palletTotalSize.toString()} X ${e.palletType.toString()}";
           }).toList();
           dropdownValue = dropdownList[0];
-          _widthController.text = value[0].binWidth.toString();
-          _heightController.text = value[0].binHeight.toString();
-          _sizeController.text = value[0].binTotalSize.toString();
-          _rowController.text = value[0].binRow.toString();
+          _widthController.text = value[0].palletWidth.toString();
+          _heightController.text = value[0].palletHeight.toString();
+          _lengthController.text = value[0].palletLength.toString();
+          _rowController.text = value[0].palletRow.toString();
           getAlltblBinLocationsModelList = value;
         });
         Navigator.pop(context);
@@ -289,19 +289,19 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                       // select it from the index no of the dropdown list
                       _widthController.text = getAlltblBinLocationsModelList[
                               dropdownList.indexOf(value)]
-                          .binWidth
+                          .palletWidth
                           .toString();
                       _heightController.text = getAlltblBinLocationsModelList[
                               dropdownList.indexOf(value)]
-                          .binHeight
+                          .palletHeight
                           .toString();
                       _rowController.text = getAlltblBinLocationsModelList[
                               dropdownList.indexOf(value)]
-                          .binRow
+                          .palletLength
                           .toString();
-                      _sizeController.text = getAlltblBinLocationsModelList[
+                      _lengthController.text = getAlltblBinLocationsModelList[
                               dropdownList.indexOf(value)]
-                          .binTotalSize
+                          .palletRow
                           .toString();
                     });
                   },
@@ -342,7 +342,7 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   TextWidget(
-                    text: "Size",
+                    text: "Length",
                     fontSize: 15,
                   ),
                   TextWidget(
@@ -355,9 +355,9 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   TextFormFieldWidget(
-                    controller: _sizeController,
+                    controller: _lengthController,
                     width: MediaQuery.of(context).size.width * 0.4,
-                    hintText: "Enter Size",
+                    hintText: "Enter Length",
                   ),
                   TextFormFieldWidget(
                     controller: _rowController,

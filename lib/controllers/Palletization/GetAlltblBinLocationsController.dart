@@ -10,7 +10,7 @@ class GetAlltblBinLocationsController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
 
-    String url = "${Constants.baseUrl}getAlltblBinLocations";
+    String url = "${Constants.baseUrl}getAlltblPalletMaster";
 
     print("url: $url");
 
