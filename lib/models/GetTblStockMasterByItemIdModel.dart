@@ -6,7 +6,7 @@ class GetTblStockMasterByItemIdModel {
   num? width;
   num? height;
   num? length;
-  num? Weight;
+  num? weight;
 
   GetTblStockMasterByItemIdModel(
       {this.iTEMID,
@@ -16,7 +16,7 @@ class GetTblStockMasterByItemIdModel {
       this.width,
       this.height,
       this.length,
-      this.Weight});
+      this.weight});
 
   GetTblStockMasterByItemIdModel.fromJson(Map<String, dynamic> json) {
     iTEMID = json['ITEMID'];
@@ -26,7 +26,7 @@ class GetTblStockMasterByItemIdModel {
     width = json['Width'];
     height = json['Height'];
     length = json['Length'];
-    Weight = json['Weight'];
+    weight = json['Weight'];
   }
 
   Map<String, dynamic> toJson() {
@@ -38,7 +38,7 @@ class GetTblStockMasterByItemIdModel {
     data['Width'] = width;
     data['Height'] = height;
     data['Length'] = length;
-    data['Weight'] = Weight;
+    data['Weight'] = weight;
     return data;
   }
 }

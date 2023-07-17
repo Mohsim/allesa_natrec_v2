@@ -626,25 +626,19 @@ class _BarcodeMappingScreenState extends State<BarcodeMappingScreen> {
 
       GetTblStockMasterByItemIdController.getData(itemID).then((value) {
         setState(() {
-          _widthController.text =
-              double.parse(value[0].width.toString()).toString();
-          _heightController.text =
-              double.parse(value[0].height.toString()).toString();
-          _lengthController.text =
-              double.parse(value[0].length.toString()).toString();
-          _weightController.text = "0.0";
+          _widthController.text = value[0].width.toString();
+          _heightController.text = value[0].height.toString();
+          _lengthController.text = value[0].length.toString();
+          _weightController.text = value[0].weight.toString();
         });
-        print("width: ${value[0].width}");
-        print("height: ${value[0].height}");
-        print("length: ${value[0].length}");
         Navigator.of(context).pop();
       }).onError((error, stackTrace) {
         Navigator.pop(context);
         setState(() {
-          _widthController.text = "0.0";
-          _heightController.text = "0.0";
-          _lengthController.text = "0.0";
-          _weightController.text = "0.0";
+          _widthController.text = "";
+          _heightController.text = "";
+          _lengthController.text = "";
+          _weightController.text = "";
         });
       });
     }).onError((error, stackTrace) {
