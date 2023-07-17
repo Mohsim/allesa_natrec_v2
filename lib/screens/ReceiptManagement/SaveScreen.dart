@@ -196,6 +196,23 @@ class _SaveScreenState extends State<SaveScreen> {
                         readOnly: true,
                       ),
                       const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const TextWidget(
+                            text: "Item Code:",
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(width: 10),
+                          TextWidget(
+                            text: widget.itemId,
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
                       Container(
                         margin: const EdgeInsets.only(right: 20),
                         child: Row(
@@ -204,12 +221,6 @@ class _SaveScreenState extends State<SaveScreen> {
                           children: [
                             Column(
                               children: [
-                                const TextWidget(
-                                  text: "Item Code:",
-                                  fontSize: 17,
-                                  color: Colors.white,
-                                ),
-                                const SizedBox(height: 10),
                                 TextWidget(
                                   text: "PO QTY*\n${widget.qty}",
                                   fontSize: 15,
@@ -220,12 +231,6 @@ class _SaveScreenState extends State<SaveScreen> {
                             ),
                             Column(
                               children: [
-                                TextWidget(
-                                  text: widget.itemId,
-                                  fontSize: 17,
-                                  color: Colors.white,
-                                ),
-                                const SizedBox(height: 10),
                                 TextWidget(
                                   text: "Received*\n$RCQTY",
                                   fontSize: 15,
@@ -238,7 +243,7 @@ class _SaveScreenState extends State<SaveScreen> {
                               children: [
                                 TextWidget(
                                   text: "CON",
-                                  fontSize: 17,
+                                  fontSize: 15,
                                   color: Colors.white,
                                 ),
                                 SizedBox(height: 10),

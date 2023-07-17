@@ -45,7 +45,8 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
   final TextEditingController _locationReferenceController =
       TextEditingController();
   final TextEditingController _scanLocationController = TextEditingController();
-  final TextEditingController _palletTypeController = TextEditingController();
+  final TextEditingController _scanSerialandPalletController =
+      TextEditingController();
 
   String result = "0";
   List<String> serialNoList = [];
@@ -64,7 +65,7 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
         Navigator.pop(context);
         for (int i = 0; i < value.length; i++) {
           setState(() {
-            dropDownList.add(value[i].binLocation ?? "");
+            dropDownList.add(value[i].bIN ?? "");
           });
         }
 
@@ -85,10 +86,13 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
     });
   }
 
-  String _site = "";
+  String _site = "By Serial";
 
   String? dropDownValue;
   List<String> dropDownList = [];
+
+  // make focus node
+  FocusNode focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -259,87 +263,78 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
                         ],
                       ),
                       const SizedBox(height: 10),
-                      Visibility(
-                        visible: dropDownValue == null ? false : true,
-                        child: Container(
-                          margin: const EdgeInsets.only(left: 10, right: 10),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              Flexible(
-                                child: ListTile(
-                                  title: const Text('By Pallet'),
-                                  leading: Radio(
-                                    value: "By Pallet",
-                                    groupValue: _site,
-                                    onChanged: (String? value) {
-                                      setState(() {
-                                        _site = value!;
-                                        print(_site);
-                                      });
-                                    },
-                                  ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 10, right: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Flexible(
+                              child: ListTile(
+                                title: const Text('By Pallet'),
+                                leading: Radio(
+                                  value: "By Pallet",
+                                  groupValue: _site,
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      _site = value!;
+                                      print(_site);
+                                    });
+                                  },
                                 ),
                               ),
-                              Flexible(
-                                child: ListTile(
-                                  title: const Text('By Serial'),
-                                  leading: Radio(
-                                    value: "By Serial",
-                                    groupValue: _site,
-                                    onChanged: (String? value) {
-                                      setState(() {
-                                        _site = value!;
-                                        print(_site);
-                                      });
-                                    },
-                                  ),
+                            ),
+                            Flexible(
+                              child: ListTile(
+                                title: const Text('By Serial'),
+                                leading: Radio(
+                                  value: "By Serial",
+                                  groupValue: _site,
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      _site = value!;
+                                      print(_site);
+                                    });
+                                  },
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-              Visibility(
-                visible: _site != '' ? true : false,
-                child: Container(
-                  margin: const EdgeInsets.only(left: 20, top: 10),
-                  child: TextWidget(
-                    text:
-                        _site == 'By Pallet' ? "Scan Pallet#" : "Scan Serial#",
-                    color: Colors.blue[900]!,
-                    fontSize: 15,
-                  ),
+              Container(
+                margin: const EdgeInsets.only(left: 20, top: 10),
+                child: TextWidget(
+                  text: _site == 'By Pallet' ? "Scan Pallet#" : "Scan Serial#",
+                  color: Colors.blue[900]!,
+                  fontSize: 15,
                 ),
               ),
-              Visibility(
-                visible: _site != '' ? true : false,
-                child: Container(
-                  margin: const EdgeInsets.only(left: 20),
-                  child: TextFormFieldWidget(
-                    controller: _palletTypeController,
-                    readOnly: false,
-                    hintText: "Enter/Scan Pallet No",
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    onEditingComplete: () {
-                      if (_site == "By Pallet") {
-                        byPalletMethod();
-                        return;
-                      }
-                      if (_site == "By Serial") {
-                        bySerialMethod();
-                        return;
-                      }
-                    },
-                  ),
+              Container(
+                margin: const EdgeInsets.only(left: 20),
+                child: TextFormFieldWidget(
+                  controller: _scanSerialandPalletController,
+                  readOnly: false,
+                  focusNode: focusNode,
+                  hintText: "Enter/Scan Pallet No",
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  onEditingComplete: () {
+                    if (_site == "By Pallet") {
+                      byPalletMethod();
+                      return;
+                    }
+                    if (_site == "By Serial") {
+                      bySerialMethod();
+                      return;
+                    }
+                  },
                 ),
               ),
               const SizedBox(height: 10),
@@ -567,7 +562,7 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
   }
 
   void insertData() {
-    if (_palletTypeController.text.trim().isEmpty) {
+    if (_scanSerialandPalletController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Please Select by Pallet or Serial"),
         backgroundColor: Colors.red,
@@ -610,13 +605,16 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
     FocusScope.of(context).requestFocus(FocusNode());
     Constants.showLoadingDialog(context);
     GetPalletTableController.getAllTable(
-            _palletTypeController.text.trim(), dropDownValue.toString())
+            _scanSerialandPalletController.text.trim(),
+            dropDownValue.toString())
         .then((value) {
       Navigator.of(context).pop();
       setState(() {
         GetShipmentPalletizingList.clear();
         GetShipmentPalletizingList = value;
       });
+      // focus back to pallet type
+      FocusScope.of(context).requestFocus(focusNode);
     }).onError((error, stackTrace) {
       Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -629,13 +627,15 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
     FocusScope.of(context).requestFocus(FocusNode());
     Constants.showLoadingDialog(context);
     GetSerialTableController.getAllTable(
-            _palletTypeController.text.trim(), dropDownValue.toString())
+            _scanSerialandPalletController.text.trim(),
+            dropDownValue.toString())
         .then((value) {
       Navigator.of(context).pop();
       setState(() {
         GetShipmentPalletizingList.clear();
         GetShipmentPalletizingList = value;
       });
+      FocusScope.of(context).requestFocus(focusNode);
     }).onError((error, stackTrace) {
       Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
