@@ -47,6 +47,7 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
   final TextEditingController _scanLocationController = TextEditingController();
   final TextEditingController _scanSerialandPalletController =
       TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   String result = "0";
   List<String> serialNoList = [];
@@ -90,6 +91,7 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
 
   String? dropDownValue;
   List<String> dropDownList = [];
+  List<String> filterList = [];
 
   // make focus node
   FocusNode focusNode = FocusNode();
@@ -523,22 +525,109 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
               //   ),
               // ),
               // make dropdown based on dropdown list
-              Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  color: Colors.white,
-                ),
-                width: MediaQuery.of(context).size.width * 0.9,
-                margin: const EdgeInsets.only(left: 20),
-                child: DropdownSearch<String>(
-                  items: dropDownList,
-                  onChanged: (value) {
-                    setState(() {
-                      dropDownValue = value!;
-                    });
-                  },
-                  selectedItem: dropDownValue,
-                ),
+              Row(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      color: Colors.white,
+                    ),
+                    width: MediaQuery.of(context).size.width * 0.73,
+                    margin: const EdgeInsets.only(left: 20),
+                    child: DropdownSearch<String>(
+                      filterFn: (item, filter) {
+                        return item
+                            .toLowerCase()
+                            .contains(filter.toLowerCase());
+                      },
+                      enabled: true,
+                      dropdownButtonProps: const DropdownButtonProps(
+                        icon: Icon(
+                          Icons.arrow_drop_down,
+                          color: Colors.black,
+                        ),
+                      ),
+                      items: dropDownList,
+                      onChanged: (value) {
+                        setState(() {
+                          dropDownValue = value!;
+                        });
+                      },
+                      selectedItem: dropDownValue,
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(left: 10),
+                    child: IconButton(
+                      onPressed: () {
+                        // show dialog box for search
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: TextWidget(
+                                text: "Search",
+                                color: Colors.blue[900]!,
+                                fontSize: 15,
+                              ),
+                              content: TextFormFieldWidget(
+                                controller: _searchController,
+                                readOnly: false,
+                                hintText: "Enter/Scan Location",
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                onEditingComplete: () {
+                                  setState(() {
+                                    dropDownList = dropDownList
+                                        .where((element) => element
+                                            .toLowerCase()
+                                            .contains(_searchController.text
+                                                .toLowerCase()))
+                                        .toList();
+                                    dropDownValue = dropDownList[0];
+                                  });
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: TextWidget(
+                                    text: "Cancel",
+                                    color: Colors.blue[900]!,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      dropDownList = dropDownList
+                                          .where((element) => element
+                                              .toLowerCase()
+                                              .contains(_searchController.text
+                                                  .toLowerCase()))
+                                          .toList();
+                                      dropDownValue = dropDownList[0];
+                                    });
+
+                                    Navigator.pop(context);
+                                  },
+                                  child: TextWidget(
+                                    text: "Search",
+                                    color: Colors.blue[900]!,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      icon: const Icon(Icons.search),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 10),
               Center(

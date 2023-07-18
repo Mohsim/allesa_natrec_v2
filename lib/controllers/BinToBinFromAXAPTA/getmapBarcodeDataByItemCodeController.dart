@@ -3,7 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 import '../../models/GetAllTblLocationsCLModel.dart';
-import '../../models/getmapBarcodeDataByItemCodeModel.dart';
 import '../../utils/Constants.dart';
 
 class GetMapBarcodeDataByItemCodeController {

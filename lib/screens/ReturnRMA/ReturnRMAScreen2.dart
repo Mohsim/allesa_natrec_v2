@@ -107,6 +107,9 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
     });
   }
 
+  // focus node for text fields
+  final FocusNode _serialNoFocusNode = FocusNode();
+
   String _site = "By Serial";
   String _barCode = '';
 
@@ -735,12 +738,12 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                       child: Container(
                         margin: const EdgeInsets.only(left: 20),
                         child: TextFormFieldWidget(
+                          focusNode: _serialNoFocusNode,
                           controller: _serialNoController,
                           readOnly: false,
                           hintText: "Enter/Scan Serial No",
                           width: MediaQuery.of(context).size.width * 0.9,
                           onEditingComplete: () {
-                            FocusScope.of(context).requestFocus(FocusNode());
                             Constants.showLoadingDialog(context);
                             setState(
                               () {
@@ -748,8 +751,10 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                                     .requestFocus(FocusNode());
                                 Constants.showLoadingDialog(context);
                                 insertIntoWmsReturnSalesOrderClController
-                                    .getData(GetShipmentPalletizingList[0],
-                                        _serialNoController.text.trim())
+                                    .getData(
+                                  GetShipmentPalletizingList.last,
+                                  _serialNoController.text.trim(),
+                                )
                                     .then((value) {
                                   setState(
                                     () {
@@ -776,11 +781,11 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
 
                                       // append the selected pallet code row to the GetShipmentPalletizingList2
                                       GetShipmentPalletizingList2.add(
-                                        GetShipmentPalletizingList.firstWhere(
+                                        GetShipmentPalletizingList.where(
                                           (element) =>
                                               element.itemSerialNo ==
                                               _serialNoController.text.trim(),
-                                        ),
+                                        ).toList().last,
                                       );
                                       // remove the selected pallet code row from the GetShipmentPalletizingList
                                       GetShipmentPalletizingList.removeWhere(
@@ -795,7 +800,9 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                                           .toString();
                                     },
                                   );
+
                                   Navigator.pop(context);
+
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                       content: TextWidget(
@@ -805,7 +812,10 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                                       backgroundColor: Colors.green,
                                     ),
                                   );
+
                                   _serialNoController.clear();
+                                  FocusScope.of(context)
+                                      .requestFocus(_serialNoFocusNode);
                                   Navigator.pop(context);
                                 }).onError(
                                   (error, stackTrace) {

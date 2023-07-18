@@ -13,7 +13,7 @@ class Constants {
       context: context,
       builder: (context) {
         return const Center(
-          child: SpinKitFoldingCube(
+          child: SpinKitFadingCircle(
             duration: Duration(milliseconds: 1200),
             color: Colors.orange,
             size: 50.0,
