@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable, use_build_context_synchronously
 
 import '../../controllers/ReturnRMA/InsertManyIntoMappedBarcodeController.dart';
+import '../../controllers/UnAllocatedItem/DeleteItemsReAllocationPickedByItemSerialNoController.dart';
 import '../../controllers/UnAllocatedItem/GetAllTblLocationsCLController.dart';
 import '../../controllers/UnAllocatedItem/GetItemInfoByPalletCodeController.dart';
 import '../../models/GetAllTblLocationsCLModel.dart';
@@ -495,7 +496,6 @@ class _UnAllocatedItemsScreen2State extends State<UnAllocatedItemsScreen2> {
             : dropDownValue.toString(),
         widget.binLocation,
       );
-      Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: TextWidget(
@@ -505,6 +505,9 @@ class _UnAllocatedItemsScreen2State extends State<UnAllocatedItemsScreen2> {
           backgroundColor: Colors.green,
         ),
       );
+      await DeleteItemsReAllocationPickedByItemSerialNoController.getData(
+          widget.itemSerialNo);
+      Navigator.pop(context);
     } catch (e) {
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -543,7 +546,7 @@ class _UnAllocatedItemsScreen2State extends State<UnAllocatedItemsScreen2> {
         widget.binLocation,
       );
       _scanPalletController.clear();
-      Navigator.pop(context);
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: TextWidget(
@@ -553,6 +556,9 @@ class _UnAllocatedItemsScreen2State extends State<UnAllocatedItemsScreen2> {
           backgroundColor: Colors.green,
         ),
       );
+      await DeleteItemsReAllocationPickedByItemSerialNoController.getData(
+          widget.itemSerialNo);
+      Navigator.pop(context);
     } catch (e) {
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
