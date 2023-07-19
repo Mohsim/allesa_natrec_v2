@@ -1,3 +1,4 @@
+import 'package:alessa_v2/screens/UnAllocatedItem/UnAllocatedItemsScreen1.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 import '../../screens/Authentication/LoginScreen.dart';
@@ -39,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
     "images": [
       "assets/picking.png",
       "assets/receipt_management.png",
-      "assets/container.png",
+      // "assets/container.png",
       "assets/work_in_progress.png",
       "assets/stock_management.png",
       "assets/gtin_tracking.png",
@@ -47,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
       "assets/log-in.png",
       "assets/journal.png",
       "assets/allocation.png",
+      "assets/container.png",
       "assets/movement.png",
       "assets/profit-and-loss.png",
       "assets/cycle-counting.png",
@@ -61,14 +63,15 @@ class _HomeScreenState extends State<HomeScreen> {
     "titles": [
       "Picking Slip",
       "Receipt Management",
-      "Received By Container",
+      // "Received By Container",
       "Dispatching",
       "Put-Away Transaction",
       "Palletization",
       "Bin To Bin (AXAPTA)",
       "Bin To Bin (Internal)",
       "Bin To Bin (Journal)",
-      "Item Re-Allocation",
+      "Items Re-Allocation",
+      "Un-Allocated Items",
       "Journal Movement Counting",
       "Profit and Loss",
       "Cycle Counting Process",
@@ -87,9 +90,9 @@ class _HomeScreenState extends State<HomeScreen> {
       () {
         Get.to(() => const ShipmentDispatchingScreen());
       },
-      () {
-        Get.to(() => const ReceivedByContainer());
-      },
+      // () {
+      //   Get.to(() => const ReceivedByContainer());
+      // },
       () {
         Get.to(() => const DispatchingFormScreen());
       },
@@ -110,6 +113,9 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       () {
         Get.to(() => const ItemReAllocationScreen());
+      },
+      () {
+        Get.to(() => const UnAllocatedItemsScreen1());
       },
       () {
         Get.to(() => const JournalMovementScreen1());

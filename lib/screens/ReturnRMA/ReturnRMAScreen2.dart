@@ -1,5 +1,6 @@
 import 'package:alessa_v2/widgets/ElevatedButtonWidget.dart';
 
+import '../../controllers/BinToBinFromAXAPTA/getmapBarcodeDataByItemCodeController.dart';
 import '../../controllers/PickListAssigned/GetPickListTableDataController.dart';
 import '../../controllers/PickListAssigned/getMappedBarcodedsByItemCodeAndBinLocationController.dart';
 import '../../controllers/ReturnRMA/InsertManyIntoMappedBarcodeController.dart';
@@ -51,6 +52,7 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
   final TextEditingController _palletTypeController = TextEditingController();
   final TextEditingController _serialNoController = TextEditingController();
   final TextEditingController _modelNoController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   String result = "0";
   String result2 = "0";
@@ -69,64 +71,6 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
       updateWmsJournalMovementClQtyScannedList =
       updateWmsJournalMovementClQtyScannedModel();
 
-  @override
-  void initState() {
-    super.initState();
-    _returnItemNumController.text = widget.rETURNITEMNUM;
-
-    Future.delayed(const Duration(seconds: 1)).then((value) {
-      Constants.showLoadingDialog(context);
-
-      getMappedBarcodedsByItemCodeAndBinLocationController
-          .getData(widget.iTEMID)
-          .then((value) {
-        dropDownList.clear();
-        for (int i = 0; i < value.length; i++) {
-          setState(() {
-            if (value[i].binLocation != "") {
-              dropDownList.add(value[i].binLocation ?? "");
-            }
-          });
-        }
-
-        // convert list to set to remove duplicate values
-        Set<String> set = dropDownList.toSet();
-        // convert set to list to get all values
-        dropDownList = set.toList();
-
-        setState(() {
-          dropDownValue = dropDownList[0];
-          GetShipmentPalletizingList = value;
-        });
-        GetPickListTableDataController.getData(
-          widget.iTEMID,
-          dropDownValue.toString(),
-        ).then((value) {
-          setState(() {
-            GetShipmentPalletizingList = value;
-            result = value.length.toString();
-          });
-        }).onError((error, stackTrace) {
-          setState(() {
-            GetShipmentPalletizingList = [];
-            result = "0";
-          });
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(error.toString()),
-            backgroundColor: Colors.red,
-          ));
-        });
-        Navigator.pop(context);
-      }).onError((error, stackTrace) {
-        Navigator.pop(context);
-        setState(() {
-          dropDownList.add("No Data Found");
-          dropDownValue = dropDownList[0];
-        });
-      });
-    });
-  }
-
   // focus node for text fields
   final FocusNode _serialNoFocusNode = FocusNode();
 
@@ -135,6 +79,59 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
 
   String? dropDownValue;
   List<String> dropDownList = [];
+  List<String> filterList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _returnItemNumController.text = widget.rETURNITEMNUM;
+
+    Future.delayed(Duration.zero, () async {
+      try {
+        Constants.showLoadingDialog(context);
+        var value =
+            await GetMapBarcodeDataByItemCodeController.getData(widget.iTEMID);
+        Navigator.pop(context);
+        for (int i = 0; i < value.length; i++) {
+          setState(() {
+            dropDownList.add(value[i].bIN ?? "");
+            Set<String> set = dropDownList.toSet();
+            dropDownList = set.toList();
+          });
+        }
+        setState(() {
+          dropDownValue = dropDownList[0];
+          filterList = dropDownList;
+        });
+
+        GetPickListTableDataController.getData(
+          widget.iTEMID,
+          dropDownValue.toString(),
+        ).then((value) {
+          setState(() {
+            GetShipmentPalletizingList = value;
+            result = value.length.toString();
+          });
+          Navigator.pop(context);
+        }).onError((error, stackTrace) {
+          setState(() {
+            GetShipmentPalletizingList = [];
+            result = "0";
+          });
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(error.toString().replaceAll("Exception:", "")),
+            backgroundColor: Colors.red,
+          ));
+        });
+      } catch (e) {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(e.toString().replaceAll("Exception:", "")),
+          backgroundColor: Colors.red,
+        ));
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -179,55 +176,21 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                           onEditingComplete: () {},
                         ),
                       ),
+                      const SizedBox(height: 10),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
-                            margin: const EdgeInsets.only(left: 20, top: 10),
-                            child: const TextWidget(
-                              text: "From: ",
-                              color: Colors.white,
-                            ),
+                          const TextWidget(
+                            text: "From:",
+                            color: Colors.white,
+                            fontSize: 18,
                           ),
-                          Container(
-                            decoration: const BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
+                          const SizedBox(width: 10),
+                          Text(
+                            widget.iNVENTSITEID,
+                            style: const TextStyle(
                               color: Colors.white,
-                            ),
-                            width: MediaQuery.of(context).size.width * 0.68,
-                            margin: const EdgeInsets.only(left: 20, top: 10),
-                            child: DropdownSearch<String>(
-                              items: dropDownList,
-                              onChanged: (value) {
-                                setState(() {
-                                  dropDownValue = value!;
-                                });
-                                FocusScope.of(context).unfocus();
-                                Constants.showLoadingDialog(context);
-
-                                GetPickListTableDataController.getData(
-                                  widget.iTEMID,
-                                  dropDownValue.toString(),
-                                ).then((value) {
-                                  setState(() {
-                                    GetShipmentPalletizingList = value;
-                                    Navigator.pop(context);
-                                    result = value.length.toString();
-                                  });
-                                }).onError((error, stackTrace) {
-                                  Navigator.pop(context);
-                                  setState(() {
-                                    GetShipmentPalletizingList = [];
-                                    result = "0";
-                                  });
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(SnackBar(
-                                    content: Text(error.toString()),
-                                    backgroundColor: Colors.red,
-                                  ));
-                                });
-                              },
-                              selectedItem: dropDownValue,
+                              fontSize: 16,
                             ),
                           ),
                         ],
@@ -524,6 +487,120 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                     ),
                   ),
                   const SizedBox(width: 20),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Container(
+                margin: const EdgeInsets.only(left: 20, top: 10),
+                child: TextWidget(
+                  text: "Scan Location To:",
+                  color: Colors.blue[900]!,
+                  fontSize: 15,
+                ),
+              ),
+              Row(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      color: Colors.white,
+                    ),
+                    width: MediaQuery.of(context).size.width * 0.73,
+                    margin: const EdgeInsets.only(left: 20),
+                    child: DropdownSearch<String>(
+                      filterFn: (item, filter) {
+                        return item
+                            .toLowerCase()
+                            .contains(filter.toLowerCase());
+                      },
+                      enabled: true,
+                      dropdownButtonProps: const DropdownButtonProps(
+                        icon: Icon(
+                          Icons.arrow_drop_down,
+                          color: Colors.black,
+                        ),
+                      ),
+                      items: filterList,
+                      onChanged: (value) {
+                        setState(() {
+                          dropDownValue = value!;
+                        });
+                      },
+                      selectedItem: dropDownValue,
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(left: 10),
+                    child: IconButton(
+                      onPressed: () {
+                        // show dialog box for search
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: TextWidget(
+                                text: "Search",
+                                color: Colors.blue[900]!,
+                                fontSize: 15,
+                              ),
+                              content: TextFormFieldWidget(
+                                controller: _searchController,
+                                readOnly: false,
+                                hintText: "Enter/Scan Location",
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                onEditingComplete: () {
+                                  setState(() {
+                                    dropDownList = dropDownList
+                                        .where((element) => element
+                                            .toLowerCase()
+                                            .contains(_searchController.text
+                                                .toLowerCase()))
+                                        .toList();
+                                    dropDownValue = dropDownList[0];
+                                  });
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: TextWidget(
+                                    text: "Cancel",
+                                    color: Colors.blue[900]!,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    // filter list based on search
+                                    setState(() {
+                                      filterList = dropDownList
+                                          .where((element) => element
+                                              .toLowerCase()
+                                              .contains(_searchController.text
+                                                  .toLowerCase()))
+                                          .toList();
+                                      dropDownValue = filterList[0];
+                                    });
+
+                                    Navigator.pop(context);
+                                  },
+                                  child: TextWidget(
+                                    text: "Search",
+                                    color: Colors.blue[900]!,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      icon: const Icon(Icons.search),
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 20),

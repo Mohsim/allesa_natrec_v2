@@ -67,16 +67,14 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
         for (int i = 0; i < value.length; i++) {
           setState(() {
             dropDownList.add(value[i].bIN ?? "");
+            Set<String> set = dropDownList.toSet();
+            dropDownList = set.toList();
           });
         }
 
-        // convert list to set to remove duplicate values
-        Set<String> set = dropDownList.toSet();
-        // convert set to list to get all values
-        dropDownList = set.toList();
-
         setState(() {
           dropDownValue = dropDownList[0];
+          filterList = dropDownList;
         });
       }).onError((error, stackTrace) {
         Navigator.pop(context);
@@ -149,27 +147,7 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
                             color: Colors.white,
                             fontSize: 18,
                           ),
-                          // // make dropdown based on dropdown list
-                          // Container(
-                          //   decoration: const BoxDecoration(
-                          //     borderRadius:
-                          //         BorderRadius.all(Radius.circular(10)),
-                          //     color: Colors.white,
-                          //   ),
-                          //   width: MediaQuery.of(context).size.width * 0.68,
-                          //   margin: const EdgeInsets.only(left: 20, top: 10),
-                          //   child: DropdownSearch<String>(
-                          //     items: dropDownList,
-                          //     onChanged: (value) {
-                          //       setState(() {
-                          //         dropDownValue = value!;
-                          //       });
-                          //     },
-                          //     selectedItem: dropDownValue,
-                          //   ),
-                          // ),
                           const SizedBox(width: 10),
-
                           Text(
                             widget.INVENTLOCATIONIDFROM,
                             style: const TextStyle(
@@ -515,16 +493,6 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
                   fontSize: 15,
                 ),
               ),
-              // Container(
-              //   margin: const EdgeInsets.only(left: 20),
-              //   child: TextFormFieldWidget(
-              //     controller: _scanLocationController,
-              //     readOnly: false,
-              //     hintText: "Enter/Scan Location",
-              //     width: MediaQuery.of(context).size.width * 0.9,
-              //   ),
-              // ),
-              // make dropdown based on dropdown list
               Row(
                 children: [
                   Container(
@@ -547,7 +515,7 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
                           color: Colors.black,
                         ),
                       ),
-                      items: dropDownList,
+                      items: filterList,
                       onChanged: (value) {
                         setState(() {
                           dropDownValue = value!;
@@ -601,14 +569,15 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
                                 ),
                                 TextButton(
                                   onPressed: () {
+                                    // filter list based on search
                                     setState(() {
-                                      dropDownList = dropDownList
+                                      filterList = dropDownList
                                           .where((element) => element
                                               .toLowerCase()
                                               .contains(_searchController.text
                                                   .toLowerCase()))
                                           .toList();
-                                      dropDownValue = dropDownList[0];
+                                      dropDownValue = filterList[0];
                                     });
 
                                     Navigator.pop(context);
@@ -721,7 +690,6 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
         .then((value) {
       Navigator.of(context).pop();
       setState(() {
-        GetShipmentPalletizingList.clear();
         GetShipmentPalletizingList = value;
       });
       FocusScope.of(context).requestFocus(focusNode);

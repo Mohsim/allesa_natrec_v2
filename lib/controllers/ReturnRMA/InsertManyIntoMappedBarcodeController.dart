@@ -1,7 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:supercharged/supercharged.dart';
 import 'dart:convert';
 
 import '../../models/getMappedBarcodedsByItemCodeAndBinLocationModel.dart';

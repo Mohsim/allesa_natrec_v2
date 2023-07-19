@@ -1,22 +1,17 @@
-// GetPickListTableDataController
-
-import '../../models/getMappedBarcodedsByItemCodeAndBinLocationModel.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
+import '../../models/GetItemInfoByPalletCode2Model.dart';
 import '../../utils/Constants.dart';
 
-class GetPickListTableDataController {
-  static Future<List<getMappedBarcodedsByItemCodeAndBinLocationModel>> getData(
-    String itemCode,
-    String binLocation,
-  ) async {
+class GetItemInfoByPalletCodeController {
+  static Future<List<GetItemInfoByPalletCode2Model>> getData(
+      String palletCode) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
 
-    String url =
-        "${Constants.baseUrl}getMappedBarcodedsByItemCodeAndBinLocation";
+    String url = "${Constants.baseUrl}getItemInfoByPalletCode";
     print("url: $url");
 
     final uri = Uri.parse(url);
@@ -25,11 +20,8 @@ class GetPickListTableDataController {
       "Authorization": token,
       "Host": Constants.host,
       "Accept": "application/json",
-      "itemcode": itemCode,
-      "binlocation": binLocation,
+      "palletcode": palletCode,
     };
-
-    print("headers: $headers");
 
     try {
       var response = await http.post(uri, headers: headers);
@@ -38,11 +30,8 @@ class GetPickListTableDataController {
         print("Status Code: ${response.statusCode}");
 
         var data = json.decode(response.body) as List;
-        List<getMappedBarcodedsByItemCodeAndBinLocationModel> shipmentData =
-            data
-                .map((e) =>
-                    getMappedBarcodedsByItemCodeAndBinLocationModel.fromJson(e))
-                .toList();
+        List<GetItemInfoByPalletCode2Model> shipmentData =
+            data.map((e) => GetItemInfoByPalletCode2Model.fromJson(e)).toList();
         return shipmentData;
       } else {
         print("Status Code: ${response.statusCode}");
