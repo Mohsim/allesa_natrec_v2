@@ -1,9 +1,9 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, use_build_context_synchronously
 
+import '../../controllers/ReturnRMA/InsertManyIntoMappedBarcodeController.dart';
 import '../../controllers/UnAllocatedItem/GetAllTblLocationsCLController.dart';
 import '../../controllers/UnAllocatedItem/GetItemInfoByPalletCodeController.dart';
 import '../../models/GetAllTblLocationsCLModel.dart';
-import '../../models/GetItemInfoByPalletCode2Model.dart';
 import '../../utils/Constants.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +60,6 @@ class _UnAllocatedItemsScreen2State extends State<UnAllocatedItemsScreen2> {
   final TextEditingController _scanPalletController = TextEditingController();
   final TextEditingController _searchController = TextEditingController();
 
-  String result = "0";
   List<String> serialNoList = [];
 
   String _site = "By Bin";
@@ -74,7 +73,6 @@ class _UnAllocatedItemsScreen2State extends State<UnAllocatedItemsScreen2> {
   FocusNode focusNode = FocusNode();
 
   List<GetAllTblLocationsCLModel> table = [];
-  List<GetItemInfoByPalletCode2Model> palletTable = [];
 
   @override
   void initState() {
@@ -448,243 +446,20 @@ class _UnAllocatedItemsScreen2State extends State<UnAllocatedItemsScreen2> {
                         ),
                       ],
                     ),
-              Visibility(
-                visible: _site == "By Pallet" ? true : false,
-                child: Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  height: MediaQuery.of(context).size.height * 0.3,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.grey,
-                      width: 1,
-                    ),
-                  ),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                        showCheckboxColumn: false,
-                        dataRowColor: MaterialStateColor.resolveWith(
-                            (states) => Colors.grey.withOpacity(0.2)),
-                        headingRowColor: MaterialStateColor.resolveWith(
-                            (states) => Colors.orange),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey,
-                            width: 1,
-                          ),
-                        ),
-                        border: TableBorder.all(
-                          color: Colors.black,
-                          width: 1,
-                        ),
-                        columns: const [
-                          DataColumn(
-                              label: Text(
-                            'ID',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          )),
-                          DataColumn(
-                              label: SelectableText('Item Code',
-                                  style: TextStyle(color: Colors.white))),
-                          DataColumn(
-                              label: Text('Item Desc',
-                                  style: TextStyle(color: Colors.white))),
-                          DataColumn(
-                              label: Text(
-                            'GTIN',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          )),
-                          DataColumn(
-                              label: Text(
-                            'Remarks',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          )),
-                          DataColumn(
-                              label: Text(
-                            'User',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          )),
-                          DataColumn(
-                              label: Text(
-                            'Classification',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          )),
-                          DataColumn(
-                              label: Text(
-                            'Main Location',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          )),
-                          DataColumn(
-                              label: SelectableText(
-                            'Bin Location',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          )),
-                          DataColumn(
-                              label: Text(
-                            'Int Code',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          )),
-                          DataColumn(
-                              label: SelectableText(
-                            'Item Serial No.',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          )),
-                          DataColumn(
-                              label: Text(
-                            'Map Date',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          )),
-                          DataColumn(
-                              label: SelectableText(
-                            'Pallet Code',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          )),
-                          DataColumn(
-                              label: Text(
-                            'Reference',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          )),
-                          DataColumn(
-                              label: Text(
-                            'SID',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          )),
-                          DataColumn(
-                              label: Text(
-                            'CID',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          )),
-                          DataColumn(
-                              label: Text(
-                            'PO',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          )),
-                          DataColumn(
-                              label: Text(
-                            'Trans',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          )),
-                          DataColumn(
-                              label: Text(
-                            'Length',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          )),
-                          DataColumn(
-                              label: Text(
-                            'Width',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          )),
-                          DataColumn(
-                              label: Text(
-                            'Height',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          )),
-                          DataColumn(
-                              label: Text(
-                            'Weight',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          )),
-                          DataColumn(
-                              label: Text(
-                            'QR Code',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          )),
-                          DataColumn(
-                              label: Text(
-                            'Trx Date',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          )),
-                        ],
-                        rows: palletTable.map((e) {
-                          return DataRow(onSelectChanged: (value) {}, cells: [
-                            DataCell(SelectableText(
-                                (palletTable.indexOf(e) + 1).toString())),
-                            DataCell(SelectableText(e.itemCode ?? "")),
-                            DataCell(SelectableText(e.itemDesc ?? "")),
-                            DataCell(SelectableText(e.gTIN ?? "")),
-                            DataCell(SelectableText(e.remarks ?? "")),
-                            DataCell(SelectableText(e.user ?? "")),
-                            DataCell(SelectableText(e.classification ?? "")),
-                            DataCell(SelectableText(e.mainLocation ?? "")),
-                            DataCell(SelectableText(e.binLocation ?? "")),
-                            DataCell(SelectableText(e.intCode ?? "")),
-                            DataCell(SelectableText(e.itemSerialNo ?? "")),
-                            DataCell(SelectableText(e.mapDate ?? "")),
-                            DataCell(SelectableText(e.palletCode ?? "")),
-                            DataCell(SelectableText(e.reference ?? "")),
-                            DataCell(SelectableText(e.sID ?? "")),
-                            DataCell(SelectableText(e.cID ?? "")),
-                            DataCell(SelectableText(e.pO ?? "")),
-                            DataCell(SelectableText(e.trans.toString())),
-                            DataCell(SelectableText(e.length.toString())),
-                            DataCell(SelectableText(e.width.toString())),
-                            DataCell(SelectableText(e.height.toString())),
-                            DataCell(SelectableText(e.weight.toString())),
-                            DataCell(SelectableText(e.qrCode ?? "")),
-                            DataCell(SelectableText(e.trxDate ?? "")),
-                          ]);
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Visibility(
-                visible: _site == "By Pallet" ? true : false,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    const TextWidget(text: "TOTAL"),
-                    const SizedBox(width: 5),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.blue,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: TextWidget(text: result),
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                  ],
-                ),
-              ),
               const SizedBox(height: 10),
               Center(
                 child: ElevatedButtonWidget(
                   height: 50,
                   width: MediaQuery.of(context).size.width * 0.9,
                   title: "Save",
-                  onPressed: () {},
+                  onPressed: () {
+                    if (_site == "By Pallet") {
+                      onSaveByPallet();
+                    }
+                    if (_site == "By Bin") {
+                      onSaveByBin();
+                    }
+                  },
                   textColor: Colors.white,
                   color: Colors.orange,
                 ),
@@ -697,15 +472,106 @@ class _UnAllocatedItemsScreen2State extends State<UnAllocatedItemsScreen2> {
     );
   }
 
+  void onSaveByBin() async {
+    if (dropDownValue == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: TextWidget(
+            text: "Select Bin Location",
+            color: Colors.white,
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+    try {
+      Constants.showLoadingDialog(context);
+      await InsertManyIntoMappedBarcodeController.getData(
+        widget.itemCode,
+        widget.itemDesc,
+        _site == "By Pallet"
+            ? _scanPalletController.text.trim()
+            : dropDownValue.toString(),
+        widget.binLocation,
+      );
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: TextWidget(
+            text: "Inserted Successfully",
+            color: Colors.white,
+          ),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: TextWidget(
+            text: e.toString().replaceAll("Exception:", ""),
+            color: Colors.white,
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  void onSaveByPallet() async {
+    if (_scanPalletController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: TextWidget(
+            text: "Please Enter Pallet No.",
+            color: Colors.white,
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+    try {
+      Constants.showLoadingDialog(context);
+      await InsertManyIntoMappedBarcodeController.getData(
+        widget.itemCode,
+        widget.itemDesc,
+        _site == "By Pallet"
+            ? _scanPalletController.text.trim()
+            : dropDownValue.toString(),
+        widget.binLocation,
+      );
+      _scanPalletController.clear();
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: TextWidget(
+            text: "Inserted Successfully",
+            color: Colors.white,
+          ),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: TextWidget(
+            text: e.toString().replaceAll("Exception:", ""),
+            color: Colors.white,
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   void onPalletSearch() async {
     try {
       Constants.showLoadingDialog(context);
-      var value = await GetItemInfoByPalletCodeController.getData(
+      await GetItemInfoByPalletCodeController.getData(
           _scanPalletController.text);
-      setState(() {
-        palletTable = value;
-        result = palletTable.length.toString();
-      });
       Navigator.pop(context);
     } catch (e) {
       Navigator.of(context).pop();

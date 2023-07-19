@@ -52,7 +52,7 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
   String result = "0";
   List<String> serialNoList = [];
 
-  List<GetShipmentReceivedTableModel> GetShipmentPalletizingList = [];
+  List<GetShipmentReceivedTableModel> table = [];
 
   @override
   void initState() {
@@ -457,11 +457,9 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
                           ),
                         ),
                       ],
-                      rows: GetShipmentPalletizingList.map((e) {
+                      rows: table.map((e) {
                         return DataRow(onSelectChanged: (value) {}, cells: [
-                          DataCell(Text(
-                              (GetShipmentPalletizingList.indexOf(e) + 1)
-                                  .toString())),
+                          DataCell(Text((table.indexOf(e) + 1).toString())),
                           DataCell(Text(e.itemCode ?? "")),
                           DataCell(Text(e.itemDesc ?? "")),
                           DataCell(Text(e.gTIN ?? "")),
@@ -622,17 +620,25 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
   void insertData() {
     if (_scanSerialandPalletController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Please Select by Pallet or Serial"),
+        content: Text("Please Scan by Pallet or Serial"),
         backgroundColor: Colors.red,
       ));
       return;
     }
+    if (table.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Please Scan Pallet or Serial"),
+        backgroundColor: Colors.red,
+      ));
+      return;
+    }
+
     FocusScope.of(context).requestFocus(FocusNode());
     Constants.showLoadingDialog(context);
     InsertAllDataController.postData(
       dropDownValue.toString(),
       _site,
-      GetShipmentPalletizingList,
+      table,
       widget.TRANSFERID,
       widget.TRANSFERSTATUS,
       widget.INVENTLOCATIONIDFROM,
@@ -648,7 +654,7 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
         content: Text("Data inserted and updated successfully."),
       ));
       setState(() {
-        GetShipmentPalletizingList.clear();
+        table.clear();
         _scanLocationController.clear();
       });
     }).onError((error, stackTrace) {
@@ -663,13 +669,12 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
     FocusScope.of(context).requestFocus(FocusNode());
     Constants.showLoadingDialog(context);
     GetPalletTableController.getAllTable(
-            _scanSerialandPalletController.text.trim(),
-            dropDownValue.toString())
+            _scanSerialandPalletController.text.trim())
         .then((value) {
       Navigator.of(context).pop();
       setState(() {
-        GetShipmentPalletizingList.clear();
-        GetShipmentPalletizingList = value;
+        table.clear();
+        table = value;
       });
       // focus back to pallet type
       FocusScope.of(context).requestFocus(focusNode);
@@ -685,12 +690,11 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
     FocusScope.of(context).requestFocus(FocusNode());
     Constants.showLoadingDialog(context);
     GetSerialTableController.getAllTable(
-            _scanSerialandPalletController.text.trim(),
-            dropDownValue.toString())
+            _scanSerialandPalletController.text.trim())
         .then((value) {
       Navigator.of(context).pop();
       setState(() {
-        GetShipmentPalletizingList = value;
+        table = value;
       });
       FocusScope.of(context).requestFocus(focusNode);
     }).onError((error, stackTrace) {

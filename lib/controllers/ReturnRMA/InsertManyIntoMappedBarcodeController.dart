@@ -3,13 +3,11 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
-import '../../models/getMappedBarcodedsByItemCodeAndBinLocationModel.dart';
 import '../../utils/Constants.dart';
 
 class InsertManyIntoMappedBarcodeController {
   static Future<void> getData(
-    List<getMappedBarcodedsByItemCodeAndBinLocationModel>
-        getShipmentPalletizingList,
+    String itemCode,
     String name,
     String newBarcodeValue,
     String selectedValue,
@@ -29,39 +27,33 @@ class InsertManyIntoMappedBarcodeController {
       "Accept": "application/json",
     };
 
-    final data = getShipmentPalletizingList.map(
-      (e) {
-        return {
-          "itemcode": e.itemCode,
-          "gtin": e.gTIN,
-          "remarks": e.remarks,
-          "user": e.user,
-          "classification": e.classification,
-          "mainlocation": e.mainLocation,
-          "intcode": e.intCode,
-          "reference": e.reference,
-          "sid": e.sID,
-          "cid": e.cID,
-          "po": e.pO,
-          "trans": e.trans,
+    print(jsonEncode({
+      "records": [
+        {
           "itemdesc": name,
+          "itemcode": itemCode,
           "itemserialno": newBarcodeValue,
           "mapdate": DateFormat('yyyy-MM-dd').format(DateTime.now()),
           "palletcode": null,
           "binlocation": selectedValue
-        };
-      },
-    ).toList()[0];
-
-    print(jsonEncode({
-      "records": [data]
+        }
+      ]
     }));
 
     try {
       var response = await http.post(uri,
           headers: headers,
           body: jsonEncode({
-            "records": [data]
+            "records": [
+              {
+                "itemdesc": name,
+                "itemcode": itemCode,
+                "itemserialno": newBarcodeValue,
+                "mapdate": DateFormat('yyyy-MM-dd').format(DateTime.now()),
+                "palletcode": null,
+                "binlocation": selectedValue
+              }
+            ]
           }));
 
       if (response.statusCode == 200 || response.statusCode == 201) {

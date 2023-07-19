@@ -7,14 +7,11 @@ import '../../utils/Constants.dart';
 
 class GetSerialTableController {
   static Future<List<GetShipmentReceivedTableModel>> getAllTable(
-    String serialNo,
-    String binLocation,
-  ) async {
+      String serialNo) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
 
-    String url =
-        "${Constants.baseUrl}getMappedBarcodedsByItemSerialNoAndBinLocation";
+    String url = "${Constants.baseUrl}getItemInfoByItemSerialNo";
 
     print("url: $url");
 
@@ -24,8 +21,7 @@ class GetSerialTableController {
       "Authorization": token,
       "Host": Constants.host,
       "Accept": "application/json",
-      "itemserialno": serialNo,
-      "binlocation": binLocation,
+      "itemserialno": serialNo
     };
 
     try {

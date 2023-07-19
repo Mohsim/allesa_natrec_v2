@@ -8,13 +8,11 @@ import '../../utils/Constants.dart';
 class GetPalletTableController {
   static Future<List<GetShipmentReceivedTableModel>> getAllTable(
     String palletCode,
-    String binLocation,
   ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
 
-    String url =
-        "${Constants.baseUrl}getMappedBarcodedsByPalletCodeAndBinLocation";
+    String url = "${Constants.baseUrl}getItemInfoByPalletCode";
     print("url: $url");
 
     final uri = Uri.parse(url);
@@ -24,7 +22,6 @@ class GetPalletTableController {
       "Host": Constants.host,
       "Accept": "application/json",
       "palletcode": palletCode,
-      "binLocation": binLocation,
     };
 
     try {
