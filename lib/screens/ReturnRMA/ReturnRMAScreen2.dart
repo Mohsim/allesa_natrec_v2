@@ -2,6 +2,7 @@ import 'package:alessa_v2/widgets/ElevatedButtonWidget.dart';
 
 import '../../controllers/PickListAssigned/GetPickListTableDataController.dart';
 import '../../controllers/PickListAssigned/getMappedBarcodedsByItemCodeAndBinLocationController.dart';
+import '../../controllers/ReturnRMA/InsertManyIntoMappedBarcodeController.dart';
 import '../../models/getMappedBarcodedsByItemCodeAndBinLocationModel.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/services.dart';
@@ -80,7 +81,6 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
           .getData(widget.iTEMID)
           .then((value) {
         dropDownList.clear();
-        Navigator.pop(context);
         for (int i = 0; i < value.length; i++) {
           setState(() {
             if (value[i].binLocation != "") {
@@ -96,7 +96,27 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
 
         setState(() {
           dropDownValue = dropDownList[0];
+          GetShipmentPalletizingList = value;
         });
+        GetPickListTableDataController.getData(
+          widget.iTEMID,
+          dropDownValue.toString(),
+        ).then((value) {
+          setState(() {
+            GetShipmentPalletizingList = value;
+            result = value.length.toString();
+          });
+        }).onError((error, stackTrace) {
+          setState(() {
+            GetShipmentPalletizingList = [];
+            result = "0";
+          });
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(error.toString()),
+            backgroundColor: Colors.red,
+          ));
+        });
+        Navigator.pop(context);
       }).onError((error, stackTrace) {
         Navigator.pop(context);
         setState(() {
@@ -111,7 +131,7 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
   final FocusNode _serialNoFocusNode = FocusNode();
 
   String _site = "By Serial";
-  String _barCode = '';
+  String _barCode = 'No Barcode';
 
   String? dropDownValue;
   List<String> dropDownList = [];
@@ -470,33 +490,7 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                           DataCell(SelectableText(e.mainLocation ?? "")),
                           DataCell(SelectableText(e.binLocation ?? "")),
                           DataCell(SelectableText(e.intCode ?? "")),
-                          DataCell(
-                            Row(
-                              children: [
-                                SelectableText(e.itemSerialNo ?? ""),
-                                // icon for copying the serial number
-                                IconButton(
-                                  onPressed: () {
-                                    Clipboard.setData(
-                                      ClipboardData(
-                                        text: e.itemSerialNo ?? "",
-                                      ),
-                                    );
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          "Copied to Clipboard",
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        duration: Duration(seconds: 1),
-                                      ),
-                                    );
-                                  },
-                                  icon: const Icon(Icons.copy),
-                                ),
-                              ],
-                            ),
-                          ),
+                          DataCell(SelectableText(e.itemSerialNo ?? "")),
                           DataCell(SelectableText(e.mapDate ?? "")),
                           DataCell(SelectableText(e.palletCode ?? "")),
                           DataCell(SelectableText(e.reference ?? "")),
@@ -608,15 +602,39 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                     color: Colors.orange[100],
                     width: MediaQuery.of(context).size.width * 0.9,
                     height: 50,
-                    onPressed: () {
+                    onPressed: () async {
                       if (_modelNoController.text.trim().isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text(
-                              "Please Enter Model No#",
+                              "Please Enter a Unique Model No.",
                               textAlign: TextAlign.center,
                             ),
-                            duration: Duration(seconds: 1),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                        return;
+                      }
+                      if (dropDownValue == "") {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "Please Select a Location.",
+                              textAlign: TextAlign.center,
+                            ),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                        return;
+                      }
+                      if (GetShipmentPalletizingList.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "No data to insert into Table Map Barcode.",
+                              textAlign: TextAlign.center,
+                            ),
+                            duration: Duration(seconds: 2),
                           ),
                         );
                         return;
@@ -642,9 +660,58 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                             wMSLOCATIONID: widget.wMSLOCATIONID,
                             itemSerialNo: value,
                           ));
+                          result2 =
+                              getWmsReturnSalesOrderList.length.toString();
                         });
 
-                        Navigator.pop(context);
+                        InsertManyIntoMappedBarcodeController.getData(
+                          GetShipmentPalletizingList,
+                          widget.nAME,
+                          _modelNoController.text.trim(),
+                          dropDownValue.toString(),
+                        ).then((value) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                "Barcode Generated Successfully.",
+                                textAlign: TextAlign.center,
+                              ),
+                              backgroundColor: Colors.green,
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                          GetPickListTableDataController.getData(
+                            widget.iTEMID,
+                            dropDownValue.toString(),
+                          ).then((value) {
+                            setState(() {
+                              // first clear the list then add the new data
+                              GetShipmentPalletizingList = value;
+                              result = value.length.toString();
+                            });
+                          }).onError((error, stackTrace) {
+                            setState(() {
+                              GetShipmentPalletizingList = [];
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(error.toString()),
+                              backgroundColor: Colors.red,
+                            ));
+                          });
+                          Navigator.pop(context);
+                        }).onError((error, stackTrace) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                error.toString().replaceAll("Exception:", ""),
+                                textAlign: TextAlign.center,
+                              ),
+                              duration: const Duration(seconds: 2),
+                            ),
+                          );
+                          Navigator.pop(context);
+                        });
+
                         _modelNoController.clear();
                       }).onError((error, stackTrace) {
                         Navigator.pop(context);
@@ -654,9 +721,10 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                               error.toString().replaceAll("Exception:", ""),
                               textAlign: TextAlign.center,
                             ),
-                            duration: const Duration(seconds: 1),
+                            duration: const Duration(seconds: 2),
                           ),
                         );
+                        Navigator.pop(context);
                       });
                     },
                   ),
@@ -744,9 +812,45 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                           hintText: "Enter/Scan Serial No",
                           width: MediaQuery.of(context).size.width * 0.9,
                           onEditingComplete: () {
-                            Constants.showLoadingDialog(context);
                             setState(
                               () {
+                                if (dropDownValue == "") {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        "Please Select a Location.",
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      duration: Duration(seconds: 2),
+                                    ),
+                                  );
+                                  return;
+                                }
+                                if (GetShipmentPalletizingList.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        "No data to insert into Table Map Barcode.",
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      duration: Duration(seconds: 2),
+                                    ),
+                                  );
+                                  return;
+                                }
+                                if (_serialNoController.text.trim() == "") {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        "Please Enter a Unique Serial No.",
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      duration: Duration(seconds: 2),
+                                    ),
+                                  );
+                                  return;
+                                }
+                                Constants.showLoadingDialog(context);
                                 FocusScope.of(context)
                                     .requestFocus(FocusNode());
                                 Constants.showLoadingDialog(context);
@@ -758,27 +862,6 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                                     .then((value) {
                                   setState(
                                     () {
-                                      // check if the entered serial no is not present in the GetShipmentPalletizingList
-                                      if (GetShipmentPalletizingList.where(
-                                          (element) =>
-                                              element.itemSerialNo ==
-                                              _serialNoController.text
-                                                  .trim()).toList().isEmpty) {
-                                        Navigator.pop(context);
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                            content: TextWidget(
-                                              text:
-                                                  "Serial No. not found in the list, please a serial no from the above list.",
-                                              color: Colors.white,
-                                            ),
-                                            backgroundColor: Colors.red,
-                                          ),
-                                        );
-                                        return;
-                                      }
-
                                       // append the selected pallet code row to the GetShipmentPalletizingList2
                                       GetShipmentPalletizingList2.add(
                                         GetShipmentPalletizingList.where(
@@ -787,12 +870,7 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                                               _serialNoController.text.trim(),
                                         ).toList().last,
                                       );
-                                      // remove the selected pallet code row from the GetShipmentPalletizingList
-                                      GetShipmentPalletizingList.removeWhere(
-                                        (element) =>
-                                            element.itemSerialNo ==
-                                            _serialNoController.text.trim(),
-                                      );
+
                                       result2 = GetShipmentPalletizingList2
                                           .length
                                           .toString();
@@ -801,22 +879,63 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                                     },
                                   );
 
-                                  Navigator.pop(context);
-
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: TextWidget(
-                                        text: "Record Inserted Successfully.",
-                                        color: Colors.white,
+                                  InsertManyIntoMappedBarcodeController.getData(
+                                    GetShipmentPalletizingList,
+                                    widget.nAME,
+                                    _serialNoController.text.trim(),
+                                    dropDownValue.toString(),
+                                  ).then((value) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          "Record inserted Successfully.",
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        backgroundColor: Colors.green,
+                                        duration: Duration(seconds: 2),
                                       ),
-                                      backgroundColor: Colors.green,
-                                    ),
-                                  );
+                                    );
+
+                                    GetPickListTableDataController.getData(
+                                      widget.iTEMID,
+                                      dropDownValue.toString(),
+                                    ).then((value) {
+                                      setState(() {
+                                        GetShipmentPalletizingList = value;
+                                        result = value.length.toString();
+                                      });
+                                      Navigator.pop(context);
+                                    }).onError((error, stackTrace) {
+                                      Navigator.pop(context);
+                                      setState(() {
+                                        GetShipmentPalletizingList = [];
+                                      });
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text(error.toString()),
+                                        backgroundColor: Colors.red,
+                                      ));
+                                    });
+                                  }).onError((error, stackTrace) {
+                                    Navigator.pop(context);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          error
+                                              .toString()
+                                              .replaceAll("Exception:", ""),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        duration: const Duration(seconds: 2),
+                                      ),
+                                    );
+                                  });
+
+                                  Navigator.pop(context);
 
                                   _serialNoController.clear();
                                   FocusScope.of(context)
                                       .requestFocus(_serialNoFocusNode);
-                                  Navigator.pop(context);
                                 }).onError(
                                   (error, stackTrace) {
                                     Navigator.pop(context);
