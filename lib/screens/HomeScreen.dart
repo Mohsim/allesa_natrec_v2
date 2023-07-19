@@ -26,7 +26,6 @@ import 'BarcodeMapping/BarcodeMappingScreen.dart';
 import 'PhysicalInverntoryByBinLocation/PhysicalInventoryByBinLocationScreen.dart';
 import 'PickListAssigned/PickListAssignedScreen.dart';
 import 'RMAputaway/RMAPutawayScreen.dart';
-import 'ReceivedByContainer/ReceivedByContainer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
