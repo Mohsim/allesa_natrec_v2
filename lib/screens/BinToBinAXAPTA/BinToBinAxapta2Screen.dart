@@ -61,8 +61,7 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
 
     Future.delayed(const Duration(seconds: 1)).then((value) {
       Constants.showLoadingDialog(context);
-      GetMapBarcodeDataByItemCodeController.getData(widget.ITEMID)
-          .then((value) {
+      GetMapBarcodeDataByItemCodeController.getData().then((value) {
         Navigator.pop(context);
         for (int i = 0; i < value.length; i++) {
           setState(() {

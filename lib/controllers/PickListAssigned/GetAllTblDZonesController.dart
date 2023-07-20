@@ -2,15 +2,15 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
-import '../../models/GetAllTblLocationsCLModel.dart';
+import '../../models/GetAllTblDZonesModel.dart';
 import '../../utils/Constants.dart';
 
-class GetMapBarcodeDataByItemCodeController {
-  static Future<List<GetAllTblLocationsCLModel>> getData() async {
+class GetAllTblDZonesController {
+  static Future<List<GetAllTblDZonesModel>> getData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
 
-    String url = "${Constants.baseUrl}getAllTblLocationsCL";
+    String url = "${Constants.baseUrl}getAllTblDZones";
     print("url: $url");
 
     final uri = Uri.parse(url);
@@ -28,8 +28,8 @@ class GetMapBarcodeDataByItemCodeController {
         print("Status Code: ${response.statusCode}");
 
         var data = json.decode(response.body) as List;
-        List<GetAllTblLocationsCLModel> shipmentData =
-            data.map((e) => GetAllTblLocationsCLModel.fromJson(e)).toList();
+        List<GetAllTblDZonesModel> shipmentData =
+            data.map((e) => GetAllTblDZonesModel.fromJson(e)).toList();
         return shipmentData;
       } else {
         print("Status Code: ${response.statusCode}");

@@ -1,5 +1,7 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../controllers/BinToBinFromAXAPTA/getmapBarcodeDataByItemCodeController.dart';
 import '../../controllers/BinToBinJournal/BinToBinJournalTableDataController.dart';
 import '../../models/BinToBinJournalModel.dart';
 import '../../screens/BinToBinJournal/BinToBinJournal2Screen.dart';
@@ -20,9 +22,8 @@ class BinToBinJournalScreen extends StatefulWidget {
 
 class _BinToBinJournalScreenState extends State<BinToBinJournalScreen> {
   final TextEditingController _journalIdController = TextEditingController();
-  final TextEditingController _scanLocationController = TextEditingController();
   String total = "0";
-  List<BinToBinJournalModel> BinToBinJournalTableList = [];
+  List<BinToBinJournalModel> table = [];
   List<bool> isMarked = [];
 
   String userName = "";
@@ -42,10 +43,40 @@ class _BinToBinJournalScreenState extends State<BinToBinJournalScreen> {
     });
   }
 
+  final TextEditingController _searchController = TextEditingController();
+  String? dropDownValue;
+  List<String> dropDownList = [];
+  List<String> filterList = [];
+
   @override
   void initState() {
     super.initState();
     _showUserInfo();
+    Future.delayed(Duration.zero, () {
+      Constants.showLoadingDialog(context);
+      GetMapBarcodeDataByItemCodeController.getData().then((value) {
+        for (int i = 0; i < value.length; i++) {
+          setState(() {
+            dropDownList.add(value[i].bIN ?? "");
+            Set<String> set = dropDownList.toSet();
+            dropDownList = set.toList();
+          });
+        }
+
+        setState(() {
+          dropDownValue = dropDownList[0];
+          filterList = dropDownList;
+        });
+
+        Navigator.pop(context);
+      }).onError((error, stackTrace) {
+        Navigator.pop(context);
+        setState(() {
+          dropDownValue = "";
+          filterList = [];
+        });
+      });
+    });
   }
 
   @override
@@ -147,31 +178,7 @@ class _BinToBinJournalScreenState extends State<BinToBinJournalScreen> {
                         hintText: "Enter/Scan Journal ID",
                         width: MediaQuery.of(context).size.width * 0.73,
                         onEditingComplete: () {
-                          // unFocus from textfield
-                          FocusScope.of(context).requestFocus(FocusNode());
-                          Constants.showLoadingDialog(context);
-                          BinToBinJournalTableDataController.getAllTable(
-                                  _journalIdController.text.trim())
-                              .then((value) {
-                            Navigator.of(context).pop();
-                            setState(() {
-                              BinToBinJournalTableList = value;
-                              isMarked = List<bool>.filled(
-                                BinToBinJournalTableList.length,
-                                false,
-                              );
-                              total =
-                                  BinToBinJournalTableList.length.toString();
-                            });
-                          }).onError((error, stackTrace) {
-                            Navigator.of(context).pop();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("No data found."),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
-                          });
+                          onClick();
                         },
                       ),
                     ),
@@ -183,31 +190,7 @@ class _BinToBinJournalScreenState extends State<BinToBinJournalScreen> {
                       ),
                       child: GestureDetector(
                         onTap: () {
-                          // unFocus from textfield
-                          FocusScope.of(context).requestFocus(FocusNode());
-                          Constants.showLoadingDialog(context);
-                          BinToBinJournalTableDataController.getAllTable(
-                                  _journalIdController.text.trim())
-                              .then((value) {
-                            Navigator.of(context).pop();
-                            setState(() {
-                              BinToBinJournalTableList = value;
-                              isMarked = List<bool>.filled(
-                                BinToBinJournalTableList.length,
-                                false,
-                              );
-                              total =
-                                  BinToBinJournalTableList.length.toString();
-                            });
-                          }).onError((error, stackTrace) {
-                            Navigator.of(context).pop();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("No data found."),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
-                          });
+                          onClick();
                         },
                         child: Image.asset('assets/finder.png',
                             width: MediaQuery.of(context).size.width * 0.15,
@@ -333,7 +316,7 @@ class _BinToBinJournalScreenState extends State<BinToBinJournalScreen> {
                           textAlign: TextAlign.center,
                         )),
                       ],
-                      rows: BinToBinJournalTableList.map((e) {
+                      rows: table.map((e) {
                         return DataRow(
                             onSelectChanged: (value) {
                               Get.to(
@@ -361,9 +344,7 @@ class _BinToBinJournalScreenState extends State<BinToBinJournalScreen> {
                               );
                             },
                             cells: [
-                              DataCell(Text(
-                                  (BinToBinJournalTableList.indexOf(e) + 1)
-                                      .toString())),
+                              DataCell(Text((table.indexOf(e) + 1).toString())),
                               DataCell(Text(e.tRANSFERID.toString())),
                               DataCell(Text(e.tRANSFERSTATUS.toString())),
                               DataCell(Text(e.iNVENTLOCATIONIDFROM ?? "")),
@@ -391,15 +372,110 @@ class _BinToBinJournalScreenState extends State<BinToBinJournalScreen> {
                   fontSize: 16,
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.only(left: 20),
-                child: TextFormFieldWidget(
-                  controller: _scanLocationController,
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  hintText: "Enter/Scan Location",
-                  onEditingComplete: () {},
-                  onFieldSubmitted: (p0) {},
-                ),
+              Row(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      color: Colors.white,
+                    ),
+                    width: MediaQuery.of(context).size.width * 0.73,
+                    margin: const EdgeInsets.only(left: 20),
+                    child: DropdownSearch<String>(
+                      filterFn: (item, filter) {
+                        return item
+                            .toLowerCase()
+                            .contains(filter.toLowerCase());
+                      },
+                      enabled: true,
+                      dropdownButtonProps: const DropdownButtonProps(
+                        icon: Icon(
+                          Icons.arrow_drop_down,
+                          color: Colors.black,
+                        ),
+                      ),
+                      items: filterList,
+                      onChanged: (value) {
+                        setState(() {
+                          dropDownValue = value!;
+                        });
+                      },
+                      selectedItem: dropDownValue,
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(left: 10),
+                    child: IconButton(
+                      onPressed: () {
+                        // show dialog box for search
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: TextWidget(
+                                text: "Search",
+                                color: Colors.blue[900]!,
+                                fontSize: 15,
+                              ),
+                              content: TextFormFieldWidget(
+                                controller: _searchController,
+                                readOnly: false,
+                                hintText: "Enter/Scan Location",
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                onEditingComplete: () {
+                                  setState(() {
+                                    dropDownList = dropDownList
+                                        .where((element) => element
+                                            .toLowerCase()
+                                            .contains(_searchController.text
+                                                .toLowerCase()))
+                                        .toList();
+                                    dropDownValue = dropDownList[0];
+                                  });
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: TextWidget(
+                                    text: "Cancel",
+                                    color: Colors.blue[900]!,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    // filter list based on search
+                                    setState(() {
+                                      filterList = dropDownList
+                                          .where((element) => element
+                                              .toLowerCase()
+                                              .contains(_searchController.text
+                                                  .toLowerCase()))
+                                          .toList();
+                                      dropDownValue = filterList[0];
+                                    });
+
+                                    Navigator.pop(context);
+                                  },
+                                  child: TextWidget(
+                                    text: "Search",
+                                    color: Colors.blue[900]!,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      icon: const Icon(Icons.search),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 10),
               Row(
@@ -429,5 +505,32 @@ class _BinToBinJournalScreenState extends State<BinToBinJournalScreen> {
         ),
       ),
     );
+  }
+
+  void onClick() async {
+    // unFocus from textfield
+    FocusScope.of(context).requestFocus(FocusNode());
+    Constants.showLoadingDialog(context);
+    BinToBinJournalTableDataController.getAllTable(
+            _journalIdController.text.trim())
+        .then((value) {
+      setState(() {
+        table = value;
+        isMarked = List<bool>.filled(
+          table.length,
+          false,
+        );
+        total = table.length.toString();
+      });
+      Navigator.of(context).pop();
+    }).onError((error, stackTrace) {
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("No data found."),
+          backgroundColor: Colors.red,
+        ),
+      );
+    });
   }
 }

@@ -1,3 +1,6 @@
+import 'package:dropdown_search/dropdown_search.dart';
+
+import '../../controllers/BinToBinFromAXAPTA/getmapBarcodeDataByItemCodeController.dart';
 import '../../screens/HomeScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,14 +24,17 @@ class RMAPutawayScreen extends StatefulWidget {
 }
 
 class _RMAPutawayScreenState extends State<RMAPutawayScreen> {
-  TextEditingController _binLocationController = TextEditingController();
   String total = "0";
-  List<getWmsReturnSalesOrderClByAssignedToUserIdModel>
-      BinToBinJournalTableList = [];
+  List<getWmsReturnSalesOrderClByAssignedToUserIdModel> table = [];
   List<bool> isMarked = [];
 
   String userName = "";
   String userID = "";
+
+  final TextEditingController _searchController = TextEditingController();
+  String? dropDownValue;
+  List<String> dropDownList = [];
+  List<String> filterList = [];
 
   void _showUserInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -53,13 +59,32 @@ class _RMAPutawayScreenState extends State<RMAPutawayScreen> {
         .then((value) {
       Constants.showLoadingDialog(context);
       setState(() {
-        BinToBinJournalTableList = value;
+        table = value;
 
-        isMarked = List<bool>.generate(
-            BinToBinJournalTableList.length, (index) => false);
-        total = BinToBinJournalTableList.length.toString();
+        isMarked = List<bool>.generate(table.length, (index) => false);
+        total = table.length.toString();
       });
-      Navigator.of(context).pop();
+      GetMapBarcodeDataByItemCodeController.getData().then((value) {
+        Navigator.pop(context);
+        for (int i = 0; i < value.length; i++) {
+          setState(() {
+            dropDownList.add(value[i].bIN ?? "");
+            Set<String> set = dropDownList.toSet();
+            dropDownList = set.toList();
+          });
+        }
+
+        setState(() {
+          dropDownValue = dropDownList[0];
+          filterList = dropDownList;
+        });
+      }).onError((error, stackTrace) {
+        Navigator.pop(context);
+        setState(() {
+          dropDownValue = "";
+          filterList = [];
+        });
+      });
     }).onError((error, stackTrace) {
       Constants.showLoadingDialog(context);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -258,11 +283,9 @@ class _RMAPutawayScreenState extends State<RMAPutawayScreen> {
                             textAlign: TextAlign.center,
                           )),
                         ],
-                        rows: BinToBinJournalTableList.map((e) {
+                        rows: table.map((e) {
                           return DataRow(onSelectChanged: (value) {}, cells: [
-                            DataCell(Text(
-                                (BinToBinJournalTableList.indexOf(e) + 1)
-                                    .toString())),
+                            DataCell(Text((table.indexOf(e) + 1).toString())),
                             DataCell(Text(e.iTEMID.toString())),
                             DataCell(Text(e.nAME.toString())),
                             DataCell(Text(e.eXPECTEDRETQTY.toString())),
@@ -289,13 +312,111 @@ class _RMAPutawayScreenState extends State<RMAPutawayScreen> {
                     fontSize: 16,
                   ),
                 ),
-                Container(
-                  margin: const EdgeInsets.only(left: 20),
-                  child: TextFormFieldWidget(
-                    controller: _binLocationController,
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    hintText: "Enter/Scan Bin Location",
-                  ),
+                Row(
+                  children: [
+                    Container(
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        color: Colors.white,
+                      ),
+                      width: MediaQuery.of(context).size.width * 0.73,
+                      margin: const EdgeInsets.only(left: 20),
+                      child: DropdownSearch<String>(
+                        filterFn: (item, filter) {
+                          return item
+                              .toLowerCase()
+                              .contains(filter.toLowerCase());
+                        },
+                        enabled: true,
+                        dropdownButtonProps: const DropdownButtonProps(
+                          icon: Icon(
+                            Icons.arrow_drop_down,
+                            color: Colors.black,
+                          ),
+                        ),
+                        items: filterList,
+                        onChanged: (value) {
+                          setState(() {
+                            dropDownValue = value!;
+                          });
+                        },
+                        selectedItem: dropDownValue,
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(left: 10),
+                      child: IconButton(
+                        onPressed: () {
+                          // show dialog box for search
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: TextWidget(
+                                  text: "Search",
+                                  color: Colors.blue[900]!,
+                                  fontSize: 15,
+                                ),
+                                content: TextFormFieldWidget(
+                                  controller: _searchController,
+                                  readOnly: false,
+                                  hintText: "Enter/Scan Location",
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.9,
+                                  onEditingComplete: () {
+                                    setState(() {
+                                      dropDownList = dropDownList
+                                          .where((element) => element
+                                              .toLowerCase()
+                                              .contains(_searchController.text
+                                                  .toLowerCase()))
+                                          .toList();
+                                      dropDownValue = dropDownList[0];
+                                    });
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: TextWidget(
+                                      text: "Cancel",
+                                      color: Colors.blue[900]!,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      // filter list based on search
+                                      setState(() {
+                                        filterList = dropDownList
+                                            .where((element) => element
+                                                .toLowerCase()
+                                                .contains(_searchController.text
+                                                    .toLowerCase()))
+                                            .toList();
+                                        dropDownValue = filterList[0];
+                                      });
+
+                                      Navigator.pop(context);
+                                    },
+                                    child: TextWidget(
+                                      text: "Search",
+                                      color: Colors.blue[900]!,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        icon: const Icon(Icons.search),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 10),
                 Row(
@@ -312,10 +433,10 @@ class _RMAPutawayScreenState extends State<RMAPutawayScreen> {
                           textColor: Colors.white,
                           color: Colors.orange,
                           onPressed: () {
-                            if (_binLocationController.text.isEmpty) {
+                            if (dropDownValue == null) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text("Fill the Bin Location"),
+                                  content: Text("Please Select Bin Location"),
                                   backgroundColor: Colors.red,
                                 ),
                               );
@@ -324,11 +445,9 @@ class _RMAPutawayScreenState extends State<RMAPutawayScreen> {
                             FocusScope.of(context).requestFocus();
                             Constants.showLoadingDialog(context);
                             insertManyIntoMappedBarcodeController
-                                .getData(_binLocationController.text.trim(),
-                                    BinToBinJournalTableList)
+                                .getData(dropDownValue.toString(), table)
                                 .then((value) {
                               Navigator.of(context).pop();
-                              _binLocationController.clear();
                               Get.offAll(() => const HomeScreen());
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(const SnackBar(

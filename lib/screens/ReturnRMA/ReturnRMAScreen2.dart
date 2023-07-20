@@ -86,8 +86,7 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
     Future.delayed(Duration.zero, () async {
       try {
         Constants.showLoadingDialog(context);
-        var value =
-            await GetMapBarcodeDataByItemCodeController.getData(widget.iTEMID);
+        var value = await GetMapBarcodeDataByItemCodeController.getData();
         Navigator.pop(context);
         for (int i = 0; i < value.length; i++) {
           setState(() {

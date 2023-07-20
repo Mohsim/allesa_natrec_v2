@@ -1,6 +1,6 @@
-import '../../controllers/PickListAssigned/GetPickListTableDataController.dart';
+import '../../controllers/BinToBinFromAXAPTA/getmapBarcodeDataByItemCodeController.dart';
+import '../../controllers/PickListAssigned/GetAllTblDZonesController.dart';
 import '../../controllers/PickListAssigned/InsertPickListController.dart';
-import '../../controllers/PickListAssigned/getMappedBarcodedsByItemCodeAndBinLocationController.dart';
 import '../../models/getMappedBarcodedsByItemCodeAndBinLocationModel.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/services.dart';
@@ -54,7 +54,6 @@ class PickListAssingedScreen2 extends StatefulWidget {
 
 class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
   final TextEditingController _transferIdController = TextEditingController();
-  final TextEditingController _scanLocationController = TextEditingController();
   final TextEditingController _palletTypeController = TextEditingController();
   final TextEditingController _serialNoController = TextEditingController();
 
@@ -63,10 +62,8 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
   List<String> serialNoList = [];
   List<bool> isMarked = [];
 
-  List<getMappedBarcodedsByItemCodeAndBinLocationModel>
-      GetShipmentPalletizingList = [];
-  List<getMappedBarcodedsByItemCodeAndBinLocationModel>
-      GetShipmentPalletizingList2 = [];
+  List<getMappedBarcodedsByItemCodeAndBinLocationModel> table1 = [];
+  List<getMappedBarcodedsByItemCodeAndBinLocationModel> table2 = [];
 
   @override
   void initState() {
@@ -75,33 +72,46 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
 
     Future.delayed(const Duration(seconds: 1)).then((value) {
       Constants.showLoadingDialog(context);
-
-      getMappedBarcodedsByItemCodeAndBinLocationController
-          .getData(widget.ITEMID)
-          .then((value) {
-        dropDownList.clear();
-        Navigator.pop(context);
+      GetMapBarcodeDataByItemCodeController.getData().then((value) {
         for (int i = 0; i < value.length; i++) {
           setState(() {
-            if (value[i].binLocation != "") {
-              dropDownList.add(value[i].binLocation ?? "");
-            }
+            dropDownList.add(value[i].bIN ?? "");
+            Set<String> set = dropDownList.toSet();
+            dropDownList = set.toList();
           });
         }
 
-        // convert list to set to remove duplicate values
-        Set<String> set = dropDownList.toSet();
-        // convert set to list to get all values
-        dropDownList = set.toList();
-
         setState(() {
           dropDownValue = dropDownList[0];
+          filterList = dropDownList;
+        });
+
+        GetAllTblDZonesController.getData().then((value2) {
+          for (int i = 0; i < value2.length; i++) {
+            setState(() {
+              dropDownList2.add(value2[i].dZONE ?? "");
+              Set<String> set = dropDownList2.toSet();
+              dropDownList2 = set.toList();
+            });
+          }
+
+          setState(() {
+            dropDownValue2 = dropDownList2[0];
+            filterList2 = dropDownList2;
+          });
+          Navigator.pop(context);
+        }).onError((error, stackTrace) {
+          Navigator.pop(context);
+          setState(() {
+            dropDownValue2 = "";
+            filterList2 = [];
+          });
         });
       }).onError((error, stackTrace) {
         Navigator.pop(context);
         setState(() {
-          dropDownList.add("No Data Found");
-          dropDownValue = dropDownList[0];
+          dropDownValue = "";
+          filterList = [];
         });
       });
     });
@@ -109,8 +119,15 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
 
   String _site = "By Serial";
 
+  final TextEditingController _searchController = TextEditingController();
   String? dropDownValue;
   List<String> dropDownList = [];
+  List<String> filterList = [];
+
+  final TextEditingController _searchController2 = TextEditingController();
+  String? dropDownValue2;
+  List<String> dropDownList2 = [];
+  List<String> filterList2 = [];
 
   @override
   Widget build(BuildContext context) {
@@ -144,6 +161,7 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                         child: const TextWidget(
                           text: "Transfer ID#",
                           color: Colors.white,
+                          fontSize: 16,
                         ),
                       ),
                       Container(
@@ -156,60 +174,118 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                           onEditingComplete: () {},
                         ),
                       ),
+                      const SizedBox(height: 10),
                       Row(
                         children: [
-                          Container(
-                            margin: const EdgeInsets.only(left: 20, top: 10),
-                            child: const TextWidget(
-                              text: "From: ",
-                              color: Colors.white,
-                            ),
-                          ),
                           Container(
                             decoration: const BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10)),
                               color: Colors.white,
                             ),
-                            width: MediaQuery.of(context).size.width * 0.68,
-                            margin: const EdgeInsets.only(left: 20, top: 10),
+                            width: MediaQuery.of(context).size.width * 0.73,
+                            margin: const EdgeInsets.only(left: 20),
                             child: DropdownSearch<String>(
-                              items: dropDownList,
+                              filterFn: (item, filter) {
+                                return item
+                                    .toLowerCase()
+                                    .contains(filter.toLowerCase());
+                              },
+                              enabled: true,
+                              dropdownButtonProps: const DropdownButtonProps(
+                                icon: Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              items: filterList,
                               onChanged: (value) {
                                 setState(() {
                                   dropDownValue = value!;
-                                });
-                                FocusScope.of(context).unfocus();
-                                Constants.showLoadingDialog(context);
-
-                                GetPickListTableDataController.getData(
-                                  widget.ITEMID,
-                                  dropDownValue.toString(),
-                                ).then((value) {
-                                  setState(() {
-                                    GetShipmentPalletizingList = value;
-                                    Navigator.pop(context);
-                                    result = value.length.toString();
-                                  });
-                                }).onError((error, stackTrace) {
-                                  Navigator.pop(context);
-                                  setState(() {
-                                    GetShipmentPalletizingList = [];
-                                    result = "0";
-                                  });
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(SnackBar(
-                                    content: Text(error.toString()),
-                                    backgroundColor: Colors.red,
-                                  ));
                                 });
                               },
                               selectedItem: dropDownValue,
                             ),
                           ),
+                          Container(
+                            margin: const EdgeInsets.only(left: 10),
+                            child: IconButton(
+                              onPressed: () {
+                                // show dialog box for search
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: TextWidget(
+                                        text: "Search",
+                                        color: Colors.blue[900]!,
+                                        fontSize: 15,
+                                      ),
+                                      content: TextFormFieldWidget(
+                                        controller: _searchController,
+                                        readOnly: false,
+                                        hintText: "Enter/Scan Location",
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.9,
+                                        onEditingComplete: () {
+                                          setState(() {
+                                            dropDownList = dropDownList
+                                                .where((element) => element
+                                                    .toLowerCase()
+                                                    .contains(_searchController
+                                                        .text
+                                                        .toLowerCase()))
+                                                .toList();
+                                            dropDownValue = dropDownList[0];
+                                          });
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: TextWidget(
+                                            text: "Cancel",
+                                            color: Colors.blue[900]!,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            // filter list based on search
+                                            setState(() {
+                                              filterList = dropDownList
+                                                  .where((element) => element
+                                                      .toLowerCase()
+                                                      .contains(
+                                                          _searchController.text
+                                                              .toLowerCase()))
+                                                  .toList();
+                                              dropDownValue = filterList[0];
+                                            });
+
+                                            Navigator.pop(context);
+                                          },
+                                          child: TextWidget(
+                                            text: "Search",
+                                            color: Colors.blue[900]!,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              icon: const Icon(Icons.search),
+                            ),
+                          ),
                         ],
                       ),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -217,7 +293,7 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                             "Item ID:",
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 20,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -226,7 +302,7 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                             widget.ITEMID,
                             style: const TextStyle(
                               color: Colors.white,
-                              fontSize: 20,
+                              fontSize: 16,
                             ),
                           ),
                         ],
@@ -244,7 +320,7 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                                   "Qty",
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 15,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -264,7 +340,7 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                                   "Qty Picked",
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 15,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -284,7 +360,7 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                                   "Pick Status",
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 15,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -449,11 +525,10 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                           ),
                         ),
                       ],
-                      rows: GetShipmentPalletizingList.map((e) {
+                      rows: table1.map((e) {
                         return DataRow(onSelectChanged: (value) {}, cells: [
                           DataCell(SelectableText(
-                              (GetShipmentPalletizingList.indexOf(e) + 1)
-                                  .toString())),
+                              (table1.indexOf(e) + 1).toString())),
                           DataCell(SelectableText(e.itemCode ?? "")),
                           DataCell(SelectableText(e.itemDesc ?? "")),
                           DataCell(SelectableText(e.gTIN ?? "")),
@@ -608,10 +683,10 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                             setState(
                               () {
                                 // check if the entered serial no is not present in the GetShipmentPalletizingList
-                                if (GetShipmentPalletizingList.where(
-                                        (element) =>
-                                            element.itemSerialNo ==
-                                            _serialNoController.text.trim())
+                                if (table1
+                                    .where((element) =>
+                                        element.itemSerialNo ==
+                                        _serialNoController.text.trim())
                                     .toList()
                                     .isEmpty) {
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -628,23 +703,21 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                                 }
 
                                 // append the selected pallet code row to the GetShipmentPalletizingList2
-                                GetShipmentPalletizingList2.add(
-                                  GetShipmentPalletizingList.firstWhere(
+                                table2.add(
+                                  table1.firstWhere(
                                     (element) =>
                                         element.itemSerialNo ==
                                         _serialNoController.text.trim(),
                                   ),
                                 );
                                 // remove the selected pallet code row from the GetShipmentPalletizingList
-                                GetShipmentPalletizingList.removeWhere(
+                                table1.removeWhere(
                                   (element) =>
                                       element.itemSerialNo ==
                                       _serialNoController.text.trim(),
                                 );
-                                result2 = GetShipmentPalletizingList2.length
-                                    .toString();
-                                result = GetShipmentPalletizingList.length
-                                    .toString();
+                                result2 = table2.length.toString();
+                                result = table1.length.toString();
                                 _serialNoController.clear();
                               },
                             );
@@ -792,11 +865,9 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                           ),
                         ),
                       ],
-                      rows: GetShipmentPalletizingList2.map((e) {
+                      rows: table2.map((e) {
                         return DataRow(onSelectChanged: (value) {}, cells: [
-                          DataCell(Text(
-                              (GetShipmentPalletizingList2.indexOf(e) + 1)
-                                  .toString())),
+                          DataCell(Text((table2.indexOf(e) + 1).toString())),
                           DataCell(Text(e.itemCode ?? "")),
                           DataCell(Text(e.itemDesc ?? "")),
                           DataCell(Text(e.gTIN ?? "")),
@@ -846,22 +917,115 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
               Container(
                 margin: const EdgeInsets.only(left: 20, top: 10),
                 child: TextWidget(
-                  text: "Scan Location To:",
+                  text: "Dispatching Location:",
                   color: Colors.blue[900]!,
                   fontSize: 15,
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.only(left: 20),
-                child: TextFormFieldWidget(
-                  controller: _scanLocationController,
-                  readOnly: false,
-                  hintText: "Enter/Scan Location",
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  onEditingComplete: () {
-                    FocusScope.of(context).requestFocus(FocusNode());
-                  },
-                ),
+              Row(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      color: Colors.white,
+                    ),
+                    width: MediaQuery.of(context).size.width * 0.73,
+                    margin: const EdgeInsets.only(left: 20),
+                    child: DropdownSearch<String>(
+                      filterFn: (item, filter) {
+                        return item
+                            .toLowerCase()
+                            .contains(filter.toLowerCase());
+                      },
+                      enabled: true,
+                      dropdownButtonProps: const DropdownButtonProps(
+                        icon: Icon(
+                          Icons.arrow_drop_down,
+                          color: Colors.black,
+                        ),
+                      ),
+                      items: filterList2,
+                      onChanged: (value) {
+                        setState(() {
+                          dropDownValue2 = value!;
+                        });
+                      },
+                      selectedItem: dropDownValue2,
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(left: 10),
+                    child: IconButton(
+                      onPressed: () {
+                        // show dialog box for search
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: TextWidget(
+                                text: "Search",
+                                color: Colors.blue[900]!,
+                                fontSize: 15,
+                              ),
+                              content: TextFormFieldWidget(
+                                controller: _searchController2,
+                                readOnly: false,
+                                hintText: "Enter/Scan Location",
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                onEditingComplete: () {
+                                  setState(() {
+                                    dropDownList2 = dropDownList2
+                                        .where((element) => element
+                                            .toLowerCase()
+                                            .contains(_searchController2.text
+                                                .toLowerCase()))
+                                        .toList();
+                                    dropDownValue2 = dropDownList2[0];
+                                  });
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: TextWidget(
+                                    text: "Cancel",
+                                    color: Colors.blue[900]!,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    // filter list based on search
+                                    setState(() {
+                                      filterList2 = dropDownList2
+                                          .where((element) => element
+                                              .toLowerCase()
+                                              .contains(_searchController2.text
+                                                  .toLowerCase()))
+                                          .toList();
+                                      dropDownValue2 = filterList2[0];
+                                    });
+
+                                    Navigator.pop(context);
+                                  },
+                                  child: TextWidget(
+                                    text: "Search",
+                                    color: Colors.blue[900]!,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      icon: const Icon(Icons.search),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 20),
               Center(
@@ -870,7 +1034,7 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                   width: MediaQuery.of(context).size.width * 0.9,
                   title: "Save",
                   onPressed: () {
-                    if (_scanLocationController.text.isEmpty) {
+                    if (dropDownValue2 == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text("Please Scan Location"),
@@ -879,7 +1043,7 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                       );
                       return;
                     }
-                    if (GetShipmentPalletizingList2.isEmpty) {
+                    if (table2.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text("Please Scan Item"),
@@ -890,9 +1054,9 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                     }
                     FocusScope.of(context).requestFocus(FocusNode());
                     Constants.showLoadingDialog(context);
-                    var data = GetShipmentPalletizingList2.map((e) {
+                    var data = table2.map((e) {
                       return {
-                        "INVENTLOCATIONID": _scanLocationController.text.trim(),
+                        "INVENTLOCATIONID": dropDownValue2.toString(),
                         "ORDERED": widget.QTY,
                         "PACKINGSLIPID": widget.TRANSREFID,
                         "ASSIGNEDUSERID": widget.ASSIGNEDTOUSERID,
@@ -919,9 +1083,8 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                         ),
                       );
                       setState(() {
-                        GetShipmentPalletizingList2.clear();
+                        table2.clear();
                         result2 = "0";
-                        _scanLocationController.clear();
                       });
                     }).onError((error, stackTrace) {
                       Navigator.pop(context);
