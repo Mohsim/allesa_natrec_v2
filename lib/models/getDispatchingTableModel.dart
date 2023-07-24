@@ -4,9 +4,9 @@ class getDispatchingTableModel {
   String? nAME;
   String? iNVENTLOCATIONID;
   String? cONFIGID;
-  int? oRDERED;
+  num? oRDERED;
   String? pACKINGSLIPID;
-  int? vEHICLESHIPPLATENUMBER;
+  String? vEHICLESHIPPLATENUMBER;
 
   getDispatchingTableModel(
       {this.sALESID,

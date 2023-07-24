@@ -318,7 +318,7 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
               ),
               const SizedBox(height: 10),
               Container(
-                height: MediaQuery.of(context).size.height * 0.3,
+                height: MediaQuery.of(context).size.height * 0.4,
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: Colors.grey,
@@ -617,22 +617,14 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
   }
 
   void insertData() {
-    if (_scanSerialandPalletController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Please Scan by Pallet or Serial"),
-        backgroundColor: Colors.red,
-      ));
-      return;
-    }
     if (table.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Please Scan Pallet or Serial"),
+        content: Text("Please Scan Pallet or Serial, Table is empty"),
         backgroundColor: Colors.red,
       ));
       return;
     }
 
-    FocusScope.of(context).requestFocus(FocusNode());
     Constants.showLoadingDialog(context);
     InsertAllDataController.postData(
       dropDownValue.toString(),
@@ -647,14 +639,15 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
       widget.QTYRECEIVED,
       widget.CREATEDDATETIME,
       widget.GROUPID,
+      dropDownValue.toString().substring(0, 2),
     ).then((value) {
       Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Data inserted and updated successfully."),
       ));
       setState(() {
-        table.clear();
-        _scanLocationController.clear();
+        // table.clear();
+        _scanSerialandPalletController.clear();
       });
     }).onError((error, stackTrace) {
       Navigator.of(context).pop();
@@ -665,16 +658,34 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
   }
 
   void byPalletMethod() {
+    if (_scanSerialandPalletController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Please Scan Pallet"),
+        backgroundColor: Colors.red,
+      ));
+      return;
+    }
+    // if a pallet no is already exist then show the error
+    if (table.any((element) =>
+        element.palletCode == _scanSerialandPalletController.text.trim())) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Pallet No already exist"),
+        backgroundColor: Colors.red,
+      ));
+      return;
+    }
+
     FocusScope.of(context).requestFocus(FocusNode());
     Constants.showLoadingDialog(context);
     GetPalletTableController.getAllTable(
             _scanSerialandPalletController.text.trim())
         .then((value) {
-      Navigator.of(context).pop();
       setState(() {
-        table.clear();
-        table = value;
+        table.addAll(value);
+        _scanSerialandPalletController.clear();
       });
+      // focus back to pallet type
+      Navigator.of(context).pop();
       // focus back to pallet type
       FocusScope.of(context).requestFocus(focusNode);
     }).onError((error, stackTrace) {
@@ -686,15 +697,33 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
   }
 
   void bySerialMethod() {
+    if (_scanSerialandPalletController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Please Scan Serial"),
+        backgroundColor: Colors.red,
+      ));
+      return;
+    }
+    // if a serial no is already exist then show the error
+    if (table.any((element) =>
+        element.itemSerialNo == _scanSerialandPalletController.text.trim())) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Serial No already exist"),
+        backgroundColor: Colors.red,
+      ));
+      return;
+    }
     FocusScope.of(context).requestFocus(FocusNode());
     Constants.showLoadingDialog(context);
     GetSerialTableController.getAllTable(
             _scanSerialandPalletController.text.trim())
         .then((value) {
-      Navigator.of(context).pop();
       setState(() {
-        table = value;
+        // append the value to the table
+        table.addAll(value);
+        _scanSerialandPalletController.clear();
       });
+      Navigator.of(context).pop();
       FocusScope.of(context).requestFocus(focusNode);
     }).onError((error, stackTrace) {
       Navigator.of(context).pop();

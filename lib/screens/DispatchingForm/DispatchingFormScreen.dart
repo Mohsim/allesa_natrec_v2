@@ -26,7 +26,7 @@ class _DispatchingFormScreenState extends State<DispatchingFormScreen> {
 
   String total = "0";
 
-  List<getDispatchingTableModel> getItemInfoByPalletCodeList = [];
+  List<getDispatchingTableModel> table = [];
   List<bool> isMarked = [];
 
   String userName = "";
@@ -123,7 +123,7 @@ class _DispatchingFormScreenState extends State<DispatchingFormScreen> {
               Container(
                 margin: const EdgeInsets.only(left: 20),
                 child: const TextWidget(
-                  text: "Picking Slip ID*",
+                  text: "Packing Slip ID*",
                   fontSize: 16,
                 ),
               ),
@@ -136,7 +136,7 @@ class _DispatchingFormScreenState extends State<DispatchingFormScreen> {
                       margin: const EdgeInsets.only(left: 20),
                       child: TextFormFieldWidget(
                         controller: _pickingSlipIdController,
-                        hintText: "Enter/Scan Pick Slip ID",
+                        hintText: "Enter/Scan Packing Slip ID",
                         width: MediaQuery.of(context).size.width * 0.73,
                         onEditingComplete: () {
                           packingSlipTable();
@@ -251,11 +251,9 @@ class _DispatchingFormScreenState extends State<DispatchingFormScreen> {
                           textAlign: TextAlign.center,
                         )),
                       ],
-                      rows: getItemInfoByPalletCodeList.map((e) {
+                      rows: table.map((e) {
                         return DataRow(onSelectChanged: (value) {}, cells: [
-                          DataCell(Text(
-                              (getItemInfoByPalletCodeList.indexOf(e) + 1)
-                                  .toString())),
+                          DataCell(Text((table.indexOf(e) + 1).toString())),
                           DataCell(Text(e.sALESID ?? "")),
                           DataCell(Text(e.iTEMID ?? "")),
                           DataCell(Text(e.nAME ?? "")),
@@ -263,7 +261,7 @@ class _DispatchingFormScreenState extends State<DispatchingFormScreen> {
                           DataCell(Text(e.cONFIGID ?? "")),
                           DataCell(Text(e.oRDERED.toString())),
                           DataCell(Text(e.pACKINGSLIPID ?? "")),
-                          DataCell(Text(e.vEHICLESHIPPLATENUMBER.toString())),
+                          DataCell(Text(e.vEHICLESHIPPLATENUMBER ?? "")),
                         ]);
                       }).toList(),
                     ),
@@ -308,7 +306,7 @@ class _DispatchingFormScreenState extends State<DispatchingFormScreen> {
                         textColor: Colors.white,
                         color: Colors.orange,
                         onPressed: () {
-                          if (getItemInfoByPalletCodeList.length == 0) {
+                          if (table.length == 0) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text("Please add item first"),
@@ -329,7 +327,7 @@ class _DispatchingFormScreenState extends State<DispatchingFormScreen> {
                             return;
                           }
 
-                          var data = getItemInfoByPalletCodeList.map((e) {
+                          var data = table.map((e) {
                             return {
                               "SALESID": e.sALESID,
                               "ITEMID": e.iTEMID,
@@ -356,7 +354,7 @@ class _DispatchingFormScreenState extends State<DispatchingFormScreen> {
                               ),
                             );
                             setState(() {
-                              getItemInfoByPalletCodeList.clear();
+                              table.clear();
                               total = "0";
                             });
                           }).onError((error, stackTrace) {
@@ -413,12 +411,12 @@ class _DispatchingFormScreenState extends State<DispatchingFormScreen> {
         .then((value) {
       Navigator.of(context).pop();
       setState(() {
-        getItemInfoByPalletCodeList = value;
+        table = value;
         isMarked = List<bool>.filled(
-          getItemInfoByPalletCodeList.length,
+          table.length,
           false,
         );
-        total = getItemInfoByPalletCodeList.length.toString();
+        total = table.length.toString();
       });
     }).onError((error, stackTrace) {
       Navigator.of(context).pop();

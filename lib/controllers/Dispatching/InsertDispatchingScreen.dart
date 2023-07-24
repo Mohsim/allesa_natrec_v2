@@ -1,5 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supercharged/supercharged.dart';
 import 'dart:convert';
 
 import '../../utils/Constants.dart';
@@ -12,8 +13,7 @@ class InsertDispatchingController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
 
-    String url =
-        "${Constants.baseUrl}insertIntoPackingSlipTableCl?vehicleShipPlateNumber=$vehicleBarcodeNo";
+    String url = "${Constants.baseUrl}insertTblDispatchingDataCL";
 
     print("url: $url");
 
@@ -26,10 +26,15 @@ class InsertDispatchingController {
       "Content-Type": "application/json",
     };
 
-    var body = json.encode([...data]);
+    var body = data.map((e) {
+      return {...e, "VEHICLESHIPPLATENUMBER": vehicleBarcodeNo};
+    }).toList();
+
+    print(body);
 
     try {
-      var response = await http.post(uri, headers: headers, body: body);
+      var response =
+          await http.post(uri, headers: headers, body: jsonEncode(body));
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         print("Status Code: ${response.statusCode}");

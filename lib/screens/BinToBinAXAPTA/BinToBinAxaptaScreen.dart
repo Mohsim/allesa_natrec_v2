@@ -145,56 +145,7 @@ class _BinToBinAxaptaScreenState extends State<BinToBinAxaptaScreen> {
                         hintText: "Enter/Scan Transfer ID",
                         width: MediaQuery.of(context).size.width * 0.73,
                         onEditingComplete: () {
-                          FocusScope.of(context).requestFocus(FocusNode());
-                          Constants.showLoadingDialog(context);
-                          GetAxaptaTableDataController.getAllTable(
-                                  _transferController.text.trim())
-                              .then((value) {
-                            Navigator.of(context).pop();
-                            setState(() {
-                              GetShipmentPalletizingList = value;
-                              isMarked = List<bool>.generate(
-                                  GetShipmentPalletizingList.length,
-                                  (index) => false);
-                              total =
-                                  GetShipmentPalletizingList.length.toString();
-                            });
-                          }).onError((error, stackTrace) {
-                            Navigator.of(context).pop();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(error
-                                    .toString()
-                                    .replaceAll("Exception:", "")),
-                              ),
-                            );
-                          });
-                        },
-                        onFieldSubmitted: (p0) {
-                          FocusScope.of(context).requestFocus(FocusNode());
-                          Constants.showLoadingDialog(context);
-                          GetAxaptaTableDataController.getAllTable(
-                                  _transferController.text.trim())
-                              .then((value) {
-                            Navigator.of(context).pop();
-                            setState(() {
-                              GetShipmentPalletizingList = value;
-                              isMarked = List<bool>.generate(
-                                  GetShipmentPalletizingList.length,
-                                  (index) => false);
-                              total =
-                                  GetShipmentPalletizingList.length.toString();
-                            });
-                          }).onError((error, stackTrace) {
-                            Navigator.of(context).pop();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(error
-                                    .toString()
-                                    .replaceAll("Exception:", "")),
-                              ),
-                            );
-                          });
+                          onSearch();
                         },
                       ),
                     ),
@@ -206,30 +157,7 @@ class _BinToBinAxaptaScreenState extends State<BinToBinAxaptaScreen> {
                       ),
                       child: GestureDetector(
                         onTap: () {
-                          FocusScope.of(context).requestFocus(FocusNode());
-                          Constants.showLoadingDialog(context);
-                          GetAxaptaTableDataController.getAllTable(
-                                  _transferController.text.trim())
-                              .then((value) {
-                            Navigator.of(context).pop();
-                            setState(() {
-                              GetShipmentPalletizingList = value;
-                              isMarked = List<bool>.generate(
-                                  GetShipmentPalletizingList.length,
-                                  (index) => false);
-                              total =
-                                  GetShipmentPalletizingList.length.toString();
-                            });
-                          }).onError((error, stackTrace) {
-                            Navigator.of(context).pop();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(error
-                                    .toString()
-                                    .replaceAll("Exception:", "")),
-                              ),
-                            );
-                          });
+                          onSearch();
                         },
                         child: Image.asset('assets/finder.png',
                             width: MediaQuery.of(context).size.width * 0.15,
@@ -427,5 +355,27 @@ class _BinToBinAxaptaScreenState extends State<BinToBinAxaptaScreen> {
         ),
       ),
     );
+  }
+
+  void onSearch() async {
+    FocusScope.of(context).requestFocus(FocusNode());
+    Constants.showLoadingDialog(context);
+    GetAxaptaTableDataController.getAllTable(_transferController.text.trim())
+        .then((value) {
+      Navigator.of(context).pop();
+      setState(() {
+        GetShipmentPalletizingList = value;
+        isMarked = List<bool>.generate(
+            GetShipmentPalletizingList.length, (index) => false);
+        total = GetShipmentPalletizingList.length.toString();
+      });
+    }).onError((error, stackTrace) {
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.toString().replaceAll("Exception:", "")),
+        ),
+      );
+    });
   }
 }

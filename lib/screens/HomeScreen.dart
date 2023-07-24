@@ -37,57 +37,66 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   Map<String, dynamic> data = {
     "images": [
+      "assets/barcode.png",
+      "assets/container.png",
+      "assets/gtin_tracking.png",
+      "assets/stock_management.png",
       "assets/picking.png",
-      "assets/receipt_management.png",
       // "assets/container.png",
       "assets/work_in_progress.png",
-      "assets/stock_management.png",
-      "assets/gtin_tracking.png",
+      "assets/allocation.png",
+      "assets/receipt_management.png",
       "assets/physical_invention.png",
       "assets/log-in.png",
       "assets/journal.png",
-      "assets/allocation.png",
-      "assets/container.png",
-      "assets/movement.png",
       "assets/profit-and-loss.png",
-      "assets/cycle-counting.png",
+      // "assets/cycle-counting.png",
       "assets/product-return.png",
       "assets/put-away.png",
-      "assets/inventory.png",
+      "assets/movement.png",
+      // "assets/inventory.png",
       "assets/wms-inventory.png",
       "assets/inventory-location.png",
-      "assets/barcode.png",
       "assets/logout.jpg",
     ],
     "titles": [
+      "Barcode Mapping",
+      "Receiving",
+      "Palletization",
+      "Shipment Put-Away",
       "Picking Slip",
-      "Receipt Management",
       // "Received By Container",
       "Dispatching",
-      "Put-Away Transaction",
-      "Palletization",
+      "Items Re-Allocation",
+      "Un-Allocated Items",
       "Bin To Bin (AXAPTA)",
       "Bin To Bin (Internal)",
       "Bin To Bin (Journal)",
-      "Items Re-Allocation",
-      "Un-Allocated Items",
-      "Journal Movement Counting",
       "Profit and Loss",
-      "Cycle Counting Process",
+      // "Cycle Counting Process",
       "Return RMA",
       "RMA Put-Away",
-      "WMS Inventory",
-      "WMS Physical Inventory",
+      "Journal Movement Counting",
+      // "WMS Inventory",
+      "Physical Count (WMS)",
       "Inventory by Bin Location",
-      "Barcode Mapping",
       "Logout",
     ],
     "functions": [
       () {
-        Get.to(() => const PickListAssignedScreen());
+        Get.to(() => BarcodeMappingScreen());
       },
       () {
         Get.to(() => const ShipmentDispatchingScreen());
+      },
+      () {
+        Get.to(() => const ShipmentPalletizingScreen());
+      },
+      () {
+        Get.to(() => const PutAwayScreen());
+      },
+      () {
+        Get.to(() => const PickListAssignedScreen());
       },
       // () {
       //   Get.to(() => const ReceivedByContainer());
@@ -96,10 +105,10 @@ class _HomeScreenState extends State<HomeScreen> {
         Get.to(() => const DispatchingFormScreen());
       },
       () {
-        Get.to(() => const PutAwayScreen());
+        Get.to(() => const ItemReAllocationScreen());
       },
       () {
-        Get.to(() => const ShipmentPalletizingScreen());
+        Get.to(() => const UnAllocatedItemsScreen1());
       },
       () {
         Get.to(() => const BinToBinAxaptaScreen());
@@ -110,21 +119,13 @@ class _HomeScreenState extends State<HomeScreen> {
       () {
         Get.to(() => const BinToBinJournalScreen());
       },
-      () {
-        Get.to(() => const ItemReAllocationScreen());
-      },
-      () {
-        Get.to(() => const UnAllocatedItemsScreen1());
-      },
-      () {
-        Get.to(() => const JournalMovementScreen1());
-      },
+
       () {
         Get.to(() => const ProfitAndLossScreen1());
       },
-      () {
-        Get.to(() => const CycleCountingScreen1());
-      },
+      // () {
+      //   Get.to(() => const CycleCountingScreen1());
+      // },
       () {
         Get.to(() => const ReturnRMAScreen1());
       },
@@ -132,16 +133,16 @@ class _HomeScreenState extends State<HomeScreen> {
         Get.to(() => const RMAPutawayScreen());
       },
       () {
-        Get.to(() => WMSInventoryScreen());
+        Get.to(() => const JournalMovementScreen1());
       },
+      // () {
+      //   Get.to(() => WMSInventoryScreen());
+      // },
       () {
         Get.to(() => const PhysicalInventoryScreen());
       },
       () {
         Get.to(() => const PhysicalInventoryByBinLocationScreen());
-      },
-      () {
-        Get.to(() => BarcodeMappingScreen());
       },
       () {
         Get.offAll(() => LoginScreen());
@@ -199,6 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Scaffold(
           backgroundColor: Colors.white,
           body: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,

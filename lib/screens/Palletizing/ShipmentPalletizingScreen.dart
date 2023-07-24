@@ -2,7 +2,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../controllers/Palletization/GetShipmentPalletizingController.dart';
 
-import '../../models/GetShipmentPalletizingModel.dart';
 import '../../models/GetTransferDistributionByTransferIdModel.dart';
 import '../../screens/Palletizing/PalletProceedScreen.dart';
 import '../../utils/Constants.dart';

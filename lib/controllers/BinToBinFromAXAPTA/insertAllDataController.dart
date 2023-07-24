@@ -19,6 +19,7 @@ class InsertAllDataController {
     int QTYRECEIVED,
     String CREATEDDATETIME,
     String GROUPID,
+    String MainLocation,
   ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
@@ -40,6 +41,7 @@ class InsertAllDataController {
         return {
           ...e.toJson(),
           "BIN": BIN,
+          "MainLocation": MainLocation,
           "SELECTTYPE": SELECTTYPE,
           "TRANSFERID": TRANSFERID,
           "TRANSFERSTATUS": TRANSFERSTATUS,
