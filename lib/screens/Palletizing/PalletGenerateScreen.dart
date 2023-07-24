@@ -344,6 +344,13 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
               const SizedBox(height: 30),
               Container(
                 margin: const EdgeInsets.only(left: 20),
+                child: const TextWidget(
+                  text: " Serial No*",
+                  fontSize: 15,
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(left: 20),
                 child: TextFormFieldWidget(
                   hintText: "Enter/Scan Serial No",
                   controller: _serialNoController,
@@ -385,7 +392,6 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                                 }
                             });
                   },
-                  onFieldSubmitted: (p0) {},
                 ),
               ),
               const SizedBox(height: 10),

@@ -40,7 +40,7 @@ class InsertAllDataController {
       (e) {
         return {
           ...e.toJson(),
-          "BIN": BIN,
+          "BinLocation": BIN,
           "MainLocation": MainLocation,
           "SELECTTYPE": SELECTTYPE,
           "TRANSFERID": TRANSFERID,

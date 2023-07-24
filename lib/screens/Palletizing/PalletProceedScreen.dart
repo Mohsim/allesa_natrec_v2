@@ -45,7 +45,6 @@ class _PalletProceedScreenState extends State<PalletProceedScreen> {
 
   String result = "0";
   List<bool> isMarked = [];
-  List<String> receivingZoneList = [];
 
   @override
   void initState() {
@@ -186,17 +185,6 @@ class _PalletProceedScreenState extends State<PalletProceedScreen> {
                   ),
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Text(
-                  "List of Recieving Zones",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.grey,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
               const SizedBox(height: 10),
               Container(
                 margin: const EdgeInsets.only(left: 20),
@@ -230,55 +218,12 @@ class _PalletProceedScreenState extends State<PalletProceedScreen> {
                     setState(() {
                       _receivingZoneController.text = value!;
                       dropdownValue = value;
-                      receivingZoneList.add(value);
                     });
                   },
                   selectedItem: dropdownValue,
                 ),
               ),
               const SizedBox(height: 10),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.35,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.grey,
-                    width: 1,
-                  ),
-                ),
-                child: ListView.builder(
-                  padding: EdgeInsets.zero,
-                  shrinkWrap: true,
-                  itemCount: receivingZoneList.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {},
-                      child: Card(
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.black38,
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                              left: MediaQuery.of(context).size.width * 0.05,
-                              right: MediaQuery.of(context).size.width * 0.05,
-                              top: 10,
-                              bottom: 10,
-                            ),
-                            child: Text(
-                              receivingZoneList[index].toString(),
-                              style: const TextStyle(
-                                fontSize: 20,
-                                color: Colors.white60,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
               const SizedBox(height: 20),
               Center(
                 child: ElevatedButtonWidget(
@@ -294,17 +239,19 @@ class _PalletProceedScreenState extends State<PalletProceedScreen> {
                       );
                       return;
                     }
-                    Get.to(() => PalletGenerateScreen(
-                          cREATEDDATETIME: widget.cREATEDDATETIME,
-                          iNVENTDIMID: widget.iNVENTDIMID,
-                          iNVENTLOCATIONIDFROM: widget.iNVENTLOCATIONIDFROM,
-                          iNVENTLOCATIONIDTO: widget.iNVENTLOCATIONIDTO,
-                          iTEMID: widget.iTEMID,
-                          qTYREMAINRECEIVE: widget.qTYREMAINRECEIVE,
-                          qTYTRANSFER: widget.qTYTRANSFER,
-                          tRANSFERID: widget.tRANSFERID,
-                          tRANSFERSTATUS: widget.tRANSFERSTATUS,
-                        ));
+                    Get.to(
+                      () => PalletGenerateScreen(
+                        cREATEDDATETIME: widget.cREATEDDATETIME,
+                        iNVENTDIMID: widget.iNVENTDIMID,
+                        iNVENTLOCATIONIDFROM: widget.iNVENTLOCATIONIDFROM,
+                        iNVENTLOCATIONIDTO: widget.iNVENTLOCATIONIDTO,
+                        iTEMID: widget.iTEMID,
+                        qTYREMAINRECEIVE: widget.qTYREMAINRECEIVE,
+                        qTYTRANSFER: widget.qTYTRANSFER,
+                        tRANSFERID: widget.tRANSFERID,
+                        tRANSFERSTATUS: widget.tRANSFERSTATUS,
+                      ),
+                    );
                   },
                   textColor: Colors.white,
                   color: Colors.orange,
