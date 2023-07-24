@@ -433,7 +433,7 @@ class _RMAPutawayScreenState extends State<RMAPutawayScreen> {
                           textColor: Colors.white,
                           color: Colors.orange,
                           onPressed: () {
-                            if (dropDownValue == null) {
+                            if (dropDownValue == null || dropDownValue == "") {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text("Please Select Bin Location"),
@@ -445,7 +445,10 @@ class _RMAPutawayScreenState extends State<RMAPutawayScreen> {
                             FocusScope.of(context).requestFocus();
                             Constants.showLoadingDialog(context);
                             insertManyIntoMappedBarcodeController
-                                .getData(dropDownValue.toString(), table)
+                                .getData(
+                              dropDownValue.toString(),
+                              table,
+                            )
                                 .then((value) {
                               Navigator.of(context).pop();
                               Get.offAll(() => const HomeScreen());

@@ -15,33 +15,26 @@ import '../HomeScreen.dart';
 
 // ignore: must_be_immutable
 class PalletGenerateScreen extends StatefulWidget {
-  List<String> receivedZoneList;
-  String ALS_PACKINGSLIPREF;
-  int ALS_TRANSFERORDERTYPE;
-  String TRANSFERID;
-  String INVENTLOCATIONIDFROM;
-  String INVENTLOCATIONIDTO;
-  int QTYTRANSFER;
-  String ITEMID;
-  String ITEMNAME;
-  String CONFIGID;
-  String WMSLOCATIONID;
-  String SHIPMENTID;
+  String tRANSFERID;
+  int tRANSFERSTATUS;
+  String iNVENTLOCATIONIDFROM;
+  String iNVENTLOCATIONIDTO;
+  String iTEMID;
+  String iNVENTDIMID;
+  int qTYTRANSFER;
+  int qTYREMAINRECEIVE;
+  String cREATEDDATETIME;
 
   PalletGenerateScreen({
-    super.key,
-    required this.receivedZoneList,
-    required this.ALS_PACKINGSLIPREF,
-    required this.ALS_TRANSFERORDERTYPE,
-    required this.TRANSFERID,
-    required this.INVENTLOCATIONIDFROM,
-    required this.INVENTLOCATIONIDTO,
-    required this.QTYTRANSFER,
-    required this.ITEMID,
-    required this.ITEMNAME,
-    required this.CONFIGID,
-    required this.WMSLOCATIONID,
-    required this.SHIPMENTID,
+    required this.tRANSFERID,
+    required this.tRANSFERSTATUS,
+    required this.iNVENTLOCATIONIDFROM,
+    required this.iNVENTLOCATIONIDTO,
+    required this.iTEMID,
+    required this.iNVENTDIMID,
+    required this.qTYTRANSFER,
+    required this.qTYREMAINRECEIVE,
+    required this.cREATEDDATETIME,
   });
 
   @override
@@ -126,18 +119,24 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Row(
+                          Row(
                             children: <Widget>[
-                              SizedBox(width: 10),
-                              Icon(
-                                Icons.search,
-                                color: Colors.white,
+                              const SizedBox(width: 10),
+                              GestureDetector(
+                                onTap: () {
+                                  Get.back();
+                                },
+                                child: const Icon(
+                                  Icons.arrow_back_ios,
+                                  color: Colors.white,
+                                  size: 17,
+                                ),
                               ),
-                              SizedBox(width: 10),
-                              TextWidget(
+                              const SizedBox(width: 10),
+                              const TextWidget(
                                 text: "Shipment Palletizing",
                                 color: Colors.white,
-                                fontSize: 25,
+                                fontSize: 20,
                               ),
                             ],
                           ),
@@ -167,7 +166,7 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                             Column(
                               children: [
                                 const Text(
-                                  "Item Name",
+                                  "Transfer Id",
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 15,
@@ -175,7 +174,7 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                                   ),
                                 ),
                                 Text(
-                                  widget.ITEMNAME,
+                                  widget.tRANSFERID,
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 15,
@@ -186,7 +185,7 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                             Column(
                               children: [
                                 const Text(
-                                  "QTY",
+                                  "QTY Transfer",
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 15,
@@ -194,7 +193,7 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                                   ),
                                 ),
                                 Text(
-                                  widget.QTYTRANSFER.toString(),
+                                  widget.qTYTRANSFER.toString(),
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 15,
@@ -205,7 +204,7 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                             Column(
                               children: [
                                 const Text(
-                                  "Put-Away",
+                                  "Status",
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 15,
@@ -213,37 +212,13 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                                   ),
                                 ),
                                 Text(
-                                  widget.WMSLOCATIONID,
+                                  widget.tRANSFERSTATUS.toString(),
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 15,
                                   ),
                                 ),
                               ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              "Item Code:",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(width: 20),
-                            Text(
-                              widget.ITEMID,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                              ),
                             ),
                           ],
                         ),
@@ -424,13 +399,12 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                 child: const Text(
                   "Serial No:",
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 18,
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
               Container(
                 height: MediaQuery.of(context).size.height * 0.3,
                 decoration: BoxDecoration(

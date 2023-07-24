@@ -1,17 +1,17 @@
-import '../../models/GetShipmentPalletizingModel.dart';
+import '../../models/GetTransferDistributionByTransferIdModel.dart';
 import '../../utils/Constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GetShipmentPalletizingController {
-  static Future<List<GetShipmentPalletizingModel>> getShipmentPalletizing(
-      String id) async {
+  static Future<List<GetTransferDistributionByTransferIdModel>>
+      getShipmentPalletizing(String id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
 
     String url =
-        "${Constants.baseUrl}getShipmentPalletizingByTransferId?TRANSFERID=$id";
+        "${Constants.baseUrl}getTransferDistributionByTransferId?TRANSFERID=$id";
 
     print("url: $url");
 
@@ -30,8 +30,11 @@ class GetShipmentPalletizingController {
         print("Status Code: ${response.statusCode}");
 
         var data = json.decode(response.body) as List;
-        List<GetShipmentPalletizingModel> shipmentPalletizing =
-            data.map((e) => GetShipmentPalletizingModel.fromJson(e)).toList();
+        List<GetTransferDistributionByTransferIdModel> shipmentPalletizing =
+            data
+                .map(
+                    (e) => GetTransferDistributionByTransferIdModel.fromJson(e))
+                .toList();
         return shipmentPalletizing;
       } else {
         print("Status Code: ${response.statusCode}");

@@ -1,3 +1,7 @@
+import 'package:dropdown_search/dropdown_search.dart';
+import 'package:get/get.dart';
+
+import '../../controllers/BinToBinFromAXAPTA/getmapBarcodeDataByItemCodeController.dart';
 import '../../controllers/PutAway/GetShipmentReceivedController.dart';
 import '../../controllers/PutAway/UpdateShipmentController.dart';
 import '../../models/GetShipmentReceivedModel.dart';
@@ -18,8 +22,6 @@ class PutAwayScreen extends StatefulWidget {
 class _PutAwayScreenState extends State<PutAwayScreen> {
   final TextEditingController _listOfSerialNoController =
       TextEditingController();
-  final TextEditingController _warehouseZoneController =
-      TextEditingController();
 
   String dropdownValue = 'No Data';
   List<String> dropdownList = ['No Data'];
@@ -28,10 +30,45 @@ class _PutAwayScreenState extends State<PutAwayScreen> {
   List<String> gtinList = ['No Data'];
 
   String result = "0";
-  List<GetShipmentReceivedModel> getAllAssetByLocationList = [];
+  List<GetShipmentReceivedModel> table = [];
   List<bool> isMarked = [];
 
   int iteration = 0;
+
+  final TextEditingController _searchController = TextEditingController();
+  String? dropDownValue;
+  List<String> dropDownList = [];
+  List<String> filterList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      Constants.showLoadingDialog(context);
+      GetMapBarcodeDataByItemCodeController.getData().then((value) {
+        for (int i = 0; i < value.length; i++) {
+          setState(() {
+            dropDownList.add(value[i].bIN ?? "");
+            Set<String> set = dropDownList.toSet();
+            dropDownList = set.toList();
+          });
+        }
+
+        setState(() {
+          dropDownValue = dropDownList[0];
+          filterList = dropDownList;
+        });
+
+        Navigator.pop(context);
+      }).onError((error, stackTrace) {
+        Navigator.pop(context);
+        setState(() {
+          dropDownValue = "";
+          filterList = [];
+        });
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,15 +100,18 @@ class _PutAwayScreenState extends State<PutAwayScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Row(
+                          Row(
                             children: <Widget>[
-                              SizedBox(width: 10),
-                              Icon(
-                                Icons.search,
-                                color: Colors.white,
+                              const SizedBox(width: 10),
+                              GestureDetector(
+                                onTap: () {
+                                  Get.back();
+                                },
+                                child: const Icon(Icons.arrow_back_ios,
+                                    color: Colors.white, size: 18),
                               ),
-                              SizedBox(width: 10),
-                              TextWidget(
+                              const SizedBox(width: 10),
+                              const TextWidget(
                                 text: "Shipment Putaway",
                                 color: Colors.white,
                                 fontSize: 20,
@@ -163,7 +203,7 @@ class _PutAwayScreenState extends State<PutAwayScreen> {
                                 isMarked.add(false);
                               }
 
-                              getAllAssetByLocationList = value;
+                              table = value;
 
                               result = value.length.toString();
 
@@ -207,7 +247,7 @@ class _PutAwayScreenState extends State<PutAwayScreen> {
                                 isMarked.add(false);
                               }
 
-                              getAllAssetByLocationList = value;
+                              table = value;
 
                               result = value.length.toString();
 
@@ -233,13 +273,13 @@ class _PutAwayScreenState extends State<PutAwayScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.only(
+              const Padding(
+                padding: EdgeInsets.only(
                   left: 15,
                   right: 20,
                 ),
                 child: Row(
-                  children: const [
+                  children: [
                     Expanded(
                       flex: 1,
                       child: Text(
@@ -318,53 +358,164 @@ class _PutAwayScreenState extends State<PutAwayScreen> {
                   physics: const NeverScrollableScrollPhysics(),
                 ),
               ),
-              const SizedBox(height: 20),
+              // Container(
+              //   margin: const EdgeInsets.only(left: 20),
+              //   child: TextFormFieldWidget(
+              //     hintText: "Enter/Scan Warehouse Zone",
+              //     controller: _warehouseZoneController,
+              //     width: MediaQuery.of(context).size.width * 0.9,
+              //     onEditingComplete: () {
+              //       if (dropdownList.isEmpty ||
+              //           _warehouseZoneController.text.isEmpty ||
+              //           dropdownList.contains('No Data')) {
+              //         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              //             content: Text(
+              //                 "Please try to fill the Pallet Serial No. & Warehouse Zone.")));
+              //         return;
+              //       }
+
+              //       Constants.showLoadingDialog(context);
+
+              //       UpdateShipmentController.updateShipment(
+              //         dropdownList,
+              //         _warehouseZoneController.text,
+              //       ).then((value) {
+              //         Navigator.of(context).pop();
+              //         ScaffoldMessenger.of(context).showSnackBar(
+              //             SnackBar(content: Text(value.toString())));
+              //         dropdownList.clear();
+              //         gtinList.clear();
+              //         setState(() {
+              //           dropdownList = ['No Data'];
+              //           gtinList = ['No Data'];
+              //         });
+              //         _warehouseZoneController.clear();
+              //         _listOfSerialNoController.clear();
+              //       }).onError(
+              //         (error, stackTrace) {
+              //           Navigator.of(context).pop();
+              //           ScaffoldMessenger.of(context).showSnackBar(
+              //             SnackBar(
+              //                 content: Text(error
+              //                     .toString()
+              //                     .replaceAll("Exception:", ""))),
+              //           );
+              //         },
+              //       );
+              //     },
+              //   ),
+              // ),
               Container(
-                margin: const EdgeInsets.only(left: 20),
-                child: TextFormFieldWidget(
-                  hintText: "Enter/Scan Warehouse Zone",
-                  controller: _warehouseZoneController,
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  onEditingComplete: () {
-                    if (dropdownList.isEmpty ||
-                        _warehouseZoneController.text.isEmpty ||
-                        dropdownList.contains('No Data')) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text(
-                              "Please try to fill the Pallet Serial No. & Warehouse Zone.")));
-                      return;
-                    }
+                margin: const EdgeInsets.only(left: 20, top: 10),
+                child: const TextWidget(
+                  text: "Scan Location To*",
+                  fontSize: 16,
+                ),
+              ),
+              Row(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      color: Colors.white,
+                    ),
+                    width: MediaQuery.of(context).size.width * 0.73,
+                    margin: const EdgeInsets.only(left: 20),
+                    child: DropdownSearch<String>(
+                      filterFn: (item, filter) {
+                        return item
+                            .toLowerCase()
+                            .contains(filter.toLowerCase());
+                      },
+                      enabled: true,
+                      dropdownButtonProps: const DropdownButtonProps(
+                        icon: Icon(
+                          Icons.arrow_drop_down,
+                          color: Colors.black,
+                        ),
+                      ),
+                      items: filterList,
+                      onChanged: (value) {
+                        setState(() {
+                          dropDownValue = value!;
+                        });
+                      },
+                      selectedItem: dropDownValue,
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(left: 10),
+                    child: IconButton(
+                      onPressed: () {
+                        // show dialog box for search
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: TextWidget(
+                                text: "Search",
+                                color: Colors.blue[900]!,
+                                fontSize: 15,
+                              ),
+                              content: TextFormFieldWidget(
+                                controller: _searchController,
+                                readOnly: false,
+                                hintText: "Enter/Scan Location",
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                onEditingComplete: () {
+                                  setState(() {
+                                    dropDownList = dropDownList
+                                        .where((element) => element
+                                            .toLowerCase()
+                                            .contains(_searchController.text
+                                                .toLowerCase()))
+                                        .toList();
+                                    dropDownValue = dropDownList[0];
+                                  });
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: TextWidget(
+                                    text: "Cancel",
+                                    color: Colors.blue[900]!,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    // filter list based on search
+                                    setState(() {
+                                      filterList = dropDownList
+                                          .where((element) => element
+                                              .toLowerCase()
+                                              .contains(_searchController.text
+                                                  .toLowerCase()))
+                                          .toList();
+                                      dropDownValue = filterList[0];
+                                    });
 
-                    Constants.showLoadingDialog(context);
-
-                    UpdateShipmentController.updateShipment(
-                      dropdownList,
-                      _warehouseZoneController.text,
-                    ).then((value) {
-                      Navigator.of(context).pop();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(value.toString())));
-                      dropdownList.clear();
-                      gtinList.clear();
-                      setState(() {
-                        dropdownList = ['No Data'];
-                        gtinList = ['No Data'];
-                      });
-                      _warehouseZoneController.clear();
-                      _listOfSerialNoController.clear();
-                    }).onError(
-                      (error, stackTrace) {
-                        Navigator.of(context).pop();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                              content: Text(error
-                                  .toString()
-                                  .replaceAll("Exception:", ""))),
+                                    Navigator.pop(context);
+                                  },
+                                  child: TextWidget(
+                                    text: "Search",
+                                    color: Colors.blue[900]!,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
                         );
                       },
-                    );
-                  },
-                ),
+                      icon: const Icon(Icons.search),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 20),
               Center(
@@ -374,7 +525,7 @@ class _PutAwayScreenState extends State<PutAwayScreen> {
                   title: "Put-Away",
                   onPressed: () {
                     if (dropdownList.isEmpty ||
-                        _warehouseZoneController.text.isEmpty ||
+                        dropDownList.isEmpty ||
                         dropdownList.contains('No Data')) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text(
@@ -386,7 +537,7 @@ class _PutAwayScreenState extends State<PutAwayScreen> {
 
                     UpdateShipmentController.updateShipment(
                       dropdownList,
-                      _warehouseZoneController.text,
+                      dropDownValue.toString(),
                     ).then((value) {
                       Navigator.of(context).pop();
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -397,7 +548,7 @@ class _PutAwayScreenState extends State<PutAwayScreen> {
                         dropdownList = ['No Data'];
                         gtinList = ['No Data'];
                       });
-                      _warehouseZoneController.clear();
+
                       _listOfSerialNoController.clear();
                     }).onError(
                       (error, stackTrace) {
@@ -414,6 +565,7 @@ class _PutAwayScreenState extends State<PutAwayScreen> {
                   color: Colors.orange,
                 ),
               ),
+              const SizedBox(height: 20),
             ],
           ),
         ),

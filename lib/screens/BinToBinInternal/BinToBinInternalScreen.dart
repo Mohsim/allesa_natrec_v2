@@ -737,7 +737,119 @@ class _BinToBinInternalScreenState extends State<BinToBinInternalScreen> {
                   ),
                 ),
               ),
+              Container(
+                margin: const EdgeInsets.only(left: 20, top: 10),
+                child: TextWidget(
+                  text: "Scan Location To:",
+                  color: Colors.blue[900]!,
+                  fontSize: 15,
+                ),
+              ),
+              Row(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      color: Colors.white,
+                    ),
+                    width: MediaQuery.of(context).size.width * 0.73,
+                    margin: const EdgeInsets.only(left: 20),
+                    child: DropdownSearch<String>(
+                      filterFn: (item, filter) {
+                        return item
+                            .toLowerCase()
+                            .contains(filter.toLowerCase());
+                      },
+                      enabled: true,
+                      dropdownButtonProps: const DropdownButtonProps(
+                        icon: Icon(
+                          Icons.arrow_drop_down,
+                          color: Colors.black,
+                        ),
+                      ),
+                      items: filterList,
+                      onChanged: (value) {
+                        setState(() {
+                          dropDownValue = value!;
+                        });
+                      },
+                      selectedItem: dropDownValue,
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(left: 10),
+                    child: IconButton(
+                      onPressed: () {
+                        // show dialog box for search
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: TextWidget(
+                                text: "Search",
+                                color: Colors.blue[900]!,
+                                fontSize: 15,
+                              ),
+                              content: TextFormFieldWidget(
+                                controller: _searchController,
+                                readOnly: false,
+                                hintText: "Enter/Scan Location",
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                onEditingComplete: () {
+                                  setState(() {
+                                    dropDownList = dropDownList
+                                        .where((element) => element
+                                            .toLowerCase()
+                                            .contains(_searchController.text
+                                                .toLowerCase()))
+                                        .toList();
+                                    dropDownValue = dropDownList[0];
+                                  });
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: TextWidget(
+                                    text: "Cancel",
+                                    color: Colors.blue[900]!,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    // filter list based on search
+                                    setState(() {
+                                      filterList = dropDownList
+                                          .where((element) => element
+                                              .toLowerCase()
+                                              .contains(_searchController.text
+                                                  .toLowerCase()))
+                                          .toList();
+                                      dropDownValue = filterList[0];
+                                    });
 
+                                    Navigator.pop(context);
+                                  },
+                                  child: TextWidget(
+                                    text: "Search",
+                                    color: Colors.blue[900]!,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      icon: const Icon(Icons.search),
+                    ),
+                  ),
+                ],
+              ),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,

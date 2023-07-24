@@ -10,31 +10,26 @@ import '../../controllers/WareHouseOperationController/GetAllTableZoneController
 
 // ignore: must_be_immutable
 class PalletProceedScreen extends StatefulWidget {
-  String ALS_PACKINGSLIPREF;
-  int ALS_TRANSFERORDERTYPE;
-  String TRANSFERID;
-  String INVENTLOCATIONIDFROM;
-  String INVENTLOCATIONIDTO;
-  int QTYTRANSFER;
-  String ITEMID;
-  String ITEMNAME;
-  String CONFIGID;
-  String WMSLOCATIONID;
-  String SHIPMENTID;
+  String tRANSFERID;
+  int tRANSFERSTATUS;
+  String iNVENTLOCATIONIDFROM;
+  String iNVENTLOCATIONIDTO;
+  String iTEMID;
+  String iNVENTDIMID;
+  int qTYTRANSFER;
+  int qTYREMAINRECEIVE;
+  String cREATEDDATETIME;
 
   PalletProceedScreen({
-    super.key,
-    required this.ALS_PACKINGSLIPREF,
-    required this.ALS_TRANSFERORDERTYPE,
-    required this.TRANSFERID,
-    required this.INVENTLOCATIONIDFROM,
-    required this.INVENTLOCATIONIDTO,
-    required this.QTYTRANSFER,
-    required this.ITEMID,
-    required this.ITEMNAME,
-    required this.CONFIGID,
-    required this.WMSLOCATIONID,
-    required this.SHIPMENTID,
+    required this.tRANSFERID,
+    required this.tRANSFERSTATUS,
+    required this.iNVENTLOCATIONIDFROM,
+    required this.iNVENTLOCATIONIDTO,
+    required this.iTEMID,
+    required this.iNVENTDIMID,
+    required this.qTYTRANSFER,
+    required this.qTYREMAINRECEIVE,
+    required this.cREATEDDATETIME,
   });
 
   @override
@@ -105,18 +100,24 @@ class _PalletProceedScreenState extends State<PalletProceedScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Row(
+                          Row(
                             children: <Widget>[
-                              SizedBox(width: 10),
-                              Icon(
-                                Icons.search,
-                                color: Colors.white,
+                              const SizedBox(width: 10),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Icon(
+                                  Icons.arrow_back_ios,
+                                  color: Colors.white,
+                                  size: 18,
+                                ),
                               ),
-                              SizedBox(width: 10),
-                              TextWidget(
+                              const SizedBox(width: 10),
+                              const TextWidget(
                                 text: "Shipment Palletizing",
                                 color: Colors.white,
-                                fontSize: 25,
+                                fontSize: 20,
                               ),
                             ],
                           ),
@@ -142,7 +143,7 @@ class _PalletProceedScreenState extends State<PalletProceedScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text(
-                            "Item Name:",
+                            "Transfer Id:",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 18,
@@ -151,7 +152,7 @@ class _PalletProceedScreenState extends State<PalletProceedScreen> {
                           ),
                           const SizedBox(width: 10),
                           Text(
-                            widget.ITEMNAME,
+                            widget.tRANSFERID,
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 16,
@@ -173,7 +174,7 @@ class _PalletProceedScreenState extends State<PalletProceedScreen> {
                           ),
                           const SizedBox(width: 10),
                           Text(
-                            widget.ITEMID,
+                            widget.iTEMID,
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 16,
@@ -285,19 +286,24 @@ class _PalletProceedScreenState extends State<PalletProceedScreen> {
                   width: MediaQuery.of(context).size.width * 0.9,
                   title: "Proceed",
                   onPressed: () {
+                    if (dropdownValue == "Select Zone" || dropdownValue == "") {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Please select receiving zone"),
+                        ),
+                      );
+                      return;
+                    }
                     Get.to(() => PalletGenerateScreen(
-                          receivedZoneList: receivingZoneList,
-                          ALS_PACKINGSLIPREF: widget.ALS_PACKINGSLIPREF,
-                          ALS_TRANSFERORDERTYPE: widget.ALS_TRANSFERORDERTYPE,
-                          CONFIGID: widget.CONFIGID,
-                          INVENTLOCATIONIDFROM: widget.INVENTLOCATIONIDFROM,
-                          INVENTLOCATIONIDTO: widget.INVENTLOCATIONIDTO,
-                          ITEMID: widget.ITEMID,
-                          ITEMNAME: widget.ITEMNAME,
-                          QTYTRANSFER: widget.QTYTRANSFER,
-                          TRANSFERID: widget.TRANSFERID,
-                          SHIPMENTID: widget.SHIPMENTID,
-                          WMSLOCATIONID: widget.WMSLOCATIONID,
+                          cREATEDDATETIME: widget.cREATEDDATETIME,
+                          iNVENTDIMID: widget.iNVENTDIMID,
+                          iNVENTLOCATIONIDFROM: widget.iNVENTLOCATIONIDFROM,
+                          iNVENTLOCATIONIDTO: widget.iNVENTLOCATIONIDTO,
+                          iTEMID: widget.iTEMID,
+                          qTYREMAINRECEIVE: widget.qTYREMAINRECEIVE,
+                          qTYTRANSFER: widget.qTYTRANSFER,
+                          tRANSFERID: widget.tRANSFERID,
+                          tRANSFERSTATUS: widget.tRANSFERSTATUS,
                         ));
                   },
                   textColor: Colors.white,
