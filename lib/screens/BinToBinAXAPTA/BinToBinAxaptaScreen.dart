@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -5,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../widgets/AppBarWidget.dart';
 import '../../../widgets/TextFormField.dart';
 import '../../../widgets/TextWidget.dart';
+import '../../controllers/BinToBinFromAXAPTA/GetQtyReceivedController.dart';
 import '../../controllers/BinToBinFromAXAPTA/getAxaptaTableData.dart';
 import '../../models/GetAxaptaTableModel.dart';
 import '../../utils/Constants.dart';
@@ -271,7 +274,7 @@ class _BinToBinAxaptaScreenState extends State<BinToBinAxaptaScreen> {
                       ],
                       rows: GetShipmentPalletizingList.map((e) {
                         return DataRow(
-                            onSelectChanged: (value) {
+                            onSelectChanged: (value) async {
                               // qty transfer is equal or greater than qty received
                               if (e.qTYRECEIVED! >= e.qTYTRANSFER!) {
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -282,12 +285,29 @@ class _BinToBinAxaptaScreenState extends State<BinToBinAxaptaScreen> {
                                 );
                                 return;
                               }
-                              setState(() {
-                                isMarked[
-                                        GetShipmentPalletizingList.indexOf(e)] =
-                                    value!;
-                              });
-                              Get.to(() => BinToBinAxapta2Screen(
+                              Constants.showLoadingDialog(context);
+                              num numb =
+                                  await GetQtyReceivedController.getAllTable(
+                                      e.tRANSFERID.toString(),
+                                      e.iTEMID.toString());
+                              try {
+                                print("numb: $numb");
+                                if (numb >= e.qTYTRANSFER!) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          "All Quantities have been transfered."),
+                                    ),
+                                  );
+                                  return;
+                                }
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  isMarked[GetShipmentPalletizingList.indexOf(
+                                      e)] = value!;
+                                });
+                                Get.to(
+                                  () => BinToBinAxapta2Screen(
                                     TRANSFERID: e.tRANSFERID ?? "",
                                     TRANSFERSTATUS:
                                         int.parse(e.tRANSFERSTATUS.toString()),
@@ -298,28 +318,23 @@ class _BinToBinAxaptaScreenState extends State<BinToBinAxaptaScreen> {
                                     ITEMID: e.iTEMID ?? "",
                                     QTYTRANSFER:
                                         int.parse(e.qTYTRANSFER.toString()),
-                                    QTYRECEIVED:
-                                        int.parse(e.qTYRECEIVED.toString()),
+                                    QTYRECEIVED: int.parse(numb.toString()),
                                     CREATEDDATETIME: e.cREATEDDATETIME ?? "",
                                     GROUPID: e.gROUPID ?? "",
-                                  ));
+                                  ),
+                                );
+                              } catch (e) {
+                                Navigator.of(context).pop();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(e
+                                        .toString()
+                                        .replaceAll("Exception:", "")),
+                                  ),
+                                );
+                              }
                             },
                             cells: [
-                              // DataCell(
-                              //   Checkbox(
-                              //     value: isMarked[
-                              //         GetShipmentPalletizingList.indexOf(e)],
-                              //     onChanged: (value) {
-                              //       setState(() {
-                              //         isMarked[
-                              //             GetShipmentPalletizingList.indexOf(
-                              //                 e)] = !isMarked[
-                              //             GetShipmentPalletizingList.indexOf(
-                              //                 e)];
-                              //       });
-                              //     },
-                              //   ),
-                              // ),
                               DataCell(Text(
                                   (GetShipmentPalletizingList.indexOf(e) + 1)
                                       .toString())),

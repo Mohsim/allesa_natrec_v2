@@ -632,6 +632,15 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
       return;
     }
 
+    if (table.length > widget.QTYTRANSFER - widget.QTYRECEIVED) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+            "You can only scan ${widget.QTYTRANSFER - widget.QTYRECEIVED} more items"),
+        backgroundColor: Colors.red,
+      ));
+      return;
+    }
+
     Constants.showLoadingDialog(context);
     InsertAllDataController.postData(
       dropDownValue.toString(),
