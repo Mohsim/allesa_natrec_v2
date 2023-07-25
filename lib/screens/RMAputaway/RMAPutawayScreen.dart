@@ -1,7 +1,7 @@
 import 'package:dropdown_search/dropdown_search.dart';
 
 import '../../controllers/BinToBinFromAXAPTA/getmapBarcodeDataByItemCodeController.dart';
-import '../../screens/HomeScreen.dart';
+import '../../controllers/ReturnRMA/DeleteMultipleRecordsFromWmsReturnSalesOrderClController.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../controllers/RMAputaway/getWmsReturnSalesOrderClByAssignedToUserIdController.dart';
@@ -261,77 +261,77 @@ class _RMAPutawayScreenState extends State<RMAPutawayScreen> {
                               ),
                             ],
                           )),
-                          DataColumn(
+                          const DataColumn(
                               label: Text(
                             'ITEM ID',
                             style: TextStyle(color: Colors.white),
                           )),
-                          DataColumn(
+                          const DataColumn(
                               label: Text(
                             'ITEM NAME',
                             style: TextStyle(color: Colors.white),
                           )),
-                          DataColumn(
+                          const DataColumn(
                               label: Text(
                             'EXPECTED RET QTY',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,
                           )),
-                          DataColumn(
+                          const DataColumn(
                               label: Text(
                             'SALES ID',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,
                           )),
-                          DataColumn(
+                          const DataColumn(
                               label: Text(
                             'RETURN ITEM NUM',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,
                           )),
-                          DataColumn(
+                          const DataColumn(
                               label: Text(
                             'INVENT SITE ID',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,
                           )),
-                          DataColumn(
+                          const DataColumn(
                               label: Text(
                             'INVENT LOCATION ID',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,
                           )),
-                          DataColumn(
+                          const DataColumn(
                               label: Text(
                             'CONFIG ID',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,
                           )),
-                          DataColumn(
+                          const DataColumn(
                               label: Text(
                             'WMS LOCATION ID',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,
                           )),
-                          DataColumn(
+                          const DataColumn(
                               label: Text(
                             'TRX DATE TIME',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,
                           )),
-                          DataColumn(
+                          const DataColumn(
                               label: Text(
                             'TRX USER ID',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,
                           )),
-                          DataColumn(
+                          const DataColumn(
                               label: Text(
                             'ITEM SERIAL NO',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,
                           )),
-                          DataColumn(
+                          const DataColumn(
                               label: Text(
                             'ASSIGNED TO USER ID',
                             style: TextStyle(color: Colors.white),
@@ -509,7 +509,7 @@ class _RMAPutawayScreenState extends State<RMAPutawayScreen> {
                         return;
                       }
 
-                      if (duplicateTable.length == 0) {
+                      if (duplicateTable.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text(
@@ -528,13 +528,38 @@ class _RMAPutawayScreenState extends State<RMAPutawayScreen> {
                         duplicateTable,
                       )
                           .then((value) {
-                        Navigator.of(context).pop();
-                        Get.offAll(() => const HomeScreen());
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text("Data Inserted Successfully"),
-                          backgroundColor: Colors.green,
-                        ));
+                        DeleteMultipleRecordsFromWmsReturnSalesOrderClController
+                            .getData(
+                          duplicateTable
+                              .map((e) => e.iTEMSERIALNO.toString())
+                              .toList(),
+                        ).then((value) {
+                          // delete the selected rows from table
+                          setState(() {
+                            table.removeWhere(
+                                (element) => duplicateTable.contains(element));
+                            duplicateTable = [];
+                            isMarked = List<bool>.generate(
+                                table.length, (index) => false);
+                            total = table.length.toString();
+                          });
+                          Navigator.of(context).pop();
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("Data Inserted Successfully"),
+                            backgroundColor: Colors.green,
+                          ));
+                        }).onError((error, stackTrace) {
+                          Navigator.of(context).pop();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(error
+                                  .toString()
+                                  .replaceAll("Exception:", "")),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        });
                       }).onError((error, stackTrace) {
                         Navigator.of(context).pop();
                         ScaffoldMessenger.of(context).showSnackBar(
