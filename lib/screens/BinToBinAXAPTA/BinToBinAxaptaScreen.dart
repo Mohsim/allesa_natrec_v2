@@ -272,6 +272,16 @@ class _BinToBinAxaptaScreenState extends State<BinToBinAxaptaScreen> {
                       rows: GetShipmentPalletizingList.map((e) {
                         return DataRow(
                             onSelectChanged: (value) {
+                              // qty transfer is equal or greater than qty received
+                              if (e.qTYRECEIVED! >= e.qTYTRANSFER!) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        "All Quantities have been transfered."),
+                                  ),
+                                );
+                                return;
+                              }
                               setState(() {
                                 isMarked[
                                         GetShipmentPalletizingList.indexOf(e)] =

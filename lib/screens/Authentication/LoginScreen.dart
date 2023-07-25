@@ -1,3 +1,7 @@
+import 'package:alessa_v2/constants/app_lotties.dart';
+import 'package:alessa_v2/utils/app_dialog.dart';
+import 'package:lottie/lottie.dart';
+
 import '../../controllers/Authentication/LoginController.dart';
 import '../../screens/HomeScreen.dart';
 import '../../utils/Constants.dart';
@@ -225,12 +229,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                         .then((value) {
                                       Navigator.of(context).pop();
                                       Get.offAll(() => const HomeScreen());
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                          content: Text("Login Successfull"),
-                                        ),
-                                      );
+                                      AppDialog.showLottie(
+                                          context, AppLotties.loading);
+                                      Future.delayed(
+                                          const Duration(milliseconds: 2500),
+                                          () {
+                                        AppDialog.closeDialog();
+                                      });
                                     }).onError((error, stackTrace) {
                                       Navigator.of(context).pop();
                                       ScaffoldMessenger.of(context)
@@ -271,6 +276,20 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void showSuccessMethod() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Lottie.asset(
+          'assets/animations/successfully.json',
+          width: 50,
+          height: 50,
+          fit: BoxFit.contain,
+        );
+      },
     );
   }
 }

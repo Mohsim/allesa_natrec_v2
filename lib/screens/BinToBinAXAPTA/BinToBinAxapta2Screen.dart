@@ -44,7 +44,6 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
   final TextEditingController _transferIdController = TextEditingController();
   final TextEditingController _locationReferenceController =
       TextEditingController();
-  final TextEditingController _scanLocationController = TextEditingController();
   final TextEditingController _scanSerialandPalletController =
       TextEditingController();
   final TextEditingController _searchController = TextEditingController();
@@ -625,6 +624,14 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
       return;
     }
 
+    if (widget.QTYRECEIVED >= widget.QTYTRANSFER) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("All Quantities have been received"),
+        backgroundColor: Colors.red,
+      ));
+      return;
+    }
+
     Constants.showLoadingDialog(context);
     InsertAllDataController.postData(
       dropDownValue.toString(),
@@ -646,8 +653,9 @@ class _BinToBinAxapta2ScreenState extends State<BinToBinAxapta2Screen> {
         content: Text("Data inserted and updated successfully."),
       ));
       setState(() {
-        // table.clear();
+        table.clear();
         _scanSerialandPalletController.clear();
+        widget.QTYRECEIVED = widget.QTYRECEIVED + 1;
       });
     }).onError((error, stackTrace) {
       Navigator.of(context).pop();

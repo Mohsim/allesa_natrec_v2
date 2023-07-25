@@ -11,7 +11,6 @@ import '../../../../widgets/TextFormField.dart';
 import '../../../../widgets/TextWidget.dart';
 import '../../models/GetAlltblBinLocationsModel.dart';
 import '../../utils/Constants.dart';
-import '../HomeScreen.dart';
 
 // ignore: must_be_immutable
 class PalletGenerateScreen extends StatefulWidget {
@@ -24,6 +23,7 @@ class PalletGenerateScreen extends StatefulWidget {
   int qTYTRANSFER;
   int qTYREMAINRECEIVE;
   String cREATEDDATETIME;
+  String palletType = "";
 
   PalletGenerateScreen({
     required this.tRANSFERID,
@@ -35,6 +35,7 @@ class PalletGenerateScreen extends StatefulWidget {
     required this.qTYTRANSFER,
     required this.qTYREMAINRECEIVE,
     required this.cREATEDDATETIME,
+    required this.palletType,
   });
 
   @override
@@ -57,6 +58,8 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
   List<bool> isMarked = [];
 
   List<GetAlltblBinLocationsModel> getAlltblBinLocationsModelList = [];
+
+  FocusNode focusNode = FocusNode();
 
   @override
   void initState() {
@@ -354,43 +357,53 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                 child: TextFormFieldWidget(
                   hintText: "Enter/Scan Serial No",
                   controller: _serialNoController,
+                  focusNode: focusNode,
                   width: MediaQuery.of(context).size.width * 0.9,
                   onEditingComplete: () {
-                    FocusScope.of(context).requestFocus(FocusNode());
+                    Constants.showLoadingDialog(context);
                     ValidateShipmentPalettizingSerialNoController
                             .palletizeSerialNo(_serialNoController.text)
-                        .then((value) => {
-                              if (value == "Success: SHIPMENTID matches")
-                                {
-                                  if (serialNoList.contains(
-                                      _serialNoController.text.toString()))
-                                    {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                          content:
-                                              Text("Serial No already exists"),
-                                          duration: Duration(seconds: 2),
-                                        ),
-                                      ),
-                                    }
-                                  else
-                                    {
-                                      serialNoList.add(
-                                          _serialNoController.text.toString()),
-                                      setState(() {})
-                                    }
-                                }
-                              else
-                                {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(value),
-                                      duration: const Duration(seconds: 2),
-                                    ),
+                        .then(
+                      (value) => {
+                        if (value == "Success: SHIPMENTID matches")
+                          {
+                            if (serialNoList
+                                .contains(_serialNoController.text.toString()))
+                              {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Serial No already exists"),
+                                    duration: Duration(seconds: 2),
                                   ),
-                                }
-                            });
+                                ),
+                                Navigator.pop(context),
+                                FocusScope.of(context).requestFocus(focusNode),
+                              }
+                            else
+                              {
+                                serialNoList
+                                    .add(_serialNoController.text.toString()),
+                                setState(() {
+                                  _serialNoController.clear();
+                                }),
+                                Navigator.pop(context),
+                                FocusScope.of(context).requestFocus(focusNode),
+                              }
+                          }
+                        else
+                          {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content:
+                                    Text(value.replaceAll("Exception:", "")),
+                                duration: const Duration(seconds: 2),
+                              ),
+                            ),
+                            Navigator.pop(context),
+                            FocusScope.of(context).requestFocus(focusNode),
+                          }
+                      },
+                    );
                   },
                 ),
               ),
@@ -460,6 +473,16 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                   width: MediaQuery.of(context).size.width * 0.9,
                   title: "Generate",
                   onPressed: () {
+                    if (serialNoList.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Please enter Serial No."),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                      return;
+                    }
+                    Constants.showLoadingDialog(context);
                     GenerateAndUpdatePalletIdController
                             .generateAndUpdatePalletId(serialNoList)
                         .then(
@@ -476,8 +499,9 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                             serialNoList.clear();
                             _serialNoController.clear();
                           });
-                          Get.offAll(const HomeScreen());
+                          Navigator.pop(context);
                         } else {
+                          Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(value),

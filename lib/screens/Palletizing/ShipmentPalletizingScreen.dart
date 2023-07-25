@@ -135,24 +135,7 @@ class _ShipmentPalletizingScreenState extends State<ShipmentPalletizingScreen> {
                         controller: shipmentIdController,
                         width: MediaQuery.of(context).size.width * 0.73,
                         onEditingComplete: () {
-                          Constants.showLoadingDialog(context);
-                          GetShipmentPalletizingController
-                                  .getShipmentPalletizing(
-                                      shipmentIdController.text.trim())
-                              .then((value) {
-                            setState(() {
-                              table = value;
-                              total = table.length.toString();
-                              isMarked = List<bool>.filled(table.length, false);
-                              Navigator.pop(context);
-                            });
-                          }).onError((error, stackTrace) {
-                            Navigator.pop(context);
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text(error
-                                    .toString()
-                                    .replaceAll("Exception:", ""))));
-                          });
+                          onClick();
                         },
                         onFieldSubmitted: (p0) {
                           onClick();
@@ -347,23 +330,8 @@ class _ShipmentPalletizingScreenState extends State<ShipmentPalletizingScreen> {
         table = value;
         total = table.length.toString();
         isMarked = List<bool>.filled(table.length, false);
-        Navigator.pop(context);
       });
-    }).onError((error, stackTrace) {
       Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(error.toString().replaceAll("Exception:", ""))));
-    });
-    Constants.showLoadingDialog(context);
-    GetShipmentPalletizingController.getShipmentPalletizing(
-            shipmentIdController.text.trim())
-        .then((value) {
-      setState(() {
-        table = value;
-        total = table.length.toString();
-        isMarked = List<bool>.filled(table.length, false);
-        Navigator.pop(context);
-      });
     }).onError((error, stackTrace) {
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

@@ -25,7 +25,10 @@ class RMAPutawayScreen extends StatefulWidget {
 
 class _RMAPutawayScreenState extends State<RMAPutawayScreen> {
   String total = "0";
+
   List<getWmsReturnSalesOrderClByAssignedToUserIdModel> table = [];
+  List<getWmsReturnSalesOrderClByAssignedToUserIdModel> duplicateTable = [];
+
   List<bool> isMarked = [];
 
   String userName = "";
@@ -164,13 +167,42 @@ class _RMAPutawayScreenState extends State<RMAPutawayScreen> {
                     ],
                   ),
                 ),
+                const SizedBox(height: 10),
                 Container(
-                  margin: const EdgeInsets.only(left: 10, top: 10),
-                  child: const TextWidget(
-                    text: "Items*",
-                    fontSize: 16,
+                  padding: const EdgeInsets.only(right: 10, left: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const TextWidget(
+                        text: "Items",
+                        fontSize: 16,
+                      ),
+                      Row(
+                        children: [
+                          const TextWidget(text: "TOTAL", fontSize: 16),
+                          const SizedBox(width: 5),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.2,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.blue,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Center(
+                              child: TextWidget(
+                                text: total,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
+                const SizedBox(height: 10),
                 Container(
                   height: MediaQuery.of(context).size.height * 0.5,
                   decoration: BoxDecoration(
@@ -199,12 +231,35 @@ class _RMAPutawayScreenState extends State<RMAPutawayScreen> {
                           color: Colors.black,
                           width: 1,
                         ),
-                        columns: const [
+                        columns: [
                           DataColumn(
-                              label: Text(
-                            'ID',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
+                              label: Row(
+                            children: [
+                              const FittedBox(
+                                child: Text(
+                                  'Select All',
+                                  style: TextStyle(color: Colors.white),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              // checkbox button for selecting all rows and store it in duplicate table
+                              Checkbox(
+                                value: duplicateTable.length == table.length,
+                                onChanged: (value) {
+                                  setState(() {
+                                    for (int i = 0; i < table.length; i++) {
+                                      isMarked[i] = value!;
+                                      if (value) {
+                                        duplicateTable.add(table[i]);
+                                      } else {
+                                        duplicateTable.remove(table[i]);
+                                      }
+                                    }
+                                    print(duplicateTable.length);
+                                  });
+                                },
+                              ),
+                            ],
                           )),
                           DataColumn(
                               label: Text(
@@ -285,7 +340,23 @@ class _RMAPutawayScreenState extends State<RMAPutawayScreen> {
                         ],
                         rows: table.map((e) {
                           return DataRow(onSelectChanged: (value) {}, cells: [
-                            DataCell(Text((table.indexOf(e) + 1).toString())),
+                            DataCell(
+                              // checkbox button for selecting row and store it in duplicate table
+                              Checkbox(
+                                value: isMarked[table.indexOf(e)],
+                                onChanged: (value) {
+                                  setState(() {
+                                    isMarked[table.indexOf(e)] = value!;
+                                    if (value) {
+                                      duplicateTable.add(e);
+                                      print(duplicateTable.length);
+                                    } else {
+                                      duplicateTable.remove(e);
+                                    }
+                                  });
+                                },
+                              ),
+                            ),
                             DataCell(Text(e.iTEMID.toString())),
                             DataCell(Text(e.nAME.toString())),
                             DataCell(Text(e.eXPECTEDRETQTY.toString())),
@@ -418,84 +489,66 @@ class _RMAPutawayScreenState extends State<RMAPutawayScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Column(
-                      children: [
-                        const TextWidget(text: ""),
-                        const SizedBox(height: 5),
-                        ElevatedButtonWidget(
-                          width: MediaQuery.of(context).size.width * 0.4,
-                          height: 50,
-                          title: "Save",
-                          textColor: Colors.white,
-                          color: Colors.orange,
-                          onPressed: () {
-                            if (dropDownValue == null || dropDownValue == "") {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Please Select Bin Location"),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                              return;
-                            }
-                            FocusScope.of(context).requestFocus();
-                            Constants.showLoadingDialog(context);
-                            insertManyIntoMappedBarcodeController
-                                .getData(
-                              dropDownValue.toString(),
-                              table,
-                            )
-                                .then((value) {
-                              Navigator.of(context).pop();
-                              Get.offAll(() => const HomeScreen());
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                content: Text("Data Inserted Successfully"),
-                                backgroundColor: Colors.green,
-                              ));
-                            }).onError((error, stackTrace) {
-                              Navigator.of(context).pop();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(error
-                                      .toString()
-                                      .replaceAll("Exception:", "")),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 20),
-                    Column(
-                      children: [
-                        const TextWidget(text: "TOTAL"),
-                        const SizedBox(height: 5),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.4,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.blue,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
+                const SizedBox(height: 20),
+                Container(
+                  margin: const EdgeInsets.only(left: 20),
+                  child: ElevatedButtonWidget(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    height: 50,
+                    title: "Save",
+                    textColor: Colors.white,
+                    color: Colors.orange,
+                    onPressed: () {
+                      if (dropDownValue == null || dropDownValue == "") {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Please Select Bin Location"),
+                            backgroundColor: Colors.red,
                           ),
-                          child: Center(
-                            child: TextWidget(text: total),
+                        );
+                        return;
+                      }
+
+                      if (duplicateTable.length == 0) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                                "Please Select Atleast One Item from table"),
+                            backgroundColor: Colors.red,
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 20),
-                  ],
+                        );
+                        return;
+                      }
+
+                      FocusScope.of(context).requestFocus();
+                      Constants.showLoadingDialog(context);
+                      insertManyIntoMappedBarcodeController
+                          .getData(
+                        dropDownValue.toString(),
+                        duplicateTable,
+                      )
+                          .then((value) {
+                        Navigator.of(context).pop();
+                        Get.offAll(() => const HomeScreen());
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text("Data Inserted Successfully"),
+                          backgroundColor: Colors.green,
+                        ));
+                      }).onError((error, stackTrace) {
+                        Navigator.of(context).pop();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                error.toString().replaceAll("Exception:", "")),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      });
+                    },
+                  ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 20),
               ],
             ),
           ),

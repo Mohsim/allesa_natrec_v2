@@ -250,6 +250,7 @@ class _PalletProceedScreenState extends State<PalletProceedScreen> {
                         qTYTRANSFER: widget.qTYTRANSFER,
                         tRANSFERID: widget.tRANSFERID,
                         tRANSFERSTATUS: widget.tRANSFERSTATUS,
+                        palletType: dropdownValue.toString(),
                       ),
                     );
                   },
