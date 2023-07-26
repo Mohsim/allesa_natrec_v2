@@ -362,48 +362,50 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                   onEditingComplete: () {
                     Constants.showLoadingDialog(context);
                     ValidateShipmentPalettizingSerialNoController
-                            .palletizeSerialNo(_serialNoController.text)
-                        .then(
-                      (value) => {
-                        if (value == "Success: SHIPMENTID matches")
-                          {
-                            if (serialNoList
-                                .contains(_serialNoController.text.toString()))
-                              {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("Serial No already exists"),
-                                    duration: Duration(seconds: 2),
-                                  ),
-                                ),
-                                Navigator.pop(context),
-                                FocusScope.of(context).requestFocus(focusNode),
-                              }
-                            else
-                              {
-                                serialNoList
-                                    .add(_serialNoController.text.toString()),
-                                setState(() {
-                                  _serialNoController.clear();
-                                }),
-                                Navigator.pop(context),
-                                FocusScope.of(context).requestFocus(focusNode),
-                              }
-                          }
-                        else
-                          {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content:
-                                    Text(value.replaceAll("Exception:", "")),
-                                duration: const Duration(seconds: 2),
-                              ),
-                            ),
-                            Navigator.pop(context),
-                            FocusScope.of(context).requestFocus(focusNode),
-                          }
-                      },
-                    );
+                        .palletizeSerialNo(
+                      _serialNoController.text,
+                      "",
+                    ).then((value) {
+                      if (serialNoList
+                          .contains(_serialNoController.text.toString())) {
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Serial No already exists"),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                        return;
+                      }
+
+                      if (_serialNoController.text.toString().isEmpty) {
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Please enter Serial No"),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                        return;
+                      }
+
+                      setState(() {
+                        serialNoList.add(_serialNoController.text.toString());
+                        _serialNoController.clear();
+                      });
+                      Navigator.pop(context);
+                    }).onError((error, stackTrace) {
+                      Navigator.pop(context);
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              error.toString().replaceAll("Exception:", "")),
+                          duration: const Duration(seconds: 2),
+                        ),
+                      );
+                      FocusScope.of(context).requestFocus(focusNode);
+                    });
                   },
                 ),
               ),
@@ -487,30 +489,28 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                             .generateAndUpdatePalletId(serialNoList)
                         .then(
                       (value) {
-                        if (value ==
-                            "Pallet IDs generated and updated successfully.") {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(value),
-                              duration: const Duration(seconds: 2),
-                            ),
-                          );
-                          setState(() {
-                            serialNoList.clear();
-                            _serialNoController.clear();
-                          });
-                          Navigator.pop(context);
-                        } else {
-                          Navigator.pop(context);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(value),
-                              duration: const Duration(seconds: 2),
-                            ),
-                          );
-                        }
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(value),
+                            duration: const Duration(seconds: 2),
+                          ),
+                        );
+                        setState(() {
+                          serialNoList.clear();
+                          _serialNoController.clear();
+                        });
+                        Navigator.pop(context);
                       },
-                    );
+                    ).onError((error, stackTrace) {
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              error.toString().replaceAll("Exception:", "")),
+                          duration: const Duration(seconds: 2),
+                        ),
+                      );
+                    });
                   },
                   textColor: Colors.white,
                   color: Colors.orange,

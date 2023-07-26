@@ -43,7 +43,8 @@ class GenerateAndUpdatePalletIdController {
       } else {
         var data = json.decode(response.body);
         String message = data["message"];
-        return message;
+
+        throw Exception(message);
       }
     } catch (e) {
       print(e);

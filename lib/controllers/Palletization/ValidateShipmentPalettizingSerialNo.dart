@@ -5,12 +5,17 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ValidateShipmentPalettizingSerialNoController {
-  static Future<String> palletizeSerialNo(String serialNo) async {
+  static Future<String> palletizeSerialNo(
+    String serialNo,
+    String shipmentId,
+  ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
 
     String url =
-        "${Constants.baseUrl}vaildatehipmentPalletizingSerialNumber?ItemSerialNo=$serialNo";
+        "${Constants.baseUrl}vaildatehipmentPalletizingSerialNumber?ItemSerialNo=$serialNo&SHIPMENTID=$shipmentId";
+
+    print("url: $url");
 
     final uri = Uri.parse(url);
 
@@ -19,8 +24,6 @@ class ValidateShipmentPalettizingSerialNoController {
       "Host": Constants.host,
       "Accept": "application/json",
     };
-
-    print(headers);
 
     try {
       var response = await http.get(uri, headers: headers);
@@ -34,8 +37,10 @@ class ValidateShipmentPalettizingSerialNoController {
       } else {
         print("Status Code: ${response.statusCode}");
 
-        String palletizeSerialNo = "SHIPMENTID does not match.";
-        return palletizeSerialNo;
+        var data = json.decode(response.body);
+        String msg = data["message"];
+
+        throw Exception(msg);
       }
     } catch (e) {
       print(e);
