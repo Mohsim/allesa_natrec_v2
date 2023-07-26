@@ -2,6 +2,7 @@ import 'package:alessa_v2/widgets/ElevatedButtonWidget.dart';
 
 import '../../controllers/BinToBinFromAXAPTA/getmapBarcodeDataByItemCodeController.dart';
 import '../../controllers/ReturnRMA/InsertManyIntoMappedBarcodeController.dart';
+import '../../controllers/ReturnRMA/ReturnDZones.dart';
 import '../../models/getMappedBarcodedsByItemCodeAndBinLocationModel.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
@@ -86,11 +87,11 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
     Future.delayed(Duration.zero, () async {
       try {
         Constants.showLoadingDialog(context);
-        var value = await GetMapBarcodeDataByItemCodeController.getData();
+        var value = await ReturnDZones.getData();
         Navigator.pop(context);
         for (int i = 0; i < value.length; i++) {
           setState(() {
-            dropDownList.add(value[i].bIN ?? "");
+            dropDownList.add(value[i].rZONE ?? "");
             Set<String> set = dropDownList.toSet();
             dropDownList = set.toList();
           });
@@ -489,7 +490,7 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
               Container(
                 margin: const EdgeInsets.only(left: 20, top: 10),
                 child: TextWidget(
-                  text: "Scan Location To:",
+                  text: "Receiving Zones",
                   color: Colors.blue[900]!,
                   fontSize: 15,
                 ),
