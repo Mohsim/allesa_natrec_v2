@@ -1,3 +1,4 @@
+import 'package:alessa_v2/screens/PalletIdInquiry/PalletIdInquiryScreen.dart';
 import 'package:alessa_v2/screens/UnAllocatedItem/UnAllocatedItemsScreen1.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
@@ -55,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
       // "assets/inventory.png",
       "assets/wms-inventory.png",
       "assets/inventory-location.png",
+      "assets/inventory.png",
       "assets/logout.jpg",
     ],
     "titles": [
@@ -78,6 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
       // "WMS Inventory",
       "Physical Count (WMS)",
       "Inventory by Bin Location",
+      "Pallet ID Inquiry",
       "Logout",
     ],
     "functions": [
@@ -141,6 +144,9 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       () {
         Get.to(() => const PhysicalInventoryByBinLocationScreen());
+      },
+      () {
+        Get.to(() => const PalletIdInquiryScreen());
       },
       () {
         Get.offAll(() => LoginScreen());

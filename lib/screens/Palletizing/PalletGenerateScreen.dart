@@ -1,3 +1,5 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
+
 import '../../controllers/Palletization/GenerateAndUpdatePalletIdController.dart';
 import '../../controllers/Palletization/GetAlltblBinLocationsController.dart';
 import '../../controllers/Palletization/ValidateShipmentPalettizingSerialNo.dart';
@@ -509,17 +511,14 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                             .generateAndUpdatePalletId(serialNoList)
                         .then(
                       (value) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(value),
-                            duration: const Duration(seconds: 2),
-                          ),
-                        );
+                        Navigator.pop(context);
+
+                        showDiologMethod(context, value).show();
+
                         setState(() {
                           serialNoList.clear();
                           _serialNoController.clear();
                         });
-                        Navigator.pop(context);
                       },
                     ).onError((error, stackTrace) {
                       Navigator.pop(context);
@@ -541,6 +540,18 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  AwesomeDialog showDiologMethod(BuildContext context, List<dynamic> value) {
+    return AwesomeDialog(
+      context: context,
+      dialogType: DialogType.success,
+      animType: AnimType.rightSlide,
+      title: value[1].toString(),
+      desc: value[0].toString(),
+      btnCancelOnPress: () {},
+      btnOkOnPress: () {},
     );
   }
 }

@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/Constants.dart';
 
 class GenerateAndUpdatePalletIdController {
-  static Future<String> generateAndUpdatePalletId(
+  static Future<List<dynamic>> generateAndUpdatePalletId(
       List<String> serialNoList) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
@@ -35,9 +35,11 @@ class GenerateAndUpdatePalletIdController {
         print("Status Code: ${response.statusCode}");
 
         var data = json.decode(response.body);
+
         print("Data: $data");
         String message = data["message"];
-        return message;
+        var PalletCode = data["PalletCode"];
+        return [message, PalletCode];
       } else {
         var data = json.decode(response.body);
         print("Data: $data");

@@ -1,9 +1,8 @@
+import 'package:alessa_v2/models/GetItemInfoByItemSerialNoModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../controllers/Palletization/GetShipmentPalletizingController.dart';
+import '../../controllers/PalletIdInquiry/PalletIdInquiryController.dart';
 
-import '../../models/GetTransferDistributionByTransferIdModel.dart';
-import '../../screens/Palletizing/PalletProceedScreen.dart';
 import '../../utils/Constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,18 +11,17 @@ import '../../../widgets/AppBarWidget.dart';
 import '../../../widgets/TextFormField.dart';
 import '../../../widgets/TextWidget.dart';
 
-class ShipmentPalletizingScreen extends StatefulWidget {
-  const ShipmentPalletizingScreen({super.key});
+class PalletIdInquiryScreen extends StatefulWidget {
+  const PalletIdInquiryScreen({super.key});
 
   @override
-  State<ShipmentPalletizingScreen> createState() =>
-      _ShipmentPalletizingScreenState();
+  State<PalletIdInquiryScreen> createState() => _PalletIdInquiryScreenState();
 }
 
-class _ShipmentPalletizingScreenState extends State<ShipmentPalletizingScreen> {
-  TextEditingController shipmentIdController = TextEditingController();
+class _PalletIdInquiryScreenState extends State<PalletIdInquiryScreen> {
+  TextEditingController serialNoController = TextEditingController();
   String total = "0";
-  List<GetTransferDistributionByTransferIdModel> table = [];
+  List<GetItemInfoByItemSerialNoModel> table = [];
   List<bool> isMarked = [];
 
   String userName = "";
@@ -52,7 +50,7 @@ class _ShipmentPalletizingScreenState extends State<ShipmentPalletizingScreen> {
   @override
   void dispose() {
     super.dispose();
-    shipmentIdController.dispose();
+    serialNoController.dispose();
     _showUserInfo();
   }
 
@@ -67,7 +65,7 @@ class _ShipmentPalletizingScreenState extends State<ShipmentPalletizingScreen> {
           onPressed: () {
             Get.back();
           },
-          title: "Palletization".toUpperCase(),
+          title: "PalletId".toUpperCase(),
           actions: [
             GestureDetector(
               onTap: () {
@@ -85,7 +83,7 @@ class _ShipmentPalletizingScreenState extends State<ShipmentPalletizingScreen> {
           ],
         ),
       ),
-      body: SizedBox(
+      body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
@@ -126,7 +124,7 @@ class _ShipmentPalletizingScreenState extends State<ShipmentPalletizingScreen> {
               Container(
                 margin: const EdgeInsets.only(left: 20, top: 10),
                 child: const TextWidget(
-                  text: "Transfer ID*",
+                  text: "Serial No.",
                   fontSize: 16,
                 ),
               ),
@@ -138,7 +136,8 @@ class _ShipmentPalletizingScreenState extends State<ShipmentPalletizingScreen> {
                     Container(
                       margin: const EdgeInsets.only(left: 20),
                       child: TextFormFieldWidget(
-                        controller: shipmentIdController,
+                        hintText: "Enter/Scan Serial No.",
+                        controller: serialNoController,
                         width: MediaQuery.of(context).size.width * 0.73,
                         onEditingComplete: () {
                           onClick();
@@ -165,14 +164,9 @@ class _ShipmentPalletizingScreenState extends State<ShipmentPalletizingScreen> {
                 ),
               ),
               Container(
-                margin: const EdgeInsets.only(left: 10, top: 10),
-                child: const TextWidget(
-                  text: "Transfer Details*",
-                  fontSize: 16,
-                ),
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.55,
+                alignment: Alignment.topCenter,
+                height: MediaQuery.of(context).size.height * 0.4,
+                width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: Colors.grey,
@@ -202,93 +196,22 @@ class _ShipmentPalletizingScreenState extends State<ShipmentPalletizingScreen> {
                       columns: const [
                         DataColumn(
                             label: Text(
-                          'ID',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text('TRANSFER ID',
-                                style: TextStyle(color: Colors.white))),
-                        DataColumn(
-                            label: Text('TRANSFER STATUS',
-                                style: TextStyle(color: Colors.white))),
-                        DataColumn(
-                            label: Text(
-                          'INVENT LOCATIONID FROM',
+                          'GTIN',
                           style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
                         )),
                         DataColumn(
                             label: Text(
-                          'INVENT LOCATION ID TO',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'ITEM ID',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'INVENT DIM ID',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'QTY TRANSFER',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'QTY REMAIN RECEIVE',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'CREATED DATE TIME',
+                          'Pallet Code',
                           style: TextStyle(color: Colors.white),
                           textAlign: TextAlign.center,
                         )),
                       ],
                       rows: table.map((e) {
-                        return DataRow(
-                            onSelectChanged: (value) {
-                              // keybord hide
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              Get.to(() => PalletProceedScreen(
-                                    cREATEDDATETIME: e.cREATEDDATETIME ?? "",
-                                    iNVENTDIMID: e.iNVENTDIMID ?? "",
-                                    iNVENTLOCATIONIDFROM:
-                                        e.iNVENTLOCATIONIDFROM ?? "",
-                                    iNVENTLOCATIONIDTO:
-                                        e.iNVENTLOCATIONIDTO ?? "",
-                                    iTEMID: e.iTEMID ?? "",
-                                    qTYREMAINRECEIVE: int.parse(
-                                        e.qTYREMAINRECEIVE.toString()),
-                                    qTYTRANSFER:
-                                        int.parse(e.qTYTRANSFER.toString()),
-                                    tRANSFERID: e.tRANSFERID.toString(),
-                                    tRANSFERSTATUS:
-                                        int.parse(e.tRANSFERSTATUS.toString()),
-                                  ));
-                            },
-                            cells: [
-                              DataCell(Text((table.indexOf(e) + 1).toString())),
-                              DataCell(Text(e.tRANSFERID ?? "")),
-                              DataCell(Text(e.tRANSFERSTATUS.toString())),
-                              DataCell(Text(e.iNVENTLOCATIONIDFROM ?? "")),
-                              DataCell(Text(e.iNVENTLOCATIONIDTO ?? "")),
-                              DataCell(Text(e.iTEMID ?? "")),
-                              DataCell(Text(e.iNVENTDIMID ?? "")),
-                              DataCell(Text(e.qTYTRANSFER.toString())),
-                              DataCell(Text(e.qTYREMAINRECEIVE.toString())),
-                              DataCell(Text(e.cREATEDDATETIME ?? "")),
-                            ]);
+                        return DataRow(onSelectChanged: (value) {}, cells: [
+                          DataCell(Text(e.gTIN ?? "")),
+                          DataCell(Text(e.palletCode ?? "")),
+                        ]);
                       }).toList(),
                     ),
                   ),
@@ -326,13 +249,14 @@ class _ShipmentPalletizingScreenState extends State<ShipmentPalletizingScreen> {
 
   void onClick() async {
     Constants.showLoadingDialog(context);
-    GetShipmentPalletizingController.getShipmentPalletizing(
-            shipmentIdController.text.trim())
+    PalletIdInquiryController.getShipmentPalletizing(
+            serialNoController.text.trim())
         .then((value) {
       setState(() {
-        table = value;
+        table.addAll(value);
         total = table.length.toString();
         isMarked = List<bool>.filled(table.length, false);
+        serialNoController.clear();
       });
       Navigator.pop(context);
     }).onError((error, stackTrace) {
