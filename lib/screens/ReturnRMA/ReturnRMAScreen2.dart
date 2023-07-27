@@ -1,6 +1,5 @@
 import 'package:alessa_v2/widgets/ElevatedButtonWidget.dart';
 
-import '../../controllers/BinToBinFromAXAPTA/getmapBarcodeDataByItemCodeController.dart';
 import '../../controllers/ReturnRMA/InsertManyIntoMappedBarcodeController.dart';
 import '../../controllers/ReturnRMA/ReturnDZones.dart';
 import '../../models/getMappedBarcodedsByItemCodeAndBinLocationModel.dart';
