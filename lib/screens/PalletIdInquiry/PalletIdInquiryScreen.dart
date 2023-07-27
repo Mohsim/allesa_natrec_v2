@@ -163,21 +163,19 @@ class _PalletIdInquiryScreenState extends State<PalletIdInquiryScreen> {
                   ],
                 ),
               ),
+              const SizedBox(height: 50),
               Container(
-                alignment: Alignment.topCenter,
-                height: MediaQuery.of(context).size.height * 0.4,
                 width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.grey,
-                    width: 1,
-                  ),
-                ),
+                alignment: Alignment.topCenter,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: DataTable(
+                      dataTextStyle: const TextStyle(
+                        fontSize: 15,
+                        color: Colors.black,
+                      ),
                       showCheckboxColumn: false,
                       dataRowColor: MaterialStateColor.resolveWith(
                           (states) => Colors.grey.withOpacity(0.2)),
@@ -217,29 +215,6 @@ class _PalletIdInquiryScreenState extends State<PalletIdInquiryScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  const TextWidget(text: "TOTAL"),
-                  const SizedBox(width: 10),
-                  Container(
-                    width: 100,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.blue,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Center(
-                      child: TextWidget(text: total),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                ],
-              ),
-              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -248,12 +223,17 @@ class _PalletIdInquiryScreenState extends State<PalletIdInquiryScreen> {
   }
 
   void onClick() async {
+    if (serialNoController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Please Enter a Serial No.")));
+      return;
+    }
     Constants.showLoadingDialog(context);
     PalletIdInquiryController.getShipmentPalletizing(
             serialNoController.text.trim())
         .then((value) {
       setState(() {
-        table.addAll(value);
+        table = value;
         total = table.length.toString();
         isMarked = List<bool>.filled(table.length, false);
         serialNoController.clear();
