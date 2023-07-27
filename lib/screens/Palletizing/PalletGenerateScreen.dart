@@ -360,6 +360,11 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                   focusNode: focusNode,
                   width: MediaQuery.of(context).size.width * 0.9,
                   onEditingComplete: () {
+                    if (_serialNoController.text.trim().isEmpty) {
+                      // hide keyboard
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      return;
+                    }
                     Constants.showLoadingDialog(context);
                     ValidateShipmentPalettizingSerialNoController
                         .palletizeSerialNo(
@@ -439,31 +444,46 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                   shrinkWrap: true,
                   itemCount: serialNoList.length,
                   itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {},
-                      child: Card(
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.black38,
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                              left: MediaQuery.of(context).size.width * 0.05,
-                              right: MediaQuery.of(context).size.width * 0.05,
-                              top: 10,
-                              bottom: 10,
-                            ),
-                            child: Text(
-                              serialNoList[index].toString(),
-                              style: const TextStyle(
-                                fontSize: 20,
-                                color: Colors.white60,
-                                fontWeight: FontWeight.bold,
+                    return Stack(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Card(
+                            color: Colors.orange[200]!,
+                            child: Container(
+                              margin: const EdgeInsets.all(10),
+                              decoration:
+                                  BoxDecoration(color: Colors.orange[200]!),
+                              child: Text(
+                                serialNoList[index].toString(),
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
+                        // delete icon for delete this item from list
+                        Positioned(
+                          right: 0,
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                serialNoList.removeAt(index);
+                              });
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.all(10),
+                              child: const Icon(
+                                Icons.delete,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     );
                   },
                 ),

@@ -10,18 +10,15 @@ class GenerateAndUpdatePalletIdController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
 
-    List<String> serialNoListt = [];
-    for (var i = 0; i < serialNoList.length; i++) {
-      serialNoListt.add("serialNumberList[]=${serialNoList[i]}");
-    }
-
     // convert list to one string
-    String serialNoListString = serialNoListt.join("&");
+    String serialNoListString = serialNoList.join("&serialNumberList[]=");
 
     print(serialNoListString);
 
     String url =
-        "${Constants.baseUrl}generateAndUpdatePalletIds?$serialNoListString}";
+        "${Constants.baseUrl}generateAndUpdatePalletIds?serialNumberList[]=$serialNoListString";
+
+    print(url);
 
     final uri = Uri.parse(url);
 
@@ -34,14 +31,16 @@ class GenerateAndUpdatePalletIdController {
     try {
       var response = await http.post(uri, headers: headers);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         print("Status Code: ${response.statusCode}");
 
         var data = json.decode(response.body);
+        print("Data: $data");
         String message = data["message"];
         return message;
       } else {
         var data = json.decode(response.body);
+        print("Data: $data");
         String message = data["message"];
 
         throw Exception(message);
