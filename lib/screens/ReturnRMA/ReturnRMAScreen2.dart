@@ -522,23 +522,6 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                         setState(() {
                           dropDownValue = value!;
                         });
-                        Constants.showLoadingDialog(context);
-                        GetPickListTableDataController.getData(
-                          widget.iTEMID,
-                          dropDownValue.toString(),
-                        ).then((value) {
-                          setState(() {
-                            GetShipmentPalletizingList2 = value;
-                            result = value.length.toString();
-                          });
-                          Navigator.pop(context);
-                        }).onError((error, stackTrace) {
-                          setState(() {
-                            GetShipmentPalletizingList2 = [];
-                            result = "0";
-                          });
-                          Navigator.pop(context);
-                        });
                       },
                       selectedItem: dropDownValue,
                     ),
