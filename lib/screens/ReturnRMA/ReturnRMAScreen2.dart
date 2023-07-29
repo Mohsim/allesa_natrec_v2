@@ -537,11 +537,7 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                             GetShipmentPalletizingList2 = [];
                             result = "0";
                           });
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                                error.toString().replaceAll("Exception:", "")),
-                            backgroundColor: Colors.red,
-                          ));
+                          Navigator.pop(context);
                         });
                       },
                       selectedItem: dropDownValue,
@@ -967,6 +963,8 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                                     _serialNoController.text.trim(),
                                     dropDownValue.toString(),
                                   ).then((value) {
+                                    _serialNoController.clear();
+                                    Navigator.pop(context);
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                         content: Text(
@@ -977,6 +975,9 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                                         duration: Duration(seconds: 2),
                                       ),
                                     );
+
+                                    FocusScope.of(context)
+                                        .requestFocus(_serialNoFocusNode);
 
                                     // GetPickListTableDataController.getData(
                                     //   widget.iTEMID,
@@ -1012,12 +1013,6 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                                       ),
                                     );
                                   });
-
-                                  Navigator.pop(context);
-
-                                  _serialNoController.clear();
-                                  FocusScope.of(context)
-                                      .requestFocus(_serialNoFocusNode);
                                 }).onError(
                                   (error, stackTrace) {
                                     Navigator.pop(context);
@@ -1032,7 +1027,6 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                                         backgroundColor: Colors.red,
                                       ),
                                     );
-                                    Navigator.pop(context);
                                   },
                                 );
                               },
