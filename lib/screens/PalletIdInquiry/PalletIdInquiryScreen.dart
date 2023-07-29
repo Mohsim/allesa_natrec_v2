@@ -226,6 +226,9 @@ class _PalletIdInquiryScreenState extends State<PalletIdInquiryScreen> {
     if (serialNoController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Please Enter a Serial No.")));
+      setState(() {
+        table = [];
+      });
       return;
     }
     Constants.showLoadingDialog(context);
@@ -233,13 +236,18 @@ class _PalletIdInquiryScreenState extends State<PalletIdInquiryScreen> {
             serialNoController.text.trim())
         .then((value) {
       setState(() {
-        table = value;
+        table = List.generate(1, (index) => value[index]);
         total = table.length.toString();
         isMarked = List<bool>.filled(table.length, false);
         serialNoController.clear();
       });
+      // hide keyboard
+      FocusScope.of(context).requestFocus(FocusNode());
       Navigator.pop(context);
     }).onError((error, stackTrace) {
+      setState(() {
+        table = [];
+      });
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(error.toString().replaceAll("Exception:", ""))));

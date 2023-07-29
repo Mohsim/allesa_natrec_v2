@@ -550,7 +550,6 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
       animType: AnimType.rightSlide,
       title: value[1].toString(),
       desc: value[0].toString(),
-      btnCancelOnPress: () {},
       btnOkOnPress: () {},
     );
   }

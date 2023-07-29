@@ -35,8 +35,9 @@ class PalletIdInquiryController {
             .toList();
         return shipmentPalletizing;
       } else {
-        print("Status Code: ${response.statusCode}");
-        throw Exception('Failed to load Data');
+        var data = json.decode(response.body);
+        var msg = data['message'];
+        throw Exception(msg);
       }
     } catch (e) {
       print(e);

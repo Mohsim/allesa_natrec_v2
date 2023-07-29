@@ -334,6 +334,8 @@ class _ShipmentPalletizingScreenState extends State<ShipmentPalletizingScreen> {
         total = table.length.toString();
         isMarked = List<bool>.filled(table.length, false);
       });
+      // Hide keyboard
+      FocusScope.of(context).requestFocus(FocusNode());
       Navigator.pop(context);
     }).onError((error, stackTrace) {
       Navigator.pop(context);
