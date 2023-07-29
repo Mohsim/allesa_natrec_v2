@@ -1,5 +1,6 @@
 import 'package:alessa_v2/widgets/ElevatedButtonWidget.dart';
 
+import '../../controllers/PickListAssigned/GetPickListTableDataController.dart';
 import '../../controllers/ReturnRMA/InsertManyIntoMappedBarcodeController.dart';
 import '../../controllers/ReturnRMA/ReturnDZones.dart';
 import '../../models/getMappedBarcodedsByItemCodeAndBinLocationModel.dart';
@@ -522,26 +523,26 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                           dropDownValue = value!;
                         });
                         Constants.showLoadingDialog(context);
-                        // GetPickListTableDataController.getData(
-                        //   widget.iTEMID,
-                        //   dropDownValue.toString(),
-                        // ).then((value) {
-                        //   setState(() {
-                        //     GetShipmentPalletizingList = value;
-                        //     result = value.length.toString();
-                        //   });
-                        //   Navigator.pop(context);
-                        // }).onError((error, stackTrace) {
-                        //   setState(() {
-                        //     GetShipmentPalletizingList = [];
-                        //     result = "0";
-                        //   });
-                        //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        //     content: Text(
-                        //         error.toString().replaceAll("Exception:", "")),
-                        //     backgroundColor: Colors.red,
-                        //   ));
-                        // });
+                        GetPickListTableDataController.getData(
+                          widget.iTEMID,
+                          dropDownValue.toString(),
+                        ).then((value) {
+                          setState(() {
+                            GetShipmentPalletizingList2 = value;
+                            result = value.length.toString();
+                          });
+                          Navigator.pop(context);
+                        }).onError((error, stackTrace) {
+                          setState(() {
+                            GetShipmentPalletizingList2 = [];
+                            result = "0";
+                          });
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                                error.toString().replaceAll("Exception:", "")),
+                            backgroundColor: Colors.red,
+                          ));
+                        });
                       },
                       selectedItem: dropDownValue,
                     ),

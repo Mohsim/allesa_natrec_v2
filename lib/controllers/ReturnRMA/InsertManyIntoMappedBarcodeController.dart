@@ -15,7 +15,7 @@ class InsertManyIntoMappedBarcodeController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
 
-    String url = "${Constants.baseUrl}insertManyIntoMappedBarcode";
+    String url = "${Constants.baseUrl}insertManyIntoMappedBarcodeFromRma";
     print("url: $url");
 
     final uri = Uri.parse(url);
