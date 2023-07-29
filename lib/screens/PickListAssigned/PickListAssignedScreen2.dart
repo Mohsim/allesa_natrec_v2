@@ -1,5 +1,6 @@
 import '../../controllers/BinToBinFromAXAPTA/getmapBarcodeDataByItemCodeController.dart';
 import '../../controllers/PickListAssigned/GetAllTblDZonesController.dart';
+import '../../controllers/PickListAssigned/GetFirstTableData.dart';
 import '../../controllers/PickListAssigned/InsertPickListController.dart';
 import '../../models/getMappedBarcodedsByItemCodeAndBinLocationModel.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -84,6 +85,21 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
         setState(() {
           dropDownValue = dropDownList[0];
           filterList = dropDownList;
+        });
+
+        GetFirstTableData.getData(
+          widget.ITEMID,
+          dropDownValue!,
+        ).then((value) {
+          setState(() {
+            table1 = value;
+            result = table1.length.toString();
+          });
+        }).onError((error, stackTrace) {
+          setState(() {
+            table1 = [];
+            result = "0";
+          });
         });
 
         GetAllTblDZonesController.getData().then((value2) {
@@ -202,6 +218,23 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                               onChanged: (value) {
                                 setState(() {
                                   dropDownValue = value!;
+                                });
+                                Constants.showLoadingDialog(context);
+                                GetFirstTableData.getData(
+                                  widget.ITEMID,
+                                  dropDownValue!,
+                                ).then((value) {
+                                  setState(() {
+                                    table1 = value;
+                                    result = table1.length.toString();
+                                  });
+                                  Navigator.pop(context);
+                                }).onError((error, stackTrace) {
+                                  setState(() {
+                                    table1 = [];
+                                    result = "0";
+                                  });
+                                  Navigator.pop(context);
                                 });
                               },
                               selectedItem: dropDownValue,
@@ -693,7 +726,7 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                                     const SnackBar(
                                       content: TextWidget(
                                         text:
-                                            "Serial No not found in the list, please a serial no from the above list.",
+                                            "Serial No not found in the list, please insert a serial no from the above list.",
                                         color: Colors.white,
                                       ),
                                       backgroundColor: Colors.red,
