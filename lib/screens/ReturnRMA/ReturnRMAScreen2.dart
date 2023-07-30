@@ -889,18 +889,6 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                                   );
                                   return;
                                 }
-                                if (GetShipmentPalletizingList2.isEmpty) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        "No data to insert into Table Map Barcode.",
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      duration: Duration(seconds: 2),
-                                    ),
-                                  );
-                                  return;
-                                }
                                 if (_serialNoController.text.trim() == "") {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
