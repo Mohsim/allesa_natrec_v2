@@ -1,14 +1,13 @@
 import 'package:alessa_v2/widgets/ElevatedButtonWidget.dart';
 
-import '../../controllers/PickListAssigned/GetPickListTableDataController.dart';
 import '../../controllers/ReturnRMA/InsertManyIntoMappedBarcodeController.dart';
 import '../../controllers/ReturnRMA/ReturnDZones.dart';
-import '../../models/getMappedBarcodedsByItemCodeAndBinLocationModel.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
 import '../../controllers/ReturnRMA/generateBarcodeForRmaController.dart';
 import '../../controllers/ReturnRMA/insertIntoWmsReturnSalesOrderClController.dart';
 import '../../models/getWmsReturnSalesOrderByReturnItemNum2Model.dart';
+import '../../models/getWmsReturnSalesOrderByReturnItemNumModel.dart';
 import '../../models/updateWmsJournalMovementClQtyScannedModel.dart';
 import '../../utils/Constants.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +26,7 @@ class ReturnRMAScreen2 extends StatefulWidget {
   String iNVENTLOCATIONID;
   String cONFIGID;
   String wMSLOCATIONID;
+  getWmsReturnSalesOrderByReturnItemNumModel tble;
 
   ReturnRMAScreen2({
     required this.iTEMID,
@@ -38,6 +38,7 @@ class ReturnRMAScreen2 extends StatefulWidget {
     required this.iNVENTLOCATIONID,
     required this.cONFIGID,
     required this.wMSLOCATIONID,
+    required this.tble,
   });
 
   @override
@@ -53,17 +54,10 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
   final TextEditingController _searchController = TextEditingController();
 
   String result = "0";
-  String result2 = "0";
   List<String> serialNoList = [];
   List<bool> isMarked = [];
 
-  // List<getMappedBarcodedsByItemCodeAndBinLocationModel>
-  //     GetShipmentPalletizingList = [];
-  List<getMappedBarcodedsByItemCodeAndBinLocationModel>
-      GetShipmentPalletizingList2 = [];
-
-  List<getWmsReturnSalesOrderByReturnItemNum2Model> getWmsReturnSalesOrderList =
-      [];
+  List<getWmsReturnSalesOrderByReturnItemNum2Model> table = [];
 
   updateWmsJournalMovementClQtyScannedModel
       updateWmsJournalMovementClQtyScannedList =
@@ -292,200 +286,6 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                   ),
                 ),
               ),
-              const SizedBox(height: 5),
-              // Container(
-              //   height: MediaQuery.of(context).size.height * 0.3,
-              //   decoration: BoxDecoration(
-              //     border: Border.all(
-              //       color: Colors.grey,
-              //       width: 1,
-              //     ),
-              //   ),
-              //   child: SingleChildScrollView(
-              //     scrollDirection: Axis.vertical,
-              //     child: SingleChildScrollView(
-              //       scrollDirection: Axis.horizontal,
-              //       child: DataTable(
-              //         showCheckboxColumn: false,
-              //         dataRowColor: MaterialStateColor.resolveWith(
-              //             (states) => Colors.grey.withOpacity(0.2)),
-              //         headingRowColor: MaterialStateColor.resolveWith(
-              //             (states) => Colors.orange),
-              //         decoration: BoxDecoration(
-              //           border: Border.all(
-              //             color: Colors.grey,
-              //             width: 1,
-              //           ),
-              //         ),
-              //         border: TableBorder.all(
-              //           color: Colors.black,
-              //           width: 1,
-              //         ),
-              //         columns: const [
-              //           DataColumn(
-              //               label: Text(
-              //             'ID',
-              //             style: TextStyle(color: Colors.white),
-              //             textAlign: TextAlign.center,
-              //           )),
-              //           DataColumn(
-              //               label: Text(
-              //             'Item Code',
-              //             style: TextStyle(color: Colors.white),
-              //           )),
-              //           DataColumn(
-              //               label: Text(
-              //             'Item Desc',
-              //             style: TextStyle(color: Colors.white),
-              //           )),
-              //           DataColumn(
-              //               label: Text(
-              //             'GTIN',
-              //             style: TextStyle(color: Colors.white),
-              //             textAlign: TextAlign.center,
-              //           )),
-              //           DataColumn(
-              //               label: Text(
-              //             'Remarks',
-              //             style: TextStyle(color: Colors.white),
-              //             textAlign: TextAlign.center,
-              //           )),
-              //           DataColumn(
-              //               label: Text(
-              //             'User',
-              //             style: TextStyle(color: Colors.white),
-              //             textAlign: TextAlign.center,
-              //           )),
-              //           DataColumn(
-              //               label: Text(
-              //             'Classification',
-              //             style: TextStyle(color: Colors.white),
-              //             textAlign: TextAlign.center,
-              //           )),
-              //           DataColumn(
-              //               label: Text(
-              //             'Main Location',
-              //             style: TextStyle(color: Colors.white),
-              //             textAlign: TextAlign.center,
-              //           )),
-              //           DataColumn(
-              //               label: Text(
-              //             'Bin Location',
-              //             style: TextStyle(color: Colors.white),
-              //             textAlign: TextAlign.center,
-              //           )),
-              //           DataColumn(
-              //               label: Text(
-              //             'Int Code',
-              //             style: TextStyle(color: Colors.white),
-              //             textAlign: TextAlign.center,
-              //           )),
-              //           DataColumn(
-              //               label: Text(
-              //             'Item Serial No.',
-              //             style: TextStyle(color: Colors.white),
-              //             textAlign: TextAlign.center,
-              //           )),
-              //           DataColumn(
-              //             label: Text(
-              //               'Map Date',
-              //               style: TextStyle(color: Colors.white),
-              //               textAlign: TextAlign.center,
-              //             ),
-              //           ),
-              //           DataColumn(
-              //             label: Text(
-              //               'Pallet Code',
-              //               style: TextStyle(color: Colors.white),
-              //               textAlign: TextAlign.center,
-              //             ),
-              //           ),
-              //           DataColumn(
-              //             label: Text(
-              //               'Reference',
-              //               style: TextStyle(color: Colors.white),
-              //               textAlign: TextAlign.center,
-              //             ),
-              //           ),
-              //           DataColumn(
-              //             label: Text(
-              //               'S-ID',
-              //               style: TextStyle(color: Colors.white),
-              //               textAlign: TextAlign.center,
-              //             ),
-              //           ),
-              //           DataColumn(
-              //             label: Text(
-              //               'C-ID',
-              //               style: TextStyle(color: Colors.white),
-              //               textAlign: TextAlign.center,
-              //             ),
-              //           ),
-              //           DataColumn(
-              //             label: Text(
-              //               'PO',
-              //               style: TextStyle(color: Colors.white),
-              //               textAlign: TextAlign.center,
-              //             ),
-              //           ),
-              //           DataColumn(
-              //             label: Text(
-              //               'Trans',
-              //               style: TextStyle(color: Colors.white),
-              //               textAlign: TextAlign.center,
-              //             ),
-              //           ),
-              //         ],
-              //         rows: GetShipmentPalletizingList.map((e) {
-              //           return DataRow(onSelectChanged: (value) {}, cells: [
-              //             DataCell(SelectableText(
-              //                 (GetShipmentPalletizingList.indexOf(e) + 1)
-              //                     .toString())),
-              //             DataCell(SelectableText(e.itemCode ?? "")),
-              //             DataCell(SelectableText(e.itemDesc ?? "")),
-              //             DataCell(SelectableText(e.gTIN ?? "")),
-              //             DataCell(SelectableText(e.remarks ?? "")),
-              //             DataCell(SelectableText(e.user ?? "")),
-              //             DataCell(SelectableText(e.classification ?? "")),
-              //             DataCell(SelectableText(e.mainLocation ?? "")),
-              //             DataCell(SelectableText(e.binLocation ?? "")),
-              //             DataCell(SelectableText(e.intCode ?? "")),
-              //             DataCell(SelectableText(e.itemSerialNo ?? "")),
-              //             DataCell(SelectableText(e.mapDate ?? "")),
-              //             DataCell(SelectableText(e.palletCode ?? "")),
-              //             DataCell(SelectableText(e.reference ?? "")),
-              //             DataCell(SelectableText(e.sID ?? "")),
-              //             DataCell(SelectableText(e.cID ?? "")),
-              //             DataCell(SelectableText(e.pO ?? "")),
-              //             DataCell(SelectableText(e.trans.toString())),
-              //           ]);
-              //         }).toList(),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // const SizedBox(height: 10),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.end,
-              //   children: <Widget>[
-              //     const TextWidget(text: "TOTAL"),
-              //     const SizedBox(width: 5),
-              //     Container(
-              //       width: MediaQuery.of(context).size.width * 0.4,
-              //       height: 50,
-              //       decoration: BoxDecoration(
-              //         border: Border.all(
-              //           color: Colors.blue,
-              //         ),
-              //         borderRadius: BorderRadius.circular(10),
-              //       ),
-              //       child: Center(
-              //         child: TextWidget(text: result.toString()),
-              //       ),
-              //     ),
-              //     const SizedBox(width: 20),
-              //   ],
-              // ),
               const SizedBox(height: 10),
               Container(
                 margin: const EdgeInsets.only(left: 20, top: 10),
@@ -663,7 +463,10 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                     readOnly: false,
                     hintText: "Enter/Scan Model No#",
                     width: MediaQuery.of(context).size.width * 0.9,
-                    onEditingComplete: () {},
+                    onEditingComplete: () {
+                      // hide keyboard
+                      FocusScope.of(context).unfocus();
+                    },
                   ),
                 ),
               ),
@@ -676,119 +479,8 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                     color: Colors.orange[100],
                     width: MediaQuery.of(context).size.width * 0.9,
                     height: 50,
-                    onPressed: () async {
-                      if (_modelNoController.text.trim().isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              "Please Enter a Unique Model No.",
-                              textAlign: TextAlign.center,
-                            ),
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
-                        return;
-                      }
-                      if (dropDownValue == "") {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              "Please Select a Location.",
-                              textAlign: TextAlign.center,
-                            ),
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
-                        return;
-                      }
-
-                      FocusScope.of(context).requestFocus();
-                      Constants.showLoadingDialog(context);
-                      GenerateBarcodeForRmaController.getData(
-                        widget.rETURNITEMNUM,
-                        widget.iTEMID,
-                        _modelNoController.text.trim(),
-                      ).then((value) {
-                        setState(() {
-                          getWmsReturnSalesOrderList
-                              .add(getWmsReturnSalesOrderByReturnItemNum2Model(
-                            cONFIGID: widget.cONFIGID,
-                            eXPECTEDRETQTY: widget.eXPECTEDRETQTY,
-                            iTEMID: widget.iTEMID,
-                            nAME: widget.nAME,
-                            iNVENTLOCATIONID: widget.iNVENTLOCATIONID,
-                            iNVENTSITEID: widget.iNVENTSITEID,
-                            rETURNITEMNUM: widget.rETURNITEMNUM,
-                            sALESID: widget.sALESID,
-                            wMSLOCATIONID: widget.wMSLOCATIONID,
-                            itemSerialNo: value,
-                          ));
-                          result2 =
-                              getWmsReturnSalesOrderList.length.toString();
-                        });
-
-                        InsertManyIntoMappedBarcodeController.getData(
-                          widget.iTEMID,
-                          widget.nAME,
-                          _modelNoController.text.trim(),
-                          dropDownValue.toString(),
-                        ).then((value) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                "Barcode Generated Successfully.",
-                                textAlign: TextAlign.center,
-                              ),
-                              backgroundColor: Colors.green,
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
-                          // GetPickListTableDataController.getData(
-                          //   widget.iTEMID,
-                          //   dropDownValue.toString(),
-                          // ).then((value) {
-                          //   setState(() {
-                          //     // first clear the list then add the new data
-                          //     GetShipmentPalletizingList = value;
-                          //     result = value.length.toString();
-                          //   });
-                          // }).onError((error, stackTrace) {
-                          //   setState(() {
-                          //     GetShipmentPalletizingList = [];
-                          //   });
-                          //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          //     content: Text(error.toString()),
-                          //     backgroundColor: Colors.red,
-                          //   ));
-                          // });
-                          Navigator.pop(context);
-                        }).onError((error, stackTrace) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                error.toString().replaceAll("Exception:", ""),
-                                textAlign: TextAlign.center,
-                              ),
-                              duration: const Duration(seconds: 2),
-                            ),
-                          );
-                          Navigator.pop(context);
-                        });
-
-                        _modelNoController.clear();
-                      }).onError((error, stackTrace) {
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              error.toString().replaceAll("Exception:", ""),
-                              textAlign: TextAlign.center,
-                            ),
-                            duration: const Duration(seconds: 2),
-                          ),
-                        );
-                        Navigator.pop(context);
-                      });
+                    onPressed: () {
+                      onGenerateBarcode();
                     },
                   ),
                 ),
@@ -875,428 +567,125 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                           hintText: "Enter/Scan Serial No",
                           width: MediaQuery.of(context).size.width * 0.9,
                           onEditingComplete: () {
-                            setState(
-                              () {
-                                if (dropDownValue == "") {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        "Please Select a Location.",
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      duration: Duration(seconds: 2),
-                                    ),
-                                  );
-                                  return;
-                                }
-                                if (_serialNoController.text.trim() == "") {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        "Please Enter a Unique Serial No.",
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      duration: Duration(seconds: 2),
-                                    ),
-                                  );
-                                  return;
-                                }
-                                Constants.showLoadingDialog(context);
-                                FocusScope.of(context)
-                                    .requestFocus(FocusNode());
-                                Constants.showLoadingDialog(context);
-                                insertIntoWmsReturnSalesOrderClController
-                                    .getData(
-                                  GetShipmentPalletizingList2.last,
-                                  _serialNoController.text.trim(),
-                                )
-                                    .then((value) {
-                                  setState(
-                                    () {
-                                      // append the selected pallet code row to the GetShipmentPalletizingList2
-                                      GetShipmentPalletizingList2.add(
-                                        GetShipmentPalletizingList2.where(
-                                          (element) =>
-                                              element.itemSerialNo ==
-                                              _serialNoController.text.trim(),
-                                        ).toList().last,
-                                      );
-
-                                      result2 = GetShipmentPalletizingList2
-                                          .length
-                                          .toString();
-                                    },
-                                  );
-
-                                  InsertManyIntoMappedBarcodeController.getData(
-                                    widget.iTEMID,
-                                    widget.nAME,
-                                    _serialNoController.text.trim(),
-                                    dropDownValue.toString(),
-                                  ).then((value) {
-                                    _serialNoController.clear();
-                                    Navigator.pop(context);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          "Record inserted Successfully.",
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        backgroundColor: Colors.green,
-                                        duration: Duration(seconds: 2),
-                                      ),
-                                    );
-
-                                    FocusScope.of(context)
-                                        .requestFocus(_serialNoFocusNode);
-
-                                    // GetPickListTableDataController.getData(
-                                    //   widget.iTEMID,
-                                    //   dropDownValue.toString(),
-                                    // ).then((value) {
-                                    //   setState(() {
-                                    //     GetShipmentPalletizingList = value;
-                                    //     result = value.length.toString();
-                                    //   });
-                                    //   Navigator.pop(context);
-                                    // }).onError((error, stackTrace) {
-                                    //   Navigator.pop(context);
-                                    //   setState(() {
-                                    //     GetShipmentPalletizingList = [];
-                                    //   });
-                                    //   ScaffoldMessenger.of(context)
-                                    //       .showSnackBar(SnackBar(
-                                    //     content: Text(error.toString()),
-                                    //     backgroundColor: Colors.red,
-                                    //   ));
-                                    // });
-                                  }).onError((error, stackTrace) {
-                                    Navigator.pop(context);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          error
-                                              .toString()
-                                              .replaceAll("Exception:", ""),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        duration: const Duration(seconds: 2),
-                                      ),
-                                    );
-                                  });
-                                }).onError(
-                                  (error, stackTrace) {
-                                    Navigator.pop(context);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: TextWidget(
-                                          text: error
-                                              .toString()
-                                              .replaceAll("Exception:", ""),
-                                          color: Colors.white,
-                                        ),
-                                        backgroundColor: Colors.red,
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
-                            );
+                            onSerialNo();
                           },
                         ),
                       ),
                     ),
               const SizedBox(height: 10),
-              _barCode == "Barcode"
-                  ? Container(
-                      height: MediaQuery.of(context).size.height * 0.3,
+              Container(
+                height: MediaQuery.of(context).size.height * 0.3,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.grey,
+                    width: 1,
+                  ),
+                ),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
+                      showCheckboxColumn: false,
+                      dataRowColor: MaterialStateColor.resolveWith(
+                          (states) => Colors.grey.withOpacity(0.2)),
+                      headingRowColor: MaterialStateColor.resolveWith(
+                          (states) => Colors.orange),
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Colors.grey,
                           width: 1,
                         ),
                       ),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: DataTable(
-                            showCheckboxColumn: false,
-                            dataRowColor: MaterialStateColor.resolveWith(
-                                (states) => Colors.grey.withOpacity(0.2)),
-                            headingRowColor: MaterialStateColor.resolveWith(
-                                (states) => Colors.orange),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.grey,
-                                width: 1,
-                              ),
-                            ),
-                            border: TableBorder.all(
-                              color: Colors.black,
-                              width: 1,
-                            ),
-                            columns: const [
-                              DataColumn(
-                                  label: Text(
-                                'ID',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              )),
-                              DataColumn(
-                                  label: Text('Item Code',
-                                      style: TextStyle(color: Colors.white))),
-                              DataColumn(
-                                  label: Text('Item Desc',
-                                      style: TextStyle(color: Colors.white))),
-                              DataColumn(
-                                  label: Text(
-                                'GTIN',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              )),
-                              DataColumn(
-                                  label: Text(
-                                'Remarks',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              )),
-                              DataColumn(
-                                  label: Text(
-                                'User',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              )),
-                              DataColumn(
-                                  label: Text(
-                                'Classification',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              )),
-                              DataColumn(
-                                  label: Text(
-                                'Main Location',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              )),
-                              DataColumn(
-                                  label: Text(
-                                'Bin Location',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              )),
-                              DataColumn(
-                                  label: Text(
-                                'Int Code',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              )),
-                              DataColumn(
-                                  label: Text(
-                                'Item Serial No.',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              )),
-                              DataColumn(
-                                label: Text(
-                                  'Map Date',
-                                  style: TextStyle(color: Colors.white),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Pallet Code',
-                                  style: TextStyle(color: Colors.white),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Reference',
-                                  style: TextStyle(color: Colors.white),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'S-ID',
-                                  style: TextStyle(color: Colors.white),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'C-ID',
-                                  style: TextStyle(color: Colors.white),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'PO',
-                                  style: TextStyle(color: Colors.white),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Trans',
-                                  style: TextStyle(color: Colors.white),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ],
-                            rows: GetShipmentPalletizingList2.map((e) {
-                              return DataRow(
-                                  onSelectChanged: (value) {},
-                                  cells: [
-                                    DataCell(Text(
-                                        (GetShipmentPalletizingList2.indexOf(
-                                                    e) +
-                                                1)
-                                            .toString())),
-                                    DataCell(Text(e.itemCode ?? "")),
-                                    DataCell(Text(e.itemDesc ?? "")),
-                                    DataCell(Text(e.gTIN ?? "")),
-                                    DataCell(Text(e.remarks ?? "")),
-                                    DataCell(Text(e.user ?? "")),
-                                    DataCell(Text(e.classification ?? "")),
-                                    DataCell(Text(e.mainLocation ?? "")),
-                                    DataCell(Text(e.binLocation ?? "")),
-                                    DataCell(Text(e.intCode ?? "")),
-                                    DataCell(Text(e.itemSerialNo ?? "")),
-                                    DataCell(Text(e.mapDate ?? "")),
-                                    DataCell(Text(e.palletCode ?? "")),
-                                    DataCell(Text(e.reference ?? "")),
-                                    DataCell(Text(e.sID ?? "")),
-                                    DataCell(Text(e.cID ?? "")),
-                                    DataCell(Text(e.pO ?? "")),
-                                    DataCell(Text(e.trans.toString())),
-                                  ]);
-                            }).toList(),
-                          ),
-                        ),
+                      border: TableBorder.all(
+                        color: Colors.black,
+                        width: 1,
                       ),
-                    )
-                  : Container(
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey,
-                          width: 1,
-                        ),
-                      ),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: DataTable(
-                            showCheckboxColumn: false,
-                            dataRowColor: MaterialStateColor.resolveWith(
-                                (states) => Colors.grey.withOpacity(0.2)),
-                            headingRowColor: MaterialStateColor.resolveWith(
-                                (states) => Colors.orange),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.grey,
-                                width: 1,
-                              ),
-                            ),
-                            border: TableBorder.all(
-                              color: Colors.black,
-                              width: 1,
-                            ),
-                            columns: const [
-                              DataColumn(
-                                  label: Text(
-                                'ID',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              )),
-                              DataColumn(
-                                  label: Text(
-                                'ITEM ID',
-                                style: TextStyle(color: Colors.white),
-                              )),
-                              DataColumn(
-                                  label: Text(
-                                'ITEM NAME',
-                                style: TextStyle(color: Colors.white),
-                              )),
-                              DataColumn(
-                                  label: Text(
-                                'EXPECTED RET QTY',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              )),
-                              DataColumn(
-                                  label: Text(
-                                'SALES ID',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              )),
-                              DataColumn(
-                                  label: Text(
-                                'RETURN ITEM NUM',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              )),
-                              DataColumn(
-                                  label: Text(
-                                'INVENT SITE ID',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              )),
-                              DataColumn(
-                                  label: Text(
-                                'INVENT LOCATION ID',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              )),
-                              DataColumn(
-                                  label: Text(
-                                'CONFIG ID',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              )),
-                              DataColumn(
-                                  label: Text(
-                                'WMS LOCATION ID',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              )),
-                              DataColumn(
-                                  label: Text(
-                                'ITEM SERIAL NO.',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              )),
-                            ],
-                            rows: getWmsReturnSalesOrderList.map((e) {
-                              return DataRow(
-                                  onSelectChanged: (value) {},
-                                  cells: [
-                                    DataCell(Text(
-                                        (getWmsReturnSalesOrderList.indexOf(e) +
-                                                1)
-                                            .toString())),
-                                    DataCell(Text(e.iTEMID ?? "")),
-                                    DataCell(Text(e.nAME ?? "")),
-                                    DataCell(Text(e.eXPECTEDRETQTY.toString())),
-                                    DataCell(Text(e.sALESID ?? "")),
-                                    DataCell(Text(e.rETURNITEMNUM ?? "")),
-                                    DataCell(Text(e.iNVENTSITEID ?? "")),
-                                    DataCell(Text(e.iNVENTLOCATIONID ?? "")),
-                                    DataCell(Text(e.cONFIGID ?? "")),
-                                    DataCell(Text(e.wMSLOCATIONID ?? "")),
-                                    DataCell(Text(e.itemSerialNo ?? "")),
-                                  ]);
-                            }).toList(),
-                          ),
-                        ),
-                      ),
+                      columns: const [
+                        DataColumn(
+                            label: Text(
+                          'ID',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        )),
+                        DataColumn(
+                            label: Text(
+                          'ITEM ID',
+                          style: TextStyle(color: Colors.white),
+                        )),
+                        DataColumn(
+                            label: Text(
+                          'ITEM NAME',
+                          style: TextStyle(color: Colors.white),
+                        )),
+                        DataColumn(
+                            label: Text(
+                          'EXPECTED RET QTY',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        )),
+                        DataColumn(
+                            label: Text(
+                          'SALES ID',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        )),
+                        DataColumn(
+                            label: Text(
+                          'RETURN ITEM NUM',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        )),
+                        DataColumn(
+                            label: Text(
+                          'INVENT SITE ID',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        )),
+                        DataColumn(
+                            label: Text(
+                          'INVENT LOCATION ID',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        )),
+                        DataColumn(
+                            label: Text(
+                          'CONFIG ID',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        )),
+                        DataColumn(
+                            label: Text(
+                          'WMS LOCATION ID',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        )),
+                        DataColumn(
+                            label: Text(
+                          'ITEM SERIAL NO.',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        )),
+                      ],
+                      rows: table.map((e) {
+                        return DataRow(onSelectChanged: (value) {}, cells: [
+                          DataCell(Text((table.indexOf(e) + 1).toString())),
+                          DataCell(Text(e.iTEMID ?? "")),
+                          DataCell(Text(e.nAME ?? "")),
+                          DataCell(Text(e.eXPECTEDRETQTY.toString())),
+                          DataCell(Text(e.sALESID ?? "")),
+                          DataCell(Text(e.rETURNITEMNUM ?? "")),
+                          DataCell(Text(e.iNVENTSITEID ?? "")),
+                          DataCell(Text(e.iNVENTLOCATIONID ?? "")),
+                          DataCell(Text(e.cONFIGID ?? "")),
+                          DataCell(Text(e.wMSLOCATIONID ?? "")),
+                          DataCell(Text(e.itemSerialNo ?? "")),
+                        ]);
+                      }).toList(),
                     ),
+                  ),
+                ),
+              ),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -1313,7 +702,7 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Center(
-                      child: TextWidget(text: result2.toString()),
+                      child: TextWidget(text: result.toString()),
                     ),
                   ),
                   const SizedBox(width: 20),
@@ -1325,6 +714,224 @@ class _ReturnRMAScreen2State extends State<ReturnRMAScreen2> {
         ),
       ),
     );
+  }
+
+  void onSerialNo() async {
+    if (dropDownValue == "") {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Please Select a Location.",
+            textAlign: TextAlign.center,
+          ),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+    if (_serialNoController.text.trim() == "") {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please Enter a Unique Serial No."),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+    Constants.showLoadingDialog(context);
+    insertIntoWmsReturnSalesOrderClController
+        .getData(
+      widget.tble,
+      _serialNoController.text.trim(),
+    )
+        .then((value) {
+      setState(
+        () {
+          // append the selected pallet code row to the GetShipmentPalletizingList2
+          table.add(
+            getWmsReturnSalesOrderByReturnItemNum2Model(
+              iTEMID: widget.iTEMID,
+              nAME: widget.nAME,
+              eXPECTEDRETQTY: widget.eXPECTEDRETQTY,
+              sALESID: widget.sALESID,
+              rETURNITEMNUM: widget.rETURNITEMNUM,
+              iNVENTSITEID: widget.iNVENTSITEID,
+              iNVENTLOCATIONID: widget.iNVENTLOCATIONID,
+              cONFIGID: widget.cONFIGID,
+              wMSLOCATIONID: widget.wMSLOCATIONID,
+              itemSerialNo: _serialNoController.text.trim(),
+            ),
+          );
+          result = table.length.toString();
+        },
+      );
+
+      InsertManyIntoMappedBarcodeController.getData(
+        widget.iTEMID,
+        widget.nAME,
+        _serialNoController.text.trim(),
+        dropDownValue.toString(),
+      ).then((value) {
+        setState(() {
+          _serialNoController.clear();
+        });
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              "Record inserted Successfully.",
+              textAlign: TextAlign.center,
+            ),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }).onError((error, stackTrace) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              error.toString().replaceAll("Exception:", ""),
+              textAlign: TextAlign.center,
+            ),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+        Navigator.pop(context);
+      });
+    }).onError(
+      (error, stackTrace) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: TextWidget(
+              text: error.toString().replaceAll("Exception:", ""),
+              color: Colors.white,
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+      },
+    );
+  }
+
+  /////////////////////////////// 2nd Method ///////////////////////////////
+
+  void onGenerateBarcode() async {
+    if (_modelNoController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Please Enter a Unique Model No.",
+            textAlign: TextAlign.center,
+          ),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+    if (dropDownValue == "") {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Please Select a Location.",
+            textAlign: TextAlign.center,
+          ),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    FocusScope.of(context).requestFocus();
+    Constants.showLoadingDialog(context);
+    GenerateBarcodeForRmaController.getData(
+      widget.rETURNITEMNUM,
+      widget.iTEMID,
+      _modelNoController.text.trim(),
+    ).then((value) {
+      insertIntoWmsReturnSalesOrderClController
+          .getData(
+        widget.tble,
+        value,
+      )
+          .then((val) {
+        setState(
+          () {
+            // append the selected pallet code row to the GetShipmentPalletizingList2
+            table.add(
+              getWmsReturnSalesOrderByReturnItemNum2Model(
+                iTEMID: widget.iTEMID,
+                nAME: widget.nAME,
+                eXPECTEDRETQTY: widget.eXPECTEDRETQTY,
+                sALESID: widget.sALESID,
+                rETURNITEMNUM: widget.rETURNITEMNUM,
+                iNVENTSITEID: widget.iNVENTSITEID,
+                iNVENTLOCATIONID: widget.iNVENTLOCATIONID,
+                cONFIGID: widget.cONFIGID,
+                wMSLOCATIONID: widget.wMSLOCATIONID,
+                itemSerialNo: value,
+              ),
+            );
+            result = table.length.toString();
+          },
+        );
+
+        InsertManyIntoMappedBarcodeController.getData(
+          widget.iTEMID,
+          widget.nAME,
+          value,
+          dropDownValue.toString(),
+        ).then((vl) {
+          setState(() {
+            _modelNoController.clear();
+          });
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                "Record inserted Successfully.",
+                textAlign: TextAlign.center,
+              ),
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }).onError((error, stackTrace) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                error.toString().replaceAll("Exception:", ""),
+                textAlign: TextAlign.center,
+              ),
+              duration: const Duration(seconds: 2),
+            ),
+          );
+          Navigator.pop(context);
+        });
+      }).onError(
+        (error, stackTrace) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: TextWidget(
+                text: error.toString().replaceAll("Exception:", ""),
+                color: Colors.white,
+              ),
+              backgroundColor: Colors.red,
+            ),
+          );
+        },
+      );
+    }).onError((error, stackTrace) {
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            error.toString().replaceAll("Exception:", ""),
+            textAlign: TextAlign.center,
+          ),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    });
   }
 
   // void createPdf(String value) async {

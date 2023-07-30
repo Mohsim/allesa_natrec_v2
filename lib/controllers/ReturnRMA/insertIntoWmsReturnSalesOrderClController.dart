@@ -2,12 +2,12 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
-import '../../models/getMappedBarcodedsByItemCodeAndBinLocationModel.dart';
+import '../../models/getWmsReturnSalesOrderByReturnItemNumModel.dart';
 import '../../utils/Constants.dart';
 
 class insertIntoWmsReturnSalesOrderClController {
   static Future<void> getData(
-    getMappedBarcodedsByItemCodeAndBinLocationModel
+    getWmsReturnSalesOrderByReturnItemNumModel
         updateWmsJournalMovementClQtyScannedList,
     String serialNo,
   ) async {
@@ -26,10 +26,12 @@ class insertIntoWmsReturnSalesOrderClController {
       "Accept": "application/json",
     };
 
-    var body = updateWmsJournalMovementClQtyScannedList;
-    body.itemSerialNo = serialNo;
+    var body = {
+      ...updateWmsJournalMovementClQtyScannedList.toJson(),
+      "ITEMSERIALNO": serialNo
+    };
 
-    print("Body: ${body.itemSerialNo.toString()}");
+    print("bodyyy: ${jsonEncode([body])}");
 
     try {
       var response =

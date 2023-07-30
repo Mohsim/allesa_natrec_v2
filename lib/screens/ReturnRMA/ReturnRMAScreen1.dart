@@ -22,8 +22,7 @@ class ReturnRMAScreen1 extends StatefulWidget {
 class _ReturnRMAScreen1State extends State<ReturnRMAScreen1> {
   TextEditingController _searchController = TextEditingController();
   String total = "0";
-  List<getWmsReturnSalesOrderByReturnItemNumModel> BinToBinJournalTableList =
-      [];
+  List<getWmsReturnSalesOrderByReturnItemNumModel> table = [];
   List<bool> isMarked = [];
 
   String userName = "";
@@ -159,12 +158,10 @@ class _ReturnRMAScreen1State extends State<ReturnRMAScreen1> {
                                 .getData(_searchController.text.trim())
                                 .then((value) {
                               setState(() {
-                                BinToBinJournalTableList = value;
+                                table = value;
                                 isMarked = List<bool>.generate(
-                                    BinToBinJournalTableList.length,
-                                    (index) => false);
-                                total =
-                                    BinToBinJournalTableList.length.toString();
+                                    table.length, (index) => false);
+                                total = table.length.toString();
                               });
                               Navigator.of(context).pop();
                             }).onError((error, stackTrace) {
@@ -217,12 +214,10 @@ class _ReturnRMAScreen1State extends State<ReturnRMAScreen1> {
                                 .getData(_searchController.text.trim())
                                 .then((value) {
                               setState(() {
-                                BinToBinJournalTableList = value;
+                                table = value;
                                 isMarked = List<bool>.generate(
-                                    BinToBinJournalTableList.length,
-                                    (index) => false);
-                                total =
-                                    BinToBinJournalTableList.length.toString();
+                                    table.length, (index) => false);
+                                total = table.length.toString();
                               });
                               Navigator.of(context).pop();
                             }).onError((error, stackTrace) {
@@ -347,7 +342,7 @@ class _ReturnRMAScreen1State extends State<ReturnRMAScreen1> {
                             textAlign: TextAlign.center,
                           )),
                         ],
-                        rows: BinToBinJournalTableList.map((e) {
+                        rows: table.map((e) {
                           return DataRow(
                               onSelectChanged: (value) {
                                 Get.to(() => ReturnRMAScreen2(
@@ -362,12 +357,12 @@ class _ReturnRMAScreen1State extends State<ReturnRMAScreen1> {
                                       rETURNITEMNUM: e.rETURNITEMNUM.toString(),
                                       sALESID: e.sALESID.toString(),
                                       wMSLOCATIONID: e.wMSLOCATIONID.toString(),
+                                      tble: e,
                                     ));
                               },
                               cells: [
-                                DataCell(Text(
-                                    (BinToBinJournalTableList.indexOf(e) + 1)
-                                        .toString())),
+                                DataCell(
+                                    Text((table.indexOf(e) + 1).toString())),
                                 DataCell(Text(e.iTEMID.toString())),
                                 DataCell(Text(e.nAME.toString())),
                                 DataCell(Text(e.eXPECTEDRETQTY.toString())),
