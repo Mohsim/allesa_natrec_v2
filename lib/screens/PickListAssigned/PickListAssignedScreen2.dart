@@ -134,6 +134,7 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
   }
 
   String _site = "By Serial";
+  final FocusNode _serialNoFocusNode = FocusNode();
 
   final TextEditingController _searchController = TextEditingController();
   String? dropDownValue;
@@ -708,6 +709,7 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                         margin: const EdgeInsets.only(left: 20),
                         child: TextFormFieldWidget(
                           controller: _serialNoController,
+                          focusNode: _serialNoFocusNode,
                           readOnly: false,
                           hintText: "Enter/Scan Serial No",
                           width: MediaQuery.of(context).size.width * 0.9,
@@ -718,7 +720,9 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                                 // check if the entered serial no is not present in the GetShipmentPalletizingList
                                 if (table1
                                     .where((element) =>
-                                        element.itemSerialNo ==
+                                        element.itemSerialNo
+                                            .toString()
+                                            .trim() ==
                                         _serialNoController.text.trim())
                                     .toList()
                                     .isEmpty) {
@@ -726,7 +730,7 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                                     const SnackBar(
                                       content: TextWidget(
                                         text:
-                                            "Serial No not found in the list, please insert a serial no from the above list.",
+                                            "Serial No. not found in the above table, please insert a valid serial no.",
                                         color: Colors.white,
                                       ),
                                       backgroundColor: Colors.red,
@@ -752,6 +756,9 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                                 result2 = table2.length.toString();
                                 result = table1.length.toString();
                                 _serialNoController.clear();
+                                // focus again on the serial no text field
+                                FocusScope.of(context)
+                                    .requestFocus(_serialNoFocusNode);
                               },
                             );
                           },
