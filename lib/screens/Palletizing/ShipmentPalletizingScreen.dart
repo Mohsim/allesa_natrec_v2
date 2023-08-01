@@ -284,7 +284,11 @@ class _ShipmentPalletizingScreenState extends State<ShipmentPalletizingScreen> {
       setState(() {
         table = value;
         shipmentIdController.text = value[0].sHIPMENTID ?? "";
-        isShipmentId = value[0].sHIPMENTID != "" ? true : false;
+        if (value[0].sHIPMENTID != null && value[0].sHIPMENTID != "") {
+          isShipmentId = true;
+        } else {
+          isShipmentId = false;
+        }
       });
       // Hide keyboard
       FocusScope.of(context).requestFocus(FocusNode());
