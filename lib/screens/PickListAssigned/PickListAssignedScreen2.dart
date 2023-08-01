@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 import '../../controllers/BinToBinFromAXAPTA/getmapBarcodeDataByItemCodeController.dart';
 import '../../controllers/PickListAssigned/GetAllTblDZonesController.dart';
 import '../../controllers/PickListAssigned/GetFirstTableData.dart';
@@ -417,224 +419,129 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
               ),
               const SizedBox(height: 5),
               Container(
-                height: MediaQuery.of(context).size.height * 0.3,
+                height: MediaQuery.of(context).size.height * 0.5,
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: Colors.grey,
                     width: 1,
                   ),
                 ),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: DataTable(
-                      showCheckboxColumn: false,
-                      dataRowColor: MaterialStateColor.resolveWith(
-                          (states) => Colors.grey.withOpacity(0.2)),
-                      headingRowColor: MaterialStateColor.resolveWith(
-                          (states) => Colors.orange),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey,
-                          width: 1,
-                        ),
+                child: PaginatedDataTable(
+                  rowsPerPage: 5,
+                  columns: const [
+                    DataColumn(
+                        label: Text(
+                      'Item Code',
+                      style: TextStyle(color: Colors.black),
+                    )),
+                    DataColumn(
+                        label: Text(
+                      'Item Desc',
+                      style: TextStyle(color: Colors.black),
+                    )),
+                    DataColumn(
+                        label: Text(
+                      'GTIN',
+                      style: TextStyle(color: Colors.black),
+                      textAlign: TextAlign.center,
+                    )),
+                    DataColumn(
+                        label: Text(
+                      'Remarks',
+                      style: TextStyle(color: Colors.black),
+                      textAlign: TextAlign.center,
+                    )),
+                    DataColumn(
+                        label: Text(
+                      'User',
+                      style: TextStyle(color: Colors.black),
+                      textAlign: TextAlign.center,
+                    )),
+                    DataColumn(
+                        label: Text(
+                      'Classification',
+                      style: TextStyle(color: Colors.black),
+                      textAlign: TextAlign.center,
+                    )),
+                    DataColumn(
+                        label: Text(
+                      'Main Location',
+                      style: TextStyle(color: Colors.black),
+                      textAlign: TextAlign.center,
+                    )),
+                    DataColumn(
+                        label: Text(
+                      'Bin Location',
+                      style: TextStyle(color: Colors.black),
+                      textAlign: TextAlign.center,
+                    )),
+                    DataColumn(
+                        label: Text(
+                      'Int Code',
+                      style: TextStyle(color: Colors.black),
+                      textAlign: TextAlign.center,
+                    )),
+                    DataColumn(
+                        label: Text(
+                      'Item Serial No.',
+                      style: TextStyle(color: Colors.black),
+                      textAlign: TextAlign.center,
+                    )),
+                    DataColumn(
+                      label: Text(
+                        'Map Date',
+                        style: TextStyle(color: Colors.black),
+                        textAlign: TextAlign.center,
                       ),
-                      border: TableBorder.all(
-                        color: Colors.black,
-                        width: 1,
-                      ),
-                      columns: const [
-                        DataColumn(
-                            label: Text(
-                          'ID',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'Item Code',
-                          style: TextStyle(color: Colors.white),
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'Item Desc',
-                          style: TextStyle(color: Colors.white),
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'GTIN',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'Remarks',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'User',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'Classification',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'Main Location',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'Bin Location',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'Int Code',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'Item Serial No.',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                          label: Text(
-                            'Map Date',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Pallet Code',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Reference',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'S-ID',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'C-ID',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'PO',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Trans',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ],
-                      rows: table1.map((e) {
-                        return DataRow(onSelectChanged: (value) {}, cells: [
-                          DataCell(SelectableText(
-                              (table1.indexOf(e) + 1).toString())),
-                          DataCell(SelectableText(e.itemCode ?? "")),
-                          DataCell(SelectableText(e.itemDesc ?? "")),
-                          DataCell(SelectableText(e.gTIN ?? "")),
-                          DataCell(SelectableText(e.remarks ?? "")),
-                          DataCell(SelectableText(e.user ?? "")),
-                          DataCell(SelectableText(e.classification ?? "")),
-                          DataCell(SelectableText(e.mainLocation ?? "")),
-                          DataCell(SelectableText(e.binLocation ?? "")),
-                          DataCell(SelectableText(e.intCode ?? "")),
-                          DataCell(
-                            Row(
-                              children: [
-                                SelectableText(e.itemSerialNo ?? ""),
-                                // icon for copying the serial number
-                                IconButton(
-                                  onPressed: () {
-                                    Clipboard.setData(
-                                      ClipboardData(
-                                        text: e.itemSerialNo ?? "",
-                                      ),
-                                    );
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          "Copied to Clipboard",
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        duration: Duration(seconds: 1),
-                                      ),
-                                    );
-                                  },
-                                  icon: const Icon(Icons.copy),
-                                ),
-                              ],
-                            ),
-                          ),
-                          DataCell(SelectableText(e.mapDate ?? "")),
-                          DataCell(SelectableText(e.palletCode ?? "")),
-                          DataCell(SelectableText(e.reference ?? "")),
-                          DataCell(SelectableText(e.sID ?? "")),
-                          DataCell(SelectableText(e.cID ?? "")),
-                          DataCell(SelectableText(e.pO ?? "")),
-                          DataCell(SelectableText(e.trans.toString())),
-                        ]);
-                      }).toList(),
                     ),
-                  ),
+                    DataColumn(
+                      label: Text(
+                        'Pallet Code',
+                        style: TextStyle(color: Colors.black),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        'Reference',
+                        style: TextStyle(color: Colors.black),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        'S-ID',
+                        style: TextStyle(color: Colors.black),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        'C-ID',
+                        style: TextStyle(color: Colors.black),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        'PO',
+                        style: TextStyle(color: Colors.black),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        'Trans',
+                        style: TextStyle(color: Colors.black),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                  source: StudentDataSource(table1, context),
+                  showCheckboxColumn: false,
                 ),
               ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  const TextWidget(text: "TOTAL"),
-                  const SizedBox(width: 5),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.blue,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Center(
-                      child: TextWidget(text: result.toString()),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                ],
-              ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 30),
               Container(
                 margin: const EdgeInsets.only(left: 10, right: 10),
                 decoration: BoxDecoration(
@@ -717,12 +624,22 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                             FocusScope.of(context).requestFocus(FocusNode());
                             setState(
                               () {
+                                if (_serialNoController.text.trim().isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: TextWidget(
+                                        text: "Please enter a valid serial no.",
+                                        color: Colors.white,
+                                      ),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                  return;
+                                }
                                 // check if the entered serial no is not present in the GetShipmentPalletizingList
                                 if (table1
                                     .where((element) =>
-                                        element.itemSerialNo
-                                            .toString()
-                                            .trim() ==
+                                        element.itemSerialNo ==
                                         _serialNoController.text.trim())
                                     .toList()
                                     .isEmpty) {
@@ -796,17 +713,24 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                       ),
                       columns: const [
                         DataColumn(
-                            label: Text(
-                          'ID',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
+                          label: Text(
+                            'ID',
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                         DataColumn(
-                            label: Text('Item Code',
-                                style: TextStyle(color: Colors.white))),
+                          label: Text(
+                            'Item Code',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
                         DataColumn(
-                            label: Text('Item Desc',
-                                style: TextStyle(color: Colors.white))),
+                          label: Text(
+                            'Item Desc',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
                         DataColumn(
                             label: Text(
                           'GTIN',
@@ -904,6 +828,13 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                             textAlign: TextAlign.center,
                           ),
                         ),
+                        DataColumn(
+                          label: Text(
+                            'Delete',
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                       ],
                       rows: table2.map((e) {
                         return DataRow(onSelectChanged: (value) {}, cells: [
@@ -925,6 +856,19 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                           DataCell(Text(e.cID ?? "")),
                           DataCell(Text(e.pO ?? "")),
                           DataCell(Text(e.trans.toString())),
+                          DataCell(
+                            IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  table2.removeAt(table2.indexOf(e));
+                                });
+                              },
+                              icon: const Icon(
+                                Icons.delete,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ),
                         ]);
                       }).toList(),
                     ),
@@ -1148,4 +1092,79 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
       ),
     );
   }
+}
+
+class StudentDataSource extends DataTableSource {
+  List<getMappedBarcodedsByItemCodeAndBinLocationModel> students;
+  BuildContext ctx;
+
+  StudentDataSource(
+    this.students,
+    this.ctx,
+  );
+
+  @override
+  DataRow? getRow(int index) {
+    if (index >= students.length) {
+      return null;
+    }
+
+    final student = students[index];
+
+    return DataRow.byIndex(
+      index: index,
+      onSelectChanged: (value) {},
+      cells: [
+        DataCell(SelectableText(student.itemCode ?? "")),
+        DataCell(SelectableText(student.itemDesc ?? "")),
+        DataCell(SelectableText(student.gTIN ?? "")),
+        DataCell(SelectableText(student.remarks ?? "")),
+        DataCell(SelectableText(student.user ?? "")),
+        DataCell(SelectableText(student.classification ?? "")),
+        DataCell(SelectableText(student.mainLocation ?? "")),
+        DataCell(SelectableText(student.binLocation ?? "")),
+        DataCell(SelectableText(student.intCode ?? "")),
+        DataCell(Row(
+          children: [
+            SelectableText(student.itemSerialNo ?? ""),
+            IconButton(
+              onPressed: () {
+                Clipboard.setData(
+                  ClipboardData(text: student.itemSerialNo ?? ""),
+                );
+                ScaffoldMessenger.of(ctx).showSnackBar(
+                  const SnackBar(
+                    content: Text("Copied to Clipboard"),
+                    backgroundColor: Colors.green,
+                    duration: Duration(seconds: 1),
+                  ),
+                );
+              },
+              icon: const Icon(
+                Icons.copy,
+                size: 15,
+                color: Colors.blue,
+              ),
+            ),
+          ],
+        )),
+        DataCell(SelectableText(student.mapDate ?? "")),
+        DataCell(SelectableText(student.palletCode ?? "")),
+        DataCell(SelectableText(student.reference ?? "")),
+        DataCell(SelectableText(student.sID ?? "")),
+        DataCell(SelectableText(student.cID ?? "")),
+        DataCell(SelectableText(student.pO ?? "")),
+        DataCell(SelectableText(student.trans.toString())),
+      ],
+    );
+  }
+
+  @override
+  bool get isRowCountApproximate => false;
+
+  @override
+  int get rowCount => students.length;
+
+  @override
+  int get selectedRowCount => 0;
 }
