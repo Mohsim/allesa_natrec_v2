@@ -1,5 +1,3 @@
-import 'package:get/get.dart';
-
 import '../../controllers/BinToBinFromAXAPTA/getmapBarcodeDataByItemCodeController.dart';
 import '../../controllers/PickListAssigned/GetAllTblDZonesController.dart';
 import '../../controllers/PickListAssigned/GetFirstTableData.dart';
