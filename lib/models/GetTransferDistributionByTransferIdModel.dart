@@ -8,6 +8,7 @@ class GetTransferDistributionByTransferIdModel {
   int? qTYTRANSFER;
   int? qTYREMAINRECEIVE;
   String? cREATEDDATETIME;
+  String? sHIPMENTID;
 
   GetTransferDistributionByTransferIdModel(
       {this.tRANSFERID,
@@ -18,7 +19,8 @@ class GetTransferDistributionByTransferIdModel {
       this.iNVENTDIMID,
       this.qTYTRANSFER,
       this.qTYREMAINRECEIVE,
-      this.cREATEDDATETIME});
+      this.cREATEDDATETIME,
+      this.sHIPMENTID});
 
   GetTransferDistributionByTransferIdModel.fromJson(Map<String, dynamic> json) {
     tRANSFERID = json['TRANSFERID'];
@@ -30,6 +32,7 @@ class GetTransferDistributionByTransferIdModel {
     qTYTRANSFER = json['QTYTRANSFER'];
     qTYREMAINRECEIVE = json['QTYREMAINRECEIVE'];
     cREATEDDATETIME = json['CREATEDDATETIME'];
+    sHIPMENTID = json['SHIPMENTID'];
   }
 
   Map<String, dynamic> toJson() {
@@ -43,6 +46,7 @@ class GetTransferDistributionByTransferIdModel {
     data['QTYTRANSFER'] = qTYTRANSFER;
     data['QTYREMAINRECEIVE'] = qTYREMAINRECEIVE;
     data['CREATEDDATETIME'] = cREATEDDATETIME;
+    data['SHIPMENTID'] = sHIPMENTID;
     return data;
   }
 }

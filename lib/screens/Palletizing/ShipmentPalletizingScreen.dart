@@ -1,7 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../controllers/Palletization/GetShipmentPalletizingController.dart';
 
+import '../../controllers/Palletization/ValidateShipmentIdFromShipmentReveivedClController.dart';
 import '../../models/GetTransferDistributionByTransferIdModel.dart';
 import '../../screens/Palletizing/PalletProceedScreen.dart';
 import '../../utils/Constants.dart';
@@ -21,7 +24,9 @@ class ShipmentPalletizingScreen extends StatefulWidget {
 }
 
 class _ShipmentPalletizingScreenState extends State<ShipmentPalletizingScreen> {
+  TextEditingController transferIdController = TextEditingController();
   TextEditingController shipmentIdController = TextEditingController();
+
   String total = "0";
   List<GetTransferDistributionByTransferIdModel> table = [];
   List<bool> isMarked = [];
@@ -52,9 +57,11 @@ class _ShipmentPalletizingScreenState extends State<ShipmentPalletizingScreen> {
   @override
   void dispose() {
     super.dispose();
-    shipmentIdController.dispose();
+    transferIdController.dispose();
     _showUserInfo();
   }
+
+  bool isShipmentId = false;
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +133,7 @@ class _ShipmentPalletizingScreenState extends State<ShipmentPalletizingScreen> {
               Container(
                 margin: const EdgeInsets.only(left: 20, top: 10),
                 child: const TextWidget(
-                  text: "Transfer ID*",
+                  text: " Transfer ID*",
                   fontSize: 16,
                 ),
               ),
@@ -138,7 +145,7 @@ class _ShipmentPalletizingScreenState extends State<ShipmentPalletizingScreen> {
                     Container(
                       margin: const EdgeInsets.only(left: 20),
                       child: TextFormFieldWidget(
-                        controller: shipmentIdController,
+                        controller: transferIdController,
                         width: MediaQuery.of(context).size.width * 0.73,
                         onEditingComplete: () {
                           onClick();
@@ -165,12 +172,24 @@ class _ShipmentPalletizingScreenState extends State<ShipmentPalletizingScreen> {
                 ),
               ),
               Container(
-                margin: const EdgeInsets.only(left: 10, top: 10),
+                margin: const EdgeInsets.only(left: 20, top: 10),
                 child: const TextWidget(
-                  text: "Transfer Details*",
+                  text: " Shipment ID*",
                   fontSize: 16,
                 ),
               ),
+              Container(
+                margin: const EdgeInsets.only(left: 20),
+                child: TextFormFieldWidget(
+                  controller: shipmentIdController,
+                  readOnly: isShipmentId == true ? true : false,
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  onEditingComplete: () {
+                    onShipmentSearch();
+                  },
+                ),
+              ),
+              const SizedBox(height: 10),
               Container(
                 height: MediaQuery.of(context).size.height * 0.55,
                 decoration: BoxDecoration(
@@ -179,142 +198,75 @@ class _ShipmentPalletizingScreenState extends State<ShipmentPalletizingScreen> {
                     width: 1,
                   ),
                 ),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: DataTable(
-                      showCheckboxColumn: false,
-                      dataRowColor: MaterialStateColor.resolveWith(
-                          (states) => Colors.grey.withOpacity(0.2)),
-                      headingRowColor: MaterialStateColor.resolveWith(
-                          (states) => Colors.orange),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey,
-                          width: 1,
-                        ),
-                      ),
-                      border: TableBorder.all(
-                        color: Colors.black,
-                        width: 1,
-                      ),
-                      columns: const [
-                        DataColumn(
-                            label: Text(
-                          'ID',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text('TRANSFER ID',
-                                style: TextStyle(color: Colors.white))),
-                        DataColumn(
-                            label: Text('TRANSFER STATUS',
-                                style: TextStyle(color: Colors.white))),
-                        DataColumn(
-                            label: Text(
-                          'INVENT LOCATIONID FROM',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'INVENT LOCATION ID TO',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'ITEM ID',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'INVENT DIM ID',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'QTY TRANSFER',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'QTY REMAIN RECEIVE',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'CREATED DATE TIME',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                      ],
-                      rows: table.map((e) {
-                        return DataRow(
-                            onSelectChanged: (value) {
-                              // keybord hide
-                              FocusScope.of(context).requestFocus(FocusNode());
-                              Get.to(() => PalletProceedScreen(
-                                    cREATEDDATETIME: e.cREATEDDATETIME ?? "",
-                                    iNVENTDIMID: e.iNVENTDIMID ?? "",
-                                    iNVENTLOCATIONIDFROM:
-                                        e.iNVENTLOCATIONIDFROM ?? "",
-                                    iNVENTLOCATIONIDTO:
-                                        e.iNVENTLOCATIONIDTO ?? "",
-                                    iTEMID: e.iTEMID ?? "",
-                                    qTYREMAINRECEIVE: int.parse(
-                                        e.qTYREMAINRECEIVE.toString()),
-                                    qTYTRANSFER:
-                                        int.parse(e.qTYTRANSFER.toString()),
-                                    tRANSFERID: e.tRANSFERID.toString(),
-                                    tRANSFERSTATUS:
-                                        int.parse(e.tRANSFERSTATUS.toString()),
-                                  ));
-                            },
-                            cells: [
-                              DataCell(Text((table.indexOf(e) + 1).toString())),
-                              DataCell(Text(e.tRANSFERID ?? "")),
-                              DataCell(Text(e.tRANSFERSTATUS.toString())),
-                              DataCell(Text(e.iNVENTLOCATIONIDFROM ?? "")),
-                              DataCell(Text(e.iNVENTLOCATIONIDTO ?? "")),
-                              DataCell(Text(e.iTEMID ?? "")),
-                              DataCell(Text(e.iNVENTDIMID ?? "")),
-                              DataCell(Text(e.qTYTRANSFER.toString())),
-                              DataCell(Text(e.qTYREMAINRECEIVE.toString())),
-                              DataCell(Text(e.cREATEDDATETIME ?? "")),
-                            ]);
-                      }).toList(),
-                    ),
+                child: PaginatedDataTable(
+                  rowsPerPage: 5,
+                  columns: const [
+                    DataColumn(
+                        label: Text('TRANSFER ID',
+                            style: TextStyle(color: Colors.black))),
+                    DataColumn(
+                        label: Text('TRANSFER STATUS',
+                            style: TextStyle(color: Colors.black))),
+                    DataColumn(
+                        label: Text(
+                      'INVENT LOCATIONID FROM',
+                      style: TextStyle(color: Colors.black),
+                      textAlign: TextAlign.center,
+                    )),
+                    DataColumn(
+                        label: Text(
+                      'INVENT LOCATION ID TO',
+                      style: TextStyle(color: Colors.black),
+                      textAlign: TextAlign.center,
+                    )),
+                    DataColumn(
+                        label: Text(
+                      'ITEM ID',
+                      style: TextStyle(color: Colors.black),
+                      textAlign: TextAlign.center,
+                    )),
+                    DataColumn(
+                        label: Text(
+                      'INVENT DIM ID',
+                      style: TextStyle(color: Colors.black),
+                      textAlign: TextAlign.center,
+                    )),
+                    DataColumn(
+                        label: Text(
+                      'QTY TRANSFER',
+                      style: TextStyle(color: Colors.black),
+                      textAlign: TextAlign.center,
+                    )),
+                    DataColumn(
+                        label: Text(
+                      'QTY REMAIN RECEIVE',
+                      style: TextStyle(color: Colors.black),
+                      textAlign: TextAlign.center,
+                    )),
+                    DataColumn(
+                        label: Text(
+                      'CREATED DATE TIME',
+                      style: TextStyle(color: Colors.black),
+                      textAlign: TextAlign.center,
+                    )),
+                  ],
+                  source: StudentDataSource(
+                    table,
+                    context,
+                    shipmentIdController.text.trim(),
+                    isShipmentId,
+                  ),
+                  showCheckboxColumn: false,
+                  showFirstLastButtons: true,
+                  arrowHeadColor: Colors.orange,
+                  header: Text(
+                    'Transfer Details',
+                    style: TextStyle(
+                        color: Colors.blue[900]!,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
-              ),
-              const SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  const TextWidget(text: "TOTAL"),
-                  const SizedBox(width: 10),
-                  Container(
-                    width: 100,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.blue,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Center(
-                      child: TextWidget(text: total),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                ],
               ),
               const SizedBox(height: 20),
             ],
@@ -327,20 +279,135 @@ class _ShipmentPalletizingScreenState extends State<ShipmentPalletizingScreen> {
   void onClick() async {
     Constants.showLoadingDialog(context);
     GetShipmentPalletizingController.getShipmentPalletizing(
-            shipmentIdController.text.trim())
+            transferIdController.text.trim())
         .then((value) {
       setState(() {
         table = value;
-        total = table.length.toString();
-        isMarked = List<bool>.filled(table.length, false);
+        shipmentIdController.text = value[0].sHIPMENTID ?? "";
+        isShipmentId = value[0].sHIPMENTID != "" ? true : false;
       });
       // Hide keyboard
       FocusScope.of(context).requestFocus(FocusNode());
       Navigator.pop(context);
     }).onError((error, stackTrace) {
+      setState(() {
+        table = [];
+        isShipmentId = false;
+      });
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(error.toString().replaceAll("Exception:", ""))));
     });
   }
+
+  void onShipmentSearch() async {
+    FocusScope.of(context).requestFocus(FocusNode());
+    Constants.showLoadingDialog(context);
+    bool value = await ValidateShipmentIdFromShipmentReveivedClController
+        .palletizeSerialNo(shipmentIdController.text.trim());
+    try {
+      if (value) {
+        setState(() {
+          isShipmentId = true;
+        });
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Shipment ID is valid."),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 1),
+        ));
+      } else {
+        setState(() {
+          isShipmentId = false;
+        });
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Shipment ID not found in tbl_Shipment_Received_CL"),
+          backgroundColor: Colors.redAccent,
+          duration: Duration(seconds: 1),
+        ));
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+}
+
+class StudentDataSource extends DataTableSource {
+  List<GetTransferDistributionByTransferIdModel> table;
+  BuildContext ctx;
+  String? shipmentId;
+  bool isShipmentId;
+
+  StudentDataSource(
+    this.table,
+    this.ctx,
+    this.shipmentId,
+    this.isShipmentId,
+  );
+
+  @override
+  DataRow? getRow(int index) {
+    if (index >= table.length) {
+      return null;
+    }
+
+    final tble = table[index];
+
+    return DataRow.byIndex(
+      index: index,
+      onSelectChanged: (value) {
+        if (shipmentId == null || shipmentId == "") {
+          ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(
+            content: Text("Please Enter Shipment id."),
+            backgroundColor: Colors.redAccent,
+            duration: Duration(seconds: 1),
+          ));
+          return;
+        }
+
+        FocusScope.of(ctx).requestFocus(FocusNode());
+        if (isShipmentId == false) {
+          ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(
+            content: Text("Shipment ID not found in tbl_Shipment_Received_CL"),
+            backgroundColor: Colors.redAccent,
+            duration: Duration(seconds: 1),
+          ));
+          return;
+        }
+        Get.to(() => PalletProceedScreen(
+              cREATEDDATETIME: tble.cREATEDDATETIME ?? "",
+              iNVENTDIMID: tble.iNVENTDIMID ?? "",
+              iNVENTLOCATIONIDFROM: tble.iNVENTLOCATIONIDFROM ?? "",
+              iNVENTLOCATIONIDTO: tble.iNVENTLOCATIONIDTO ?? "",
+              iTEMID: tble.iTEMID ?? "",
+              qTYREMAINRECEIVE: int.parse(tble.qTYREMAINRECEIVE.toString()),
+              qTYTRANSFER: int.parse(tble.qTYTRANSFER.toString()),
+              tRANSFERID: tble.tRANSFERID.toString(),
+              tRANSFERSTATUS: int.parse(tble.tRANSFERSTATUS.toString()),
+              shipmentId: shipmentId!,
+            ));
+      },
+      cells: [
+        DataCell(Text(tble.tRANSFERID ?? "")),
+        DataCell(Text(tble.tRANSFERSTATUS.toString())),
+        DataCell(Text(tble.iNVENTLOCATIONIDFROM ?? "")),
+        DataCell(Text(tble.iNVENTLOCATIONIDTO ?? "")),
+        DataCell(Text(tble.iTEMID ?? "")),
+        DataCell(Text(tble.iNVENTDIMID ?? "")),
+        DataCell(Text(tble.qTYTRANSFER.toString())),
+        DataCell(Text(tble.qTYREMAINRECEIVE.toString())),
+        DataCell(Text(tble.cREATEDDATETIME ?? "")),
+      ],
+    );
+  }
+
+  @override
+  bool get isRowCountApproximate => false;
+
+  @override
+  int get rowCount => table.length;
+
+  @override
+  int get selectedRowCount => 0;
 }

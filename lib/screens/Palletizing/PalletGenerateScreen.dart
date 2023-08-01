@@ -26,6 +26,7 @@ class PalletGenerateScreen extends StatefulWidget {
   int qTYREMAINRECEIVE;
   String cREATEDDATETIME;
   String palletType = "";
+  String shipmentId;
 
   PalletGenerateScreen({
     required this.tRANSFERID,
@@ -38,6 +39,7 @@ class PalletGenerateScreen extends StatefulWidget {
     required this.qTYREMAINRECEIVE,
     required this.cREATEDDATETIME,
     required this.palletType,
+    required this.shipmentId,
   });
 
   @override
@@ -209,7 +211,7 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                             Column(
                               children: [
                                 const Text(
-                                  "Status",
+                                  "Shipment Id",
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 15,
@@ -217,7 +219,7 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                                   ),
                                 ),
                                 Text(
-                                  widget.tRANSFERSTATUS.toString(),
+                                  widget.shipmentId,
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 15,
@@ -362,57 +364,7 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
                   focusNode: focusNode,
                   width: MediaQuery.of(context).size.width * 0.9,
                   onEditingComplete: () {
-                    if (_serialNoController.text.trim().isEmpty) {
-                      // hide keyboard
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      return;
-                    }
-                    Constants.showLoadingDialog(context);
-                    ValidateShipmentPalettizingSerialNoController
-                        .palletizeSerialNo(
-                      _serialNoController.text,
-                      "",
-                    ).then((value) {
-                      if (serialNoList
-                          .contains(_serialNoController.text.toString())) {
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Serial No already exists"),
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
-                        return;
-                      }
-
-                      if (_serialNoController.text.toString().isEmpty) {
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Please enter Serial No"),
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
-                        return;
-                      }
-
-                      setState(() {
-                        serialNoList.add(_serialNoController.text.toString());
-                        _serialNoController.clear();
-                      });
-                      Navigator.pop(context);
-                    }).onError((error, stackTrace) {
-                      Navigator.pop(context);
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                              error.toString().replaceAll("Exception:", "")),
-                          duration: const Duration(seconds: 2),
-                        ),
-                      );
-                      FocusScope.of(context).requestFocus(focusNode);
-                    });
+                    onSerial();
                   },
                 ),
               ),
@@ -552,5 +504,56 @@ class _PalletGenerateScreenState extends State<PalletGenerateScreen> {
       desc: value[0].toString(),
       btnOkOnPress: () {},
     );
+  }
+
+  void onSerial() async {
+    if (_serialNoController.text.trim().isEmpty) {
+      // hide keyboard
+      FocusScope.of(context).requestFocus(FocusNode());
+      return;
+    }
+    Constants.showLoadingDialog(context);
+    ValidateShipmentPalettizingSerialNoController.palletizeSerialNo(
+      _serialNoController.text,
+      widget.shipmentId,
+    ).then((value) {
+      if (serialNoList.contains(_serialNoController.text.toString())) {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Serial No already exists"),
+            duration: Duration(seconds: 2),
+          ),
+        );
+        return;
+      }
+
+      if (_serialNoController.text.toString().isEmpty) {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Please enter Serial No"),
+            duration: Duration(seconds: 2),
+          ),
+        );
+        return;
+      }
+
+      setState(() {
+        serialNoList.add(_serialNoController.text.toString());
+        _serialNoController.clear();
+      });
+      Navigator.pop(context);
+    }).onError((error, stackTrace) {
+      Navigator.pop(context);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.toString().replaceAll("Exception:", "")),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      FocusScope.of(context).requestFocus(focusNode);
+    });
   }
 }

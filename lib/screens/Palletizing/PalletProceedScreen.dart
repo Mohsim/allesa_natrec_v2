@@ -19,6 +19,7 @@ class PalletProceedScreen extends StatefulWidget {
   int qTYTRANSFER;
   int qTYREMAINRECEIVE;
   String cREATEDDATETIME;
+  String shipmentId;
 
   PalletProceedScreen({
     required this.tRANSFERID,
@@ -30,6 +31,7 @@ class PalletProceedScreen extends StatefulWidget {
     required this.qTYTRANSFER,
     required this.qTYREMAINRECEIVE,
     required this.cREATEDDATETIME,
+    required this.shipmentId,
   });
 
   @override
@@ -48,6 +50,7 @@ class _PalletProceedScreenState extends State<PalletProceedScreen> {
 
   @override
   void initState() {
+    print("widget.shipmentId: ${widget.shipmentId}");
     super.initState();
     Future.delayed(const Duration(seconds: 0), () {
       Constants.showLoadingDialog(context);
@@ -251,6 +254,7 @@ class _PalletProceedScreenState extends State<PalletProceedScreen> {
                         tRANSFERID: widget.tRANSFERID,
                         tRANSFERSTATUS: widget.tRANSFERSTATUS,
                         palletType: dropdownValue.toString(),
+                        shipmentId: widget.shipmentId,
                       ),
                     );
                   },

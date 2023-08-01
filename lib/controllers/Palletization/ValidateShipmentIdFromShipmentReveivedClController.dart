@@ -1,17 +1,16 @@
-import '../../models/GetTransferDistributionByTransferIdModel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../utils/Constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class GetShipmentPalletizingController {
-  static Future<List<GetTransferDistributionByTransferIdModel>>
-      getShipmentPalletizing(String id) async {
+class ValidateShipmentIdFromShipmentReveivedClController {
+  static Future<bool> palletizeSerialNo(String shipmentId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
 
     String url =
-        "${Constants.baseUrl}getTransferDistributionByTransferId?TRANSFERID=$id";
+        "${Constants.baseUrl}validateShipmentIdFromShipmentReceivedCl?SHIPMENTID=$shipmentId";
 
     print("url: $url");
 
@@ -29,16 +28,15 @@ class GetShipmentPalletizingController {
       if (response.statusCode == 200) {
         print("Status Code: ${response.statusCode}");
 
-        var data = json.decode(response.body) as List;
-        List<GetTransferDistributionByTransferIdModel> obj = data
-            .map((json) =>
-                GetTransferDistributionByTransferIdModel.fromJson(json))
-            .toList();
-        return obj;
-      } else {
         var data = json.decode(response.body);
-        var msg = data['message'];
-        throw Exception("$msg");
+        print("Response: $data");
+        return true;
+      } else {
+        print("Status Code: ${response.statusCode}");
+
+        var data = json.decode(response.body);
+        print("Error: $data");
+        return false;
       }
     } catch (e) {
       print(e);
