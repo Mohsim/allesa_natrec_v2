@@ -6,17 +6,14 @@ import '../../utils/Constants.dart';
 
 class InsertPickListController {
   static Future<void> insertData(
-    List<Map<String, String>> data,
-    String PICKINGROUTEID,
-    String ITEMID,
-    String QTYPICKED,
-    String QTY,
+    List<Map<String, dynamic>> data,
+    String pICKINGROUTEID,
   ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token').toString();
 
     String url =
-        "${Constants.baseUrl}insertIntoPackingSlipTableClAndUpdateWmsSalesPickingListCl?PICKINGROUTEID=$PICKINGROUTEID&ITEMID=$ITEMID&QTYPICKED=$QTYPICKED&QTY=$QTY";
+        "${Constants.baseUrl}insertIntoPackingSlipTableClAndUpdateWmsSalesPickingListCl?PICKINGROUTEID=$pICKINGROUTEID";
 
     print("url: $url");
 

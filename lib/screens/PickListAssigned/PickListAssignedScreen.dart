@@ -350,7 +350,9 @@ class _PickListAssignedScreenState extends State<PickListAssignedScreen> {
                                   ASSIGNEDTOUSERID:
                                       e.aSSIGNEDTOUSERID.toString(),
                                   PICKSTATUS: e.pICKSTATUS.toString(),
-                                  QTYPICKED: e.qTYPICKED.toString(),
+                                  QTYPICKED: e.qTYPICKED == null
+                                      ? "0"
+                                      : e.qTYPICKED.toString(),
                                 ),
                               );
                             },
@@ -371,7 +373,9 @@ class _PickListAssignedScreenState extends State<PickListAssignedScreen> {
                               DataCell(Text(e.dATETIMEASSIGNED ?? "")),
                               DataCell(Text(e.aSSIGNEDTOUSERID ?? "")),
                               DataCell(Text(e.pICKSTATUS ?? "")),
-                              DataCell(Text(e.qTYPICKED.toString())),
+                              DataCell(Text(e.qTYPICKED == null
+                                  ? "0"
+                                  : e.qTYPICKED.toString())),
                             ]);
                       }).toList(),
                     ),

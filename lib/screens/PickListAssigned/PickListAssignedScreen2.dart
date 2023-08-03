@@ -321,23 +321,49 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                       ),
                       const SizedBox(height: 20),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          const Text(
-                            "Item ID:",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              const Text(
+                                "Item ID:",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Text(
+                                widget.ITEMID,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 10),
-                          Text(
-                            widget.ITEMID,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Text(
+                                "Pick Status",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                widget.PICKSTATUS.toString(),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -351,7 +377,7 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 const Text(
-                                  "Qty",
+                                  "Qty Received",
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 16,
@@ -384,27 +410,6 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                                     color: Colors.white,
                                     fontSize: 15,
                                   ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const Text(
-                                  "Pick Status",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  widget.PICKSTATUS.toString(),
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                  ),
-                                  textAlign: TextAlign.center,
                                 ),
                               ],
                             ),
@@ -619,49 +624,66 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                           hintText: "Enter/Scan Serial No",
                           width: MediaQuery.of(context).size.width * 0.9,
                           onEditingComplete: () {
-                            FocusScope.of(context).requestFocus(FocusNode());
+                            print(
+                                "Serial No. ${_serialNoController.text.trim()}");
+
+                            if (_serialNoController.text.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: TextWidget(
+                                    text: "Please enter a valid serial no.",
+                                    color: Colors.white,
+                                  ),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                              return;
+                            } else if (int.parse(widget.QTYPICKED) >=
+                                int.parse(widget.QTY)) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: TextWidget(
+                                    text: "Cannot pick more than remaining qty",
+                                    color: Colors.white,
+                                    textAlign: TextAlign.start,
+                                  ),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                              return;
+                            }
+
+                            if (table1
+                                .where((element) =>
+                                    element.itemSerialNo.toString().trim() ==
+                                    _serialNoController.text.trim())
+                                .isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: TextWidget(
+                                    text:
+                                        "Serial No. not found in the above table, please insert a valid serial no.",
+                                    color: Colors.white,
+                                  ),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                              return;
+                            }
                             setState(
                               () {
-                                if (_serialNoController.text.trim().isEmpty) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: TextWidget(
-                                        text: "Please enter a valid serial no.",
-                                        color: Colors.white,
-                                      ),
-                                      backgroundColor: Colors.red,
-                                    ),
-                                  );
-                                  return;
-                                }
-                                // check if the entered serial no is not present in the GetShipmentPalletizingList
-                                if (table1
-                                    .where((element) =>
-                                        element.itemSerialNo ==
-                                        _serialNoController.text.trim())
-                                    .toList()
-                                    .isEmpty) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: TextWidget(
-                                        text:
-                                            "Serial No. not found in the above table, please insert a valid serial no.",
-                                        color: Colors.white,
-                                      ),
-                                      backgroundColor: Colors.red,
-                                    ),
-                                  );
-                                  return;
-                                }
-
-                                // append the selected pallet code row to the GetShipmentPalletizingList2
                                 table2.add(
                                   table1.firstWhere(
                                     (element) =>
-                                        element.itemSerialNo ==
+                                        element.itemSerialNo
+                                            .toString()
+                                            .trim() ==
                                         _serialNoController.text.trim(),
                                   ),
                                 );
+                                widget.QTYPICKED =
+                                    (int.parse(widget.QTYPICKED) + 1)
+                                        .toString();
                                 // remove the selected pallet code row from the GetShipmentPalletizingList
                                 table1.removeWhere(
                                   (element) =>
@@ -859,6 +881,10 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                               onPressed: () {
                                 setState(() {
                                   table2.removeAt(table2.indexOf(e));
+                                  widget.QTYPICKED =
+                                      (int.parse(widget.QTYPICKED) - 1)
+                                          .toString();
+                                  result2 = (int.parse(result2) - 1).toString();
                                 });
                               },
                               icon: const Icon(
@@ -1046,25 +1072,30 @@ class _PickListAssingedScreen2State extends State<PickListAssingedScreen2> {
                         "ITEMID": widget.ITEMID,
                         "NAME": widget.ITEMID,
                         "CONFIGID": widget.CONFIGID,
-                        "DATETIMECREATED": widget.DATETIMEASSIGNED
+                        "DATETIMECREATED": widget.DATETIMEASSIGNED,
+                        "oldBinLocation": e.binLocation,
+                        "ItemSerialNo": e.itemSerialNo
                       };
                     }).toList();
+
+                    print(data);
 
                     InsertPickListController.insertData(
                       data,
                       widget.PICKINGROUTEID,
-                      widget.ITEMID,
-                      widget.QTYPICKED,
-                      widget.QTY,
                     ).then((value) {
                       Navigator.pop(context);
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text("Successfully Inserted Successfully"),
+                          content: Text("Data Inserted Successfully"),
                           backgroundColor: Colors.green,
                         ),
                       );
                       setState(() {
+                        widget.QTY = (int.parse(widget.QTY.toString()) -
+                                int.parse(widget.QTYPICKED.toString()))
+                            .toString();
+                        _serialNoController.clear();
                         table2.clear();
                         result2 = "0";
                       });
